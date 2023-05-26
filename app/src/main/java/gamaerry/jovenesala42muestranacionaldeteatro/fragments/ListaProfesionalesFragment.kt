@@ -37,15 +37,27 @@ class ListaProfesionalesFragment : Fragment() {
             // lo consigue más adelante en el lifecycleScope
             profesionalesViewModel.setProfesionalEnfocado(it)
             requireActivity().supportFragmentManager.beginTransaction().apply {
-                setCustomAnimations(R.anim.entrar_desde_derecha, R.anim.salir_hacia_izquierda, R.anim.entrar_desde_izquierda, R.anim.salir_hacia_derecha)
+                setCustomAnimations(
+                    R.anim.entrar_desde_derecha,
+                    R.anim.salir_hacia_izquierda,
+                    R.anim.entrar_desde_izquierda,
+                    R.anim.salir_hacia_derecha
+                )
                 replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
                 addToBackStack("detallesProfesionales")
                 commit()
                 (requireActivity() as MainActivity).ocultarNavigationView()
             }
         }
+
         binding.miRecyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            val cuadricula = GridLayoutManager(requireContext(), 2)
+            cuadricula.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int =
+                    if (position == 0) 2 // Tamaño completo para la cabecera en la posición 0
+                    else 1 // Tamaño normal para los elementos regulares
+            }
+            layoutManager = cuadricula
             adapter = miAdapter
         }
 
