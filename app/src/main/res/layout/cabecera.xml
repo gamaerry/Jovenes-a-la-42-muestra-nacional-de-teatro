@@ -14,12 +14,12 @@
         android:elevation="8dp" />
 
     <ImageView
-        android:id="@+id/iconoLista"
+        android:id="@+id/icono"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp"
         android:layout_weight="1.5"
         android:scaleX=".8"
-        android:scaleY=".7"
+        android:scaleY=".8"
         android:src="@drawable/ic_list" />
 </LinearLayout>
