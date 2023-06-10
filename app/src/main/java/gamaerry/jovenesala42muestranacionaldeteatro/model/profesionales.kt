@@ -5,7 +5,7 @@ fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
         ProfesionalDelTeatro(
             nombre = "Luis Gerardo",
             especialidades = "Actuación",
-            descripcion = "Actor de teatro de la Compañía teatral foro 4 desde el 2017.",
+            descripcion = "Actor de teatro en la Compañía teatral foro 4 de la capital michoacana desde el 2017.",
             estado = "Michoacán",
             urlImagen = "http://fismat.umich.mx/~lg/profesionales/luis.jpg"
         ),
