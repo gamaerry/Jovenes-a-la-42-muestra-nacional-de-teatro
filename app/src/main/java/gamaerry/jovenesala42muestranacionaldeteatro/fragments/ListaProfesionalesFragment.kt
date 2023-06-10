@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
@@ -20,7 +19,6 @@ import kotlinx.coroutines.launch
 class ListaProfesionalesFragment : Fragment() {
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
-    private val profesionalesViewModel: ProfesionalesDelTeatroViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,9 +30,20 @@ class ListaProfesionalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val miAdapter = ListaProfesionalesAdapter {
-            // aqui solo se manda una funcion, mas el objeto compañero
-            // lo consigue más adelante en el lifecycleScope
+        val profesionalesViewModel: ProfesionalesDelTeatroViewModel by activityViewModels()
+        val profesionalesAdapter = ListaProfesionalesAdapter()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                profesionalesViewModel.listaProfesionalesDeTeatro.collect {
+                    profesionalesAdapter.submitList(it)
+                }
+            }
+        }
+
+        profesionalesAdapter.accionAlHacerClic = {
+            // aqui solo se manda una funcion, mas el objeto
+            // ProfesionalDelTeatro lo consigue  en el lifecycleScope
             profesionalesViewModel.setProfesionalEnfocado(it)
             requireActivity().supportFragmentManager.beginTransaction().apply {
                 setCustomAnimations(
@@ -57,15 +66,7 @@ class ListaProfesionalesFragment : Fragment() {
                     else 1 // Tamaño normal para los elementos regulares
             }
             layoutManager = cuadricula
-            adapter = miAdapter
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                profesionalesViewModel.listaProfesionalesDeTeatro.collect {
-                    miAdapter.submitList(it)
-                }
-            }
+            adapter = profesionalesAdapter
         }
     }
 
