@@ -1,20 +1,14 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class ProfesionalDelTeatro(
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null,
     val nombre: String,
-    val especialidades: List<Especialidad>,
+    val especialidades: String,
     val descripcion: String,
-    val id: Long,
     val urlImagen: String
-) {
-    fun getStringDeEspecialidades(): String {
-        return when (especialidades.size) {
-            1 -> especialidades.first().capitalize()
-            2 -> "${especialidades.first().capitalize()} y ${especialidades.last()}"
-            else ->
-                "${especialidades.first().capitalize()}, ${
-                    especialidades.drop(1).dropLast(1).joinToString()
-                } y ${especialidades.last()}"
-        }
-    }
-}
+)
