@@ -9,12 +9,12 @@ data class ProfesionalDelTeatro(
 ) {
     fun getStringDeEspecialidades(): String {
         return when (especialidades.size) {
-            1 -> especialidades[0].principal()
-            2 -> "${especialidades[0].principal()} y ${especialidades[1]}"
+            1 -> especialidades.first().capitalize()
+            2 -> "${especialidades.first().capitalize()} y ${especialidades.last()}"
             else ->
-                "${especialidades[0].principal()}, ${
+                "${especialidades.first().capitalize()}, ${
                     especialidades.drop(1).dropLast(1).joinToString()
-                } y ${especialidades[especialidades.lastIndex]}"
+                } y ${especialidades.last()}"
         }
     }
 }

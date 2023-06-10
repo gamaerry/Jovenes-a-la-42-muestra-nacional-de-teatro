@@ -30,7 +30,7 @@ class EspecialidadesAdapter : ListAdapter<Especialidad, EspecialidadesAdapter.Es
         RecyclerView.ViewHolder(binding.root) {
         private val botonEspecialidad = binding.especialidad
         fun enlazar(especialidad: Especialidad) {
-            botonEspecialidad.text = " ${especialidad.principal()} "
+            botonEspecialidad.text = " ${especialidad.capitalize()} "
         }
     }
     object EspecialidadDiffUtil: DiffUtil.ItemCallback<Especialidad>(){
