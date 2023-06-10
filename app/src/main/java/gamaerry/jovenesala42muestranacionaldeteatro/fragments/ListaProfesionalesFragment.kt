@@ -46,7 +46,6 @@ class ListaProfesionalesFragment : Fragment() {
                 replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
                 addToBackStack("detallesProfesionales")
                 commit()
-                (requireActivity() as MainActivity).ocultarNavigationView()
             }
         }
 
