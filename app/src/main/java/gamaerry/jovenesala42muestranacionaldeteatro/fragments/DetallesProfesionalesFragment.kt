@@ -15,6 +15,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesDelTeatroViewModel
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,7 @@ class DetallesProfesionalesFragment : Fragment() {
                     binding.nombre.text = it?.nombre
                     binding.descripcion.text = it?.descripcion
                     binding.imagen?.load(it?.urlImagen)
-                    especialidadesAdapter.submitList(it?.especialidades)
+                    especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
                 }
             }
         }

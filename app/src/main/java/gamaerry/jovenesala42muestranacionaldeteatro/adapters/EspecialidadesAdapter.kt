@@ -2,45 +2,35 @@ package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import gamaerry.jovenesala42muestranacionaldeteatro.data.Especialidad
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemEspecialidadBinding
 
-class EspecialidadesAdapter : ListAdapter<Especialidad, EspecialidadesAdapter.EspecialidadViewHolder>(
-    EspecialidadDiffUtil
-) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EspecialidadViewHolder {
-        return EspecialidadViewHolder(
+class EspecialidadesAdapter :
+    RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHolder>() {
+    // definira que pasara con el cada item a la hora de hacer click,
+    // lo usara el viewHolder pero quien tiene que recibirlo es el adapter
+    lateinit var accionAlHacerClic: (String) -> Unit
+    lateinit var listaDeEspecialidades: List<String>
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        EspecialidadesViewHolder(
             ItemEspecialidadBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
         )
-    }
 
-    override fun onBindViewHolder(holder: EspecialidadViewHolder, i: Int) {
-        val especialidad = getItem(i)
-        holder.enlazar(especialidad)
-    }
+    override fun getItemCount() = listaDeEspecialidades.size
 
-    class EspecialidadViewHolder(binding: ItemEspecialidadBinding) :
+    override fun onBindViewHolder(holder: EspecialidadesViewHolder, i: Int) =
+        holder.enlazar(listaDeEspecialidades[i])
+
+    inner class EspecialidadesViewHolder(binding: ItemEspecialidadBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val botonEspecialidad = binding.especialidad
-        fun enlazar(especialidad: Especialidad) {
-            botonEspecialidad.text = " ${especialidad.capitalize()} "
+        fun enlazar(especialidad: String) {
+            botonEspecialidad.text = especialidad
         }
-    }
-    object EspecialidadDiffUtil: DiffUtil.ItemCallback<Especialidad>(){
-        override fun areItemsTheSame(oldItem: Especialidad, newItem: Especialidad): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Especialidad, newItem: Especialidad): Boolean {
-            return oldItem.toString() == newItem.toString()
-        }
-
     }
 }
