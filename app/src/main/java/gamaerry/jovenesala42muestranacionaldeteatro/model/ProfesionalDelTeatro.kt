@@ -1,4 +1,4 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

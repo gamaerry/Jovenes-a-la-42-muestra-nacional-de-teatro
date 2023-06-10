@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import gamaerry.jovenesala42muestranacionaldeteatro.data.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.CabeceraBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
 

@@ -1,6 +1,6 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.model
 
-fun getProfesionalesDelTeatro(): List<ProfesionalDelTeatro> {
+fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
     return listOf(
         ProfesionalDelTeatro(
             nombre = "Luis Gerardo",
