@@ -30,7 +30,7 @@ class EspecialidadesAdapter :
         RecyclerView.ViewHolder(binding.root) {
         private val botonEspecialidad = binding.especialidad
         fun enlazar(especialidad: String) {
-            botonEspecialidad.text = especialidad
+            botonEspecialidad.text = " $especialidad "
         }
     }
 }
