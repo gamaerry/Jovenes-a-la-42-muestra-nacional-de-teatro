@@ -10,7 +10,7 @@ fun getProfesionalesDelTeatro(): List<ProfesionalDelTeatro> {
         ),
         ProfesionalDelTeatro(
             nombre = "Victor Sosa",
-            especialidades = "Actuacion, direccion y dramaturgia",
+            especialidades = "Actuación, dirección y dramaturgia",
             descripcion = "Estudiante de la facultad de artes, ganador de los Premios Estatales de Literatura Joven 2022 y \"Soltar las amarras\" durante el 2018.",
             urlImagen = "http://fismat.umich.mx/~lg/profesionales/victor.jpg"
         ),
@@ -28,13 +28,13 @@ fun getProfesionalesDelTeatro(): List<ProfesionalDelTeatro> {
         ),
         ProfesionalDelTeatro(
             nombre = "Anahí González",
-            especialidades = "Gestion cultural y operación técnica",
+            especialidades = "Gestión cultural y operación técnica",
             descripcion = "Maestra en estudios literarios por la Universidad de Colima y gestora cultural en programas y festividades culturales estatales y nacionales.",
             urlImagen = "http://fismat.umich.mx/~lg/profesionales/anahi.jpg"
         ),
         ProfesionalDelTeatro(
             nombre = "Edward Chan",
-            especialidades = "Operación técnica y codirecion",
+            especialidades = "Operación técnica y codireción",
             descripcion = "Personal artístico en el Centro Estatal de Prevención del Delito y Participación Ciudadana y Co director en Epígrafe (Agrupación escénica independiente).",
             urlImagen = "http://fismat.umich.mx/~lg/profesionales/edward.jpg"
         ),
