@@ -81,7 +81,7 @@ class ListaProfesionalesAdapter(private val onClick: (ProfesionalDelTeatro) -> U
         fun enlazar(profesional: ProfesionalDelTeatro) {
             profesionalActual = profesional
             nombre.text = profesional.nombre
-            especialidad.text = profesional.getStringDeEspecialidades()
+            especialidad.text = profesional.especialidades
             imagen.load(profesional.urlImagen)
         }
     }
