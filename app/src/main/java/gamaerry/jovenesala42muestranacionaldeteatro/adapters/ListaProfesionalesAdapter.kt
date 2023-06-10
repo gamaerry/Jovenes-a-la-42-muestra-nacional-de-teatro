@@ -1,7 +1,10 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +17,8 @@ class ListaProfesionalesAdapter :
     ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(ProfesionalDiffUtil) {
     // definira que pasara con el cada item a la hora de hacer click,
     // lo usara el viewHolder pero quien tiene que recibirlo es el adapter
-    lateinit var accionAlHacerClic: (ProfesionalDelTeatro) -> Unit
+    lateinit var accionAlPresionarItem: (ProfesionalDelTeatro) -> Unit
+    lateinit var accionAlPresionarIcono: (ImageView) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         0 -> CabeceraViewHolder(
@@ -28,6 +32,7 @@ class ListaProfesionalesAdapter :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, i: Int) = when (holder) {
         is ProfesionalDelTeatroViewHolder -> holder.enlazar(getItem(i - 1))
+        is CabeceraViewHolder -> holder.enlazar()
         else -> Unit
     }
 
@@ -36,7 +41,12 @@ class ListaProfesionalesAdapter :
 
     override fun getItemViewType(position: Int) = if (position == 0) 0 else 1
 
-    inner class CabeceraViewHolder(binding: CabeceraBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class CabeceraViewHolder(binding: CabeceraBinding) : RecyclerView.ViewHolder(binding.root){
+        private val icono = binding.icono
+        fun enlazar(){
+            icono.setOnClickListener { accionAlPresionarIcono(it as ImageView) }
+        }
+    }
 
     inner class ProfesionalDelTeatroViewHolder(binding: ItemCompaneroBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -45,7 +55,7 @@ class ListaProfesionalesAdapter :
         private val especialidad = binding.especialidad
 
         fun enlazar(profesional: ProfesionalDelTeatro) {
-            itemView.setOnClickListener { accionAlHacerClic(profesional) }
+            itemView.setOnClickListener { accionAlPresionarItem(profesional) }
             nombre.text = profesional.nombre
             especialidad.text = profesional.especialidades
             imagen.load(profesional.urlImagen)
