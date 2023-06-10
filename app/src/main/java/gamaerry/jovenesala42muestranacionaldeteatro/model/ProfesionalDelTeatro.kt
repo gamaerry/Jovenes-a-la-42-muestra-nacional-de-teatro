@@ -10,5 +10,6 @@ data class ProfesionalDelTeatro(
     val nombre: String,
     val especialidades: String,
     val descripcion: String,
+    val estado: String,
     val urlImagen: String
 )
