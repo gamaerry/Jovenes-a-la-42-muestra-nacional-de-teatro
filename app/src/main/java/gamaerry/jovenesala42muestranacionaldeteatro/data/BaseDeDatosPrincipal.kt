@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 
-@Database(entities = [ProfesionalDelTeatro::class], version = 1)
+@Database(entities = [ProfesionalDelTeatro::class], version = 1, exportSchema = true)
 abstract class BaseDeDatosPrincipal : RoomDatabase() {
     abstract fun getDaoPrincipal(): DaoPrincipal
 
