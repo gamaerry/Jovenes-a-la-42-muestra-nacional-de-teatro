@@ -15,19 +15,23 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaProfesionalesAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesDelTeatroViewModel
+import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ListaProfesionalesFragment : Fragment() {
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
-    private val profesionalesAdapter = ListaProfesionalesAdapter()
+    @Inject
+    lateinit var profesionalesAdapter: ProfesionalesAdapter
+    private val profesionalesViewModel: ProfesionalesViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val profesionalesViewModel: ProfesionalesDelTeatroViewModel by activityViewModels()
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -55,7 +59,7 @@ class ListaProfesionalesFragment : Fragment() {
         }
     }
 
-    private fun getIcono(profesionalesViewModel: ProfesionalesDelTeatroViewModel): Drawable? {
+    private fun getIcono(profesionalesViewModel: ProfesionalesViewModel): Drawable? {
         return if (profesionalesViewModel.switchEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else

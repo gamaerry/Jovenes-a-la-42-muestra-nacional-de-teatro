@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.addCallback
 import androidx.core.view.isGone
+import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaProfesionalesFragment
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {

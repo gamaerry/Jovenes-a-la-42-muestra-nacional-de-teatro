@@ -1,8 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
@@ -12,9 +10,13 @@ import coil.load
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.CabeceraBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ListaProfesionalesAdapter :
-    ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(ProfesionalDiffUtil) {
+@Singleton
+class ProfesionalesAdapter
+@Inject
+constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(ProfesionalDiffUtil) {
     lateinit var accionAlPresionarItem: (ProfesionalDelTeatro) -> Unit
     lateinit var accionAlPresionarIcono: (ImageView) -> Unit
 

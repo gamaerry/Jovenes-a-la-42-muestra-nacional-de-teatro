@@ -13,23 +13,30 @@ import coil.load
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesDelTeatroViewModel
+import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DetallesProfesionalesFragment : Fragment() {
     private var _binding: FragmentDetallesProfesionalesBinding? = null
     private val binding get() = _binding!!
+    @Inject
+    lateinit var especialidadesAdapter: EspecialidadesAdapter
+    private val profesionalesViewModel: ProfesionalesViewModel by activityViewModels()
     private val accionAlCambiarProfesionalEnfocado: (ProfesionalDelTeatro?) -> Unit = {
-
+        binding.nombre.text = it?.nombre
+        binding.descripcion.text = it?.descripcion
+        binding.imagen?.load(it?.urlImagen)
+        especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val profesionalesViewModel: ProfesionalesDelTeatroViewModel by activityViewModels()
-        val especialidadesAdapter = EspecialidadesAdapter()
         super.onViewCreated(view, savedInstanceState)
         binding.botonesDeEspecialidades.apply {
             layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW, FlexWrap.WRAP)
@@ -39,10 +46,8 @@ class DetallesProfesionalesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 profesionalesViewModel.profesionalEnfocado.collect {
-                    binding.nombre.text = it?.nombre
-                    binding.descripcion.text = it?.descripcion
-                    binding.imagen?.load(it?.urlImagen)
-                    especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista() }
+                    accionAlCambiarProfesionalEnfocado(it)
+                }
             }
         }
     }

@@ -1,12 +1,18 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import gamaerry.jovenesala42muestranacionaldeteatro.data.RepositorioPrincipal
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.model.getProfesionalesDePrueba
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class ProfesionalesDelTeatroViewModel : ViewModel() {
+@HiltViewModel
+class ProfesionalesViewModel
+@Inject
+constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _listaProfesionalesDeTeatro = MutableStateFlow(getProfesionalesDePrueba())
     val listaProfesionalesDeTeatro: StateFlow<List<ProfesionalDelTeatro>> get() = _listaProfesionalesDeTeatro
 

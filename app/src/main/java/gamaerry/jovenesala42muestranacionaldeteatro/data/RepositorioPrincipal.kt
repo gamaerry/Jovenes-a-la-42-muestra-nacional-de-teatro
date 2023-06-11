@@ -1,13 +1,15 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.data
 
-import android.content.Context
-import androidx.room.Room
-import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RepositorioPrincipal(private val daoPrincipal: DaoPrincipal) {
+@Singleton
+class RepositorioPrincipal
+@Inject
+constructor(private val daoPrincipal: DaoPrincipal) {
     fun insertarProfesional(profesional: ProfesionalDelTeatro) = flow {
         emit(daoPrincipal.operacionInsertarProfesional(profesional))
     }.catch { it.printStackTrace() }

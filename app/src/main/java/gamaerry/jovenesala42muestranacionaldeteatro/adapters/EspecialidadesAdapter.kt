@@ -4,9 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemEspecialidadBinding
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class EspecialidadesAdapter :
-    RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHolder>() {
+@Singleton
+class EspecialidadesAdapter
+@Inject
+constructor() : RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHolder>() {
     lateinit var accionAlHacerClic: (String) -> Unit
     lateinit var listaDeEspecialidades: List<String>
 
