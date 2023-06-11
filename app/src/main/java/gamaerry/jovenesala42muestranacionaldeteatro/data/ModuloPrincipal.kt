@@ -1,10 +1,12 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.data
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import javax.inject.Singleton
@@ -16,10 +18,12 @@ object ModuloPrincipal {
     // con una funcion propia de la librería de Room
     @Provides
     @Singleton
-    fun proveerBaseDeDatosPrincipal(app: Application): BaseDeDatosPrincipal = Room
-        .databaseBuilder(app, BaseDeDatosPrincipal::class.java, NOMBRE_BASE_DE_DATOS)
-        .fallbackToDestructiveMigration()
-        .build()
+    fun proveerBaseDeDatosPrincipal(@ApplicationContext contexto: Context): BaseDeDatosPrincipal =
+        Room.databaseBuilder(
+            contexto,
+            BaseDeDatosPrincipal::class.java,
+            NOMBRE_BASE_DE_DATOS
+        ).createFromAsset("datos/profesionales.db").build()
 
     // la instancia del dao se crea a partir de la base de datos ya proveida
     @Provides

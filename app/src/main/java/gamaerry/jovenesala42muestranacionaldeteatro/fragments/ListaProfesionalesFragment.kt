@@ -33,6 +33,8 @@ class ListaProfesionalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        profesionalesViewModel.getProfesionales()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 profesionalesViewModel.listaProfesionalesDeTeatro.collect {

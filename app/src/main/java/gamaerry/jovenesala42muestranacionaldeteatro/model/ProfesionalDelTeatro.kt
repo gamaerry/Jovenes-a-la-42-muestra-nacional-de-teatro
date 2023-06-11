@@ -6,7 +6,7 @@ import java.util.UUID
 
 @Entity(tableName = "profesionales")
 data class ProfesionalDelTeatro(
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val nombre: String,
     val especialidades: String,

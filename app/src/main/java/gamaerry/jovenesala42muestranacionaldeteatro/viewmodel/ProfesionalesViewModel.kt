@@ -9,13 +9,14 @@ import gamaerry.jovenesala42muestranacionaldeteatro.model.getProfesionalesDePrue
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfesionalesViewModel
 @Inject
 constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
-    private val _listaProfesionalesDeTeatro = MutableStateFlow(getProfesionalesDePrueba())
+    private val _listaProfesionalesDeTeatro = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
     val listaProfesionalesDeTeatro: StateFlow<List<ProfesionalDelTeatro>> get() = _listaProfesionalesDeTeatro
 
     private val _profesionalEnfocado = MutableStateFlow<ProfesionalDelTeatro?>(null)
@@ -24,18 +25,18 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _esLineal = MutableStateFlow(false)
     val esLineal: StateFlow<Boolean> get() = _esLineal
 
-    init {
-        _listaProfesionalesDeTeatro.value.forEach {
-            repositorio.insertarProfesional(it).launchIn(viewModelScope)
-        }
-    }
-
-    fun switchEsLineal(): Boolean{
+    fun switchEsLineal(): Boolean {
         _esLineal.value = !_esLineal.value
         return esLineal.value
     }
 
     fun setProfesionalEnfocado(profesional: ProfesionalDelTeatro) {
         _profesionalEnfocado.value = profesional
+    }
+
+    fun getProfesionales() {
+        repositorio.getListaDeProfesionales("").onEach {
+            _listaProfesionalesDeTeatro.value = it
+        }.launchIn(viewModelScope)
     }
 }
