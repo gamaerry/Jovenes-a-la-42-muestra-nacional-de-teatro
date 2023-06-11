@@ -16,17 +16,21 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesDelTeatroViewModel
 import kotlinx.coroutines.launch
 
 class DetallesProfesionalesFragment : Fragment() {
     private var _binding: FragmentDetallesProfesionalesBinding? = null
     private val binding get() = _binding!!
+    private val accionAlCambiarProfesionalEnfocado: (ProfesionalDelTeatro?) -> Unit = {
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val profesionalesViewModel: ProfesionalesDelTeatroViewModel by activityViewModels()
         val especialidadesAdapter = EspecialidadesAdapter()
+        super.onViewCreated(view, savedInstanceState)
         binding.botonesDeEspecialidades.apply {
             layoutManager = FlexboxLayoutManager(requireContext(), FlexDirection.ROW, FlexWrap.WRAP)
             adapter = especialidadesAdapter
@@ -38,8 +42,7 @@ class DetallesProfesionalesFragment : Fragment() {
                     binding.nombre.text = it?.nombre
                     binding.descripcion.text = it?.descripcion
                     binding.imagen?.load(it?.urlImagen)
-                    especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
-                }
+                    especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista() }
             }
         }
     }

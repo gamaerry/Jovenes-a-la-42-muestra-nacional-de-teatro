@@ -15,8 +15,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBin
 
 class ListaProfesionalesAdapter :
     ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(ProfesionalDiffUtil) {
-    // definira que pasara con el cada item a la hora de hacer click,
-    // lo usara el viewHolder pero quien tiene que recibirlo es el adapter
     lateinit var accionAlPresionarItem: (ProfesionalDelTeatro) -> Unit
     lateinit var accionAlPresionarIcono: (ImageView) -> Unit
 
@@ -36,7 +34,6 @@ class ListaProfesionalesAdapter :
         else -> Unit
     }
 
-    // toma en cuenta el encabezado
     override fun getItemCount() = currentList.size + 1
 
     override fun getItemViewType(position: Int) = if (position == 0) 0 else 1

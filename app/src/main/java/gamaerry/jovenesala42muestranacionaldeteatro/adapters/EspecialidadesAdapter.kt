@@ -7,8 +7,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemEspecialidad
 
 class EspecialidadesAdapter :
     RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHolder>() {
-    // definira que pasara con el cada item a la hora de hacer click,
-    // lo usara el viewHolder pero quien tiene que recibirlo es el adapter
     lateinit var accionAlHacerClic: (String) -> Unit
     lateinit var listaDeEspecialidades: List<String>
 
