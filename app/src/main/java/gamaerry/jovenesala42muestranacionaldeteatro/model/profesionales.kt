@@ -1,5 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.model
 
+// esta ya no se usa desde que logre importar mi base de datos
+// externa, y este archivo será borrado en la versión final
 fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
     return listOf(
         ProfesionalDelTeatro(
