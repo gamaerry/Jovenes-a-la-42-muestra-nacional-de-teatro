@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 
 @Dao
@@ -11,7 +12,7 @@ interface DaoPrincipal {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun operacionInsertarProfesional(profesional: ProfesionalDelTeatro)
 
-    @Query("SELECT * FROM profesionales WHERE nombre LIKE '%' || :palabrasClave || '%'" +
+    @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE nombre LIKE '%' || :palabrasClave || '%'" +
             " OR especialidades LIKE '%' || :palabrasClave || '%'" +
             " OR descripcion LIKE '%' || :palabrasClave || '%'" +
             " OR estado LIKE '%' || :palabrasClave || '%'")

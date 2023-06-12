@@ -33,30 +33,6 @@ fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
             descripcion = "Actor fundador de Focus Compañía Teatral, y maestro en el CEACH Centro de Enseñanza Artística de la Chontalpa desde el 2019.",
             estado = "Tabasco",
             urlImagen = "http://fismat.umich.mx/~lg/profesionales/fernando.jpg"
-        ),
-        ProfesionalDelTeatro(
-            id = 7,
-            nombre = "Anahí González",
-            especialidades = "Gestión cultural y operación técnica",
-            descripcion = "Maestra en estudios literarios por la Universidad de Colima y gestora cultural en programas y festividades culturales estatales y nacionales.",
-            estado = "Colima",
-            urlImagen = "http://fismat.umich.mx/~lg/profesionales/anahi.jpg"
-        ),
-        ProfesionalDelTeatro(
-            id = 27,
-            nombre = "Edward Chan",
-            especialidades = "Operación técnica y codireción",
-            descripcion = "Personal artístico en el Centro Estatal de Prevención del Delito y Participación Ciudadana y Co director en Epígrafe (Agrupación escénica independiente).",
-            estado = "Yucatán",
-            urlImagen = "http://fismat.umich.mx/~lg/profesionales/edward.jpg"
-        ),
-        ProfesionalDelTeatro(
-            id = 2,
-            nombre = "Marina Hernández",
-            especialidades = "Actuación, fotografía y musicalización",
-            descripcion = "Becaria nacional por la Facultad de artes UABC, Tijuana. Encargada de fotografía y musicalización de diversas obras de teatro universitario de dicha institución.",
-            estado = "Baja california",
-            urlImagen = "http://fismat.umich.mx/~lg/profesionales/marina.jpg"
         )
     )
 }

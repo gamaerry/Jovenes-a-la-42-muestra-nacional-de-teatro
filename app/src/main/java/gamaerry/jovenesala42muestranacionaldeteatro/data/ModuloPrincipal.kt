@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.data
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import dagger.Module
@@ -23,7 +22,7 @@ object ModuloPrincipal {
             contexto,
             BaseDeDatosPrincipal::class.java,
             NOMBRE_BASE_DE_DATOS
-        ).createFromAsset("datos/profesionales.db").build()
+        ).createFromAsset("$NOMBRE_BASE_DE_DATOS.db").build()
 
     // la instancia del dao se crea a partir de la base de datos ya proveida
     @Provides
