@@ -10,6 +10,9 @@ import dagger.hilt.components.SingletonComponent
 import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import javax.inject.Singleton
 
+// el objeto modulo nos sirve para proveer las
+// implementaciones especificas de cada tipo
+// (clase o interfaz) que se requieran inyectar
 @Module
 @InstallIn(SingletonComponent::class)
 object ModuloPrincipal {
