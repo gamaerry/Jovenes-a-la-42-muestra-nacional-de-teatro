@@ -1,18 +1,12 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.data
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 
 @Dao
 interface DaoPrincipal {
-    // inserta a un profesional a la vez a la base de datos
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun operacionInsertarProfesional(profesional: ProfesionalDelTeatro)
-
     // busca y regresa al profesional con el id especificado
     @Query("SELECT * FROM profesionales WHERE id = :id")
     suspend fun operacionGetProfesionalPorId(id: String): ProfesionalDelTeatro?
