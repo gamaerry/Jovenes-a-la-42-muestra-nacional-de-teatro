@@ -30,6 +30,9 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _esLineal = MutableStateFlow(false)
     val esLineal: StateFlow<Boolean> get() = _esLineal
 
+    // representa el filtrado de busqueda
+    private val palabrasClave = MutableStateFlow("")
+
     // cambia el valor del acomodo y lo regresa
     fun switchEsLineal(): Boolean {
         _esLineal.value = !_esLineal.value
@@ -41,11 +44,20 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         _profesionalEnfocado.value = profesional
     }
 
-    // a partir de las palabras clave realiza la busqueda de los
-    // profesionales a mostrar (notese que si palabrasClave es ""
-    // entonces mostrara a todos los profesionales de la base de datos)
+    // establece las palabras clave que devolveran la lista correspondiente en cada busqueda
+    // (notese que si palabrasClave.value es "" room devolvera toda la base de datos)
+    fun setPalabrasClave(busqueda: String): Boolean {
+        palabrasClave.value = busqueda
+        // es necesario actualizar en cada actualizacion de
+        // palabras clave nuestra listaProfesionalesDeTeatro
+        getProfesionales()
+        // devuelve true para indicar una busqueda exitosa
+        return true
+    }
+
+    // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
     fun getProfesionales() {
-        repositorio.getListaDeProfesionales("").onEach {
+        repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
             _listaProfesionalesDeTeatro.value = it
         }.launchIn(viewModelScope)
     }
