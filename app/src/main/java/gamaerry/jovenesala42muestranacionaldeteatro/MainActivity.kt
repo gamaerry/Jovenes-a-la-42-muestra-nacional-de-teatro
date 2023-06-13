@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // con esta condicion se asegura que este fragment se lanze una sola vez
         if (savedInstanceState == null)
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaProfesionalesFragment()).commit()
