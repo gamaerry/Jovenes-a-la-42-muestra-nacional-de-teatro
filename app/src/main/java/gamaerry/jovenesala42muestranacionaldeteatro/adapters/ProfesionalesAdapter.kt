@@ -2,15 +2,12 @@ package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.databinding.CabeceraBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,76 +16,25 @@ import javax.inject.Singleton
 @Singleton
 class ProfesionalesAdapter
 @Inject
-constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(ProfesionalDiffUtil) {
+constructor() :
+    ListAdapter<ProfesionalDelTeatro, ProfesionalesAdapter.ProfesionalDelTeatroViewHolder>(
+        ProfesionalDiffUtil
+    ) {
     // accion al presionar contenedor del profesional
     lateinit var accionAlPresionarItem: (ProfesionalDelTeatro) -> Unit
 
-    // accion al presionar icono del acomodo 
-    lateinit var accionAlPresionarIcono: (ImageView) -> Unit
-
-    // accion al presionar la barra de busqueda (notese
-    // que no puede ser un lambda por tener dos funciones)
-    lateinit var accionAlPresionarBusqueda: (String) -> Boolean
-
-    // define los valores de cada tipo de item dada su posicion de aparicion
-    // (0 para la cabecera y 1 para los contenedores de cada profesional ie, con esta
-    // implementacion establecemos que la cabecera -viewType 0- sera el de la posicion 0
-    // y a los demas items -viewType 1- no se le asignará una posición específica)
-    override fun getItemViewType(posicionDeAparicion: Int) = if (posicionDeAparicion == 0) 0 else 1
-
-    // dependiendo del tipo de Item se crea el viewHolder correspondiente
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        0 -> CabeceraViewHolder(
-            CabeceraBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        )
-        // notese que seria mas elegante y correcto que el compilador me deje especificar 1 en lugar de
-        // else (pues con la funcion anterior me aseguro de que el viewType nunca sera diferente a 0 y 1)
-        else -> ProfesionalDelTeatroViewHolder(
+    // se crea el viewHolder correspondiente
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ProfesionalDelTeatroViewHolder(
             ItemCompaneroBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
-    }
 
-    // una vez creada la instancia correcta del viewHolder se llama a su correspondiente funcion de enlace
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, posicionDeAparicion: Int) =
-        if (posicionDeAparicion == 0)
-            (viewHolder as CabeceraViewHolder).enlazar()
-        else
-            (viewHolder as ProfesionalDelTeatroViewHolder).enlazar(getItem(posicionDeAparicion - 1))
+    // una vez creada la instancia del viewHolder se llama a su correspondiente funcion de enlace
+    override fun onBindViewHolder(holder: ProfesionalDelTeatroViewHolder, i: Int) =
+        holder.enlazar(getItem(i))
 
-    // getItemCount hace referencia a los items contenedores (n)
-    // y currentList.size a los elementos de la lista actual (n+1)
-    override fun getItemCount() = currentList.size + 1
-
-    inner class CabeceraViewHolder(binding: CabeceraBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        // las unicas view de la cabecera del recyclerView
-        private val icono = binding.icono
-        private val busqueda = binding.barraDeBusqueda
-
-        fun enlazar() {
-            // los lambda que se definen en el fragment obtienen desde aqui la referenca a ambos view
-            icono.setOnClickListener { accionAlPresionarIcono(it as ImageView) }
-            busqueda.setOnQueryTextListener( object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
-                // esta funcion se llama cuando se presiona el
-                // icono de buscar en el SearchView o en el teclado
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return if (query != null) {
-                        busqueda.ocultarTeclado()
-                        accionAlPresionarBusqueda(query)
-                    } else false
-                }
-
-                // y esta se llama cuando cambia el texto introducido
-                // (notese que en ambas funciones setBusquedaQuery()
-                // regresa un true indicando su correcto funcionamiento)
-                override fun onQueryTextChange(query: String?): Boolean {
-                    return if (query != null)
-                        accionAlPresionarBusqueda(query)
-                    else false
-                }
-            } )
-        }
-    }
+    // getItemCount hace referencia a los elementos del adapter (items y objetos Profesionales)
+    override fun getItemCount() = currentList.size
 
     inner class ProfesionalDelTeatroViewHolder(binding: ItemCompaneroBinding) :
         RecyclerView.ViewHolder(binding.root) {
