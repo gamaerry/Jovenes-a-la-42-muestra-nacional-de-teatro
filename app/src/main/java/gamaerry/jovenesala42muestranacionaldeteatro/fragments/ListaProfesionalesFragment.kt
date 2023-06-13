@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
@@ -56,9 +57,29 @@ class ListaProfesionalesFragment : Fragment() {
 
         binding.miRecyclerView.adapter = profesionalesAdapter
 
-        profesionalesAdapter.accionAlPresionarBusqueda = { viewModelPrincipal.setPalabrasClave(it) }
+        binding.busqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            // esta funcion se llama cuando se presiona el
+            // icono de buscar en el SearchView o en el teclado
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return if (query != null) {
+                    view.ocultarTeclado()
+                    viewModelPrincipal.setPalabrasClave(query)
+                } else false
+            }
 
-        profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono()) }
+            // y esta se llama cuando cambia el texto introducido
+            // (notese que en ambas funciones setBusquedaQuery()
+            // regresa un true indicando su correcto funcionamiento)
+            override fun onQueryTextChange(query: String?): Boolean {
+                return if (query != null)
+                    viewModelPrincipal.setPalabrasClave(query)
+                else false
+            }
+        }
+
+        )
+
+        binding.icono.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
         profesionalesAdapter.accionAlPresionarItem = {
             viewModelPrincipal.setProfesionalEnfocado(it)
@@ -77,13 +98,7 @@ class ListaProfesionalesFragment : Fragment() {
         return if (esLineal)
             LinearLayoutManager(requireContext())
         else
-            GridLayoutManager(requireContext(), 2).apply {
-                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int =
-                        if (position == 0) 2 // Tamaño completo para la cabecera en la posición 0
-                        else 1 // Tamaño normal para los elementos regulares
-                }
-            }
+            GridLayoutManager(requireContext(), 2)
     }
 
     private fun getTransicion(): FragmentTransaction {
