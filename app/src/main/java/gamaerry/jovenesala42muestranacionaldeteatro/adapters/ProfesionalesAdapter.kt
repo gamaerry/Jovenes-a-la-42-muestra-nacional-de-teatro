@@ -3,7 +3,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +10,7 @@ import coil.load
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.CabeceraBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,7 +28,7 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
 
     // accion al presionar la barra de busqueda (notese
     // que no puede ser un lambda por tener dos funciones)
-    lateinit var accionAlPresionarBusqueda: (SearchView) -> SearchView.OnQueryTextListener
+    lateinit var accionAlPresionarBusqueda: (String) -> Boolean
 
     // define los valores de cada tipo de item dada su posicion de aparicion
     // (0 para la cabecera y 1 para los contenedores de cada profesional ie, con esta
@@ -68,7 +68,25 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
         fun enlazar() {
             // los lambda que se definen en el fragment obtienen desde aqui la referenca a ambos view
             icono.setOnClickListener { accionAlPresionarIcono(it as ImageView) }
-            busqueda.setOnQueryTextListener( accionAlPresionarBusqueda(busqueda) )
+            busqueda.setOnQueryTextListener( object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+                // esta funcion se llama cuando se presiona el
+                // icono de buscar en el SearchView o en el teclado
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return if (query != null) {
+                        busqueda.ocultarTeclado()
+                        accionAlPresionarBusqueda(query)
+                    } else false
+                }
+
+                // y esta se llama cuando cambia el texto introducido
+                // (notese que en ambas funciones setBusquedaQuery()
+                // regresa un true indicando su correcto funcionamiento)
+                override fun onQueryTextChange(query: String?): Boolean {
+                    return if (query != null)
+                        accionAlPresionarBusqueda(query)
+                    else false
+                }
+            } )
         }
     }
 

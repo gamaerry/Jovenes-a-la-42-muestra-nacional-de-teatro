@@ -56,35 +56,13 @@ class ListaProfesionalesFragment : Fragment() {
 
         binding.miRecyclerView.adapter = profesionalesAdapter
 
-        profesionalesAdapter.accionAlPresionarBusqueda = accionAlBuscar()
+        profesionalesAdapter.accionAlPresionarBusqueda = { viewModelPrincipal.setPalabrasClave(it) }
 
         profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono()) }
 
         profesionalesAdapter.accionAlPresionarItem = {
             viewModelPrincipal.setProfesionalEnfocado(it)
             getTransicion().commit()
-        }
-    }
-
-    private fun accionAlBuscar(): (SearchView) -> SearchView.OnQueryTextListener = {
-        object : SearchView.OnQueryTextListener {
-            // esta funcion se llama cuando se presiona el
-            // icono de buscar en el SearchView o en el teclado
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return if (query != null) {
-                    it.ocultarTeclado()
-                    viewModelPrincipal.setPalabrasClave(query)
-                } else false
-            }
-
-            // y esta se llama cuando cambia el texto introducido
-            // (notese que en ambas funciones setBusquedaQuery()
-            // regresa un true indicando su correcto funcionamiento)
-            override fun onQueryTextChange(query: String?): Boolean {
-                return if (query != null)
-                    viewModelPrincipal.setPalabrasClave(query)
-                else false
-            }
         }
     }
 
