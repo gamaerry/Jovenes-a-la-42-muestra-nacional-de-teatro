@@ -28,7 +28,7 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
 
     // accion al presionar la barra de busqueda (notese
     // que no puede ser un lambda por tener dos funciones)
-    lateinit var accionAlPresionarBusqueda: SearchView.OnQueryTextListener
+    lateinit var accionAlPresionarBusqueda: (SearchView) -> SearchView.OnQueryTextListener
 
     // define los valores de cada tipo de item dada su posicion de aparicion
     // (0 para la cabecera y 1 para los contenedores de cada profesional ie, con esta
@@ -66,9 +66,9 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
         private val busqueda = binding.barraDeBusqueda
 
         fun enlazar() {
-            // aqui la lambda que se define en el fragment desde aqui la referenca al icono
+            // los lambda que se definen en el fragment obtienen desde aqui la referenca a ambos view
             icono.setOnClickListener { accionAlPresionarIcono(it as ImageView) }
-            busqueda.setOnQueryTextListener( accionAlPresionarBusqueda )
+            busqueda.setOnQueryTextListener( accionAlPresionarBusqueda(busqueda) )
         }
     }
 
