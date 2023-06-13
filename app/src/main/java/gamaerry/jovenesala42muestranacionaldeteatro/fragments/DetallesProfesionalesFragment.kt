@@ -18,7 +18,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapt
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesViewModel
+import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,7 +28,7 @@ class DetallesProfesionalesFragment : Fragment() {
     private val binding get() = _binding!!
     @Inject
     lateinit var especialidadesAdapter: EspecialidadesAdapter
-    private val profesionalesViewModel: ProfesionalesViewModel by activityViewModels()
+    private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
     private val accionAlCambiarProfesionalEnfocado: (ProfesionalDelTeatro?) -> Unit = {
         binding.nombre.text = it?.nombre
         binding.descripcion.text = it?.descripcion
@@ -45,7 +45,7 @@ class DetallesProfesionalesFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                profesionalesViewModel.profesionalEnfocado.collect {
+                viewModelPrincipal.profesionalEnfocado.collect {
                     accionAlCambiarProfesionalEnfocado(it)
                 }
             }

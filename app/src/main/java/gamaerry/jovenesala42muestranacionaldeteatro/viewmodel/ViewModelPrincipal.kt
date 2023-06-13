@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gamaerry.jovenesala42muestranacionaldeteatro.data.RepositorioPrincipal
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.model.getProfesionalesDePrueba
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +15,7 @@ import javax.inject.Inject
 // establece el enlace del repositorio (y sus operaciones) con el uso que
 // se le de a los datos resultantes por parte de las vistas de los fragmentos
 @HiltViewModel
-class ProfesionalesViewModel
+class ViewModelPrincipal
 @Inject
 constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     // aqui es donde se almacenan a los profesionales del reciclerView

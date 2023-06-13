@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ProfesionalesViewModel
+import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,15 +29,15 @@ class ListaProfesionalesFragment : Fragment() {
     private val binding get() = _binding!!
     @Inject
     lateinit var profesionalesAdapter: ProfesionalesAdapter
-    private val profesionalesViewModel: ProfesionalesViewModel by activityViewModels()
+    private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        profesionalesViewModel.getProfesionales()
+        viewModelPrincipal.getProfesionales()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                profesionalesViewModel.listaProfesionalesDeTeatro.collect {
+                viewModelPrincipal.listaProfesionalesDeTeatro.collect {
                     profesionalesAdapter.submitList(it)
                 }
             }
@@ -45,7 +45,7 @@ class ListaProfesionalesFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                profesionalesViewModel.esLineal.collect {
+                viewModelPrincipal.esLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
                 }
             }
@@ -53,16 +53,16 @@ class ListaProfesionalesFragment : Fragment() {
 
         binding.miRecyclerView.adapter = profesionalesAdapter
 
-        profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono(profesionalesViewModel)) }
+        profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono(viewModelPrincipal)) }
 
         profesionalesAdapter.accionAlPresionarItem = {
-            profesionalesViewModel.setProfesionalEnfocado(it)
+            viewModelPrincipal.setProfesionalEnfocado(it)
             getTransicion().commit()
         }
     }
 
-    private fun getIcono(profesionalesViewModel: ProfesionalesViewModel): Drawable? {
-        return if (profesionalesViewModel.switchEsLineal())
+    private fun getIcono(viewModelPrincipal: ViewModelPrincipal): Drawable? {
+        return if (viewModelPrincipal.switchEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
