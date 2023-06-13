@@ -3,6 +3,7 @@ package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,10 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
 
     // accion al presionar icono del acomodo 
     lateinit var accionAlPresionarIcono: (ImageView) -> Unit
+
+    // accion al presionar la barra de busqueda (notese
+    // que no puede ser un lambda por tener dos funciones)
+    lateinit var accionAlPresionarBusqueda: SearchView.OnQueryTextListener
 
     // define los valores de cada tipo de item dada su posicion de aparicion
     // (0 para la cabecera y 1 para los contenedores de cada profesional ie, con esta
@@ -58,11 +63,12 @@ constructor() : ListAdapter<ProfesionalDelTeatro, RecyclerView.ViewHolder>(Profe
         RecyclerView.ViewHolder(binding.root) {
         // las unicas view de la cabecera del recyclerView
         private val icono = binding.icono
+        private val busqueda = binding.barraDeBusqueda
 
-        // aqui la lambda que se define en el fragment recibe
-        // la referenca al icono y la barra de busqueda
         fun enlazar() {
+            // aqui la lambda que se define en el fragment desde aqui la referenca al icono
             icono.setOnClickListener { accionAlPresionarIcono(it as ImageView) }
+            busqueda.setOnQueryTextListener( accionAlPresionarBusqueda )
         }
     }
 
