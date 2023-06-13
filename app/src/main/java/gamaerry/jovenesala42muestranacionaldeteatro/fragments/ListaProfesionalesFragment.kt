@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -19,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +29,7 @@ import javax.inject.Inject
 class ListaProfesionalesFragment : Fragment() {
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
+
     @Inject
     lateinit var profesionalesAdapter: ProfesionalesAdapter
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
@@ -53,7 +56,9 @@ class ListaProfesionalesFragment : Fragment() {
 
         binding.miRecyclerView.adapter = profesionalesAdapter
 
-        profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono(viewModelPrincipal)) }
+        profesionalesAdapter.accionAlPresionarBusqueda = accionAlBuscar()
+
+        profesionalesAdapter.accionAlPresionarIcono = { it.setImageDrawable(getIcono()) }
 
         profesionalesAdapter.accionAlPresionarItem = {
             viewModelPrincipal.setProfesionalEnfocado(it)
@@ -61,7 +66,29 @@ class ListaProfesionalesFragment : Fragment() {
         }
     }
 
-    private fun getIcono(viewModelPrincipal: ViewModelPrincipal): Drawable? {
+    private fun accionAlBuscar(): (SearchView) -> SearchView.OnQueryTextListener = {
+        object : SearchView.OnQueryTextListener {
+            // esta funcion se llama cuando se presiona el
+            // icono de buscar en el SearchView o en el teclado
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return if (query != null) {
+                    it.ocultarTeclado()
+                    viewModelPrincipal.setPalabrasClave(query)
+                } else false
+            }
+
+            // y esta se llama cuando cambia el texto introducido
+            // (notese que en ambas funciones setBusquedaQuery()
+            // regresa un true indicando su correcto funcionamiento)
+            override fun onQueryTextChange(query: String?): Boolean {
+                return if (query != null)
+                    viewModelPrincipal.setPalabrasClave(query)
+                else false
+            }
+        }
+    }
+
+    private fun getIcono(): Drawable? {
         return if (viewModelPrincipal.switchEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
