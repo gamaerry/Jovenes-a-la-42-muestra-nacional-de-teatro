@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.android.material.card.MaterialCardView
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
 import javax.inject.Inject
@@ -46,6 +47,10 @@ constructor() :
         // en esta funcion cada item del recyclerView recibe a su respectivo profesional
         fun enlazar(profesional: ProfesionalDelTeatro) {
             itemView.setOnClickListener { accionAlPresionarItem(profesional) }
+            itemView.setOnLongClickListener {(it as MaterialCardView)
+                it.isChecked = !it.isChecked
+                true
+            }
             nombre.text = profesional.nombre
             especialidad.text = profesional.especialidades
             imagen.load(profesional.urlImagen)
