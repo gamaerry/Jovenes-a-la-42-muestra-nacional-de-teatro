@@ -28,17 +28,25 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListaProfesionalesFragment : Fragment() {
+    // los binding enlazan a las vistas con el codigo
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
 
+    // gracias a la inyeccion de dependencias no uso constructor
     @Inject
     lateinit var profesionalesAdapter: ProfesionalesAdapter
+
+    // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // creado el fragmento se consiguen todos a los
+        // profesionales con palabrasClaves establecidas en ""
         viewModelPrincipal.getProfesionales()
 
+        // de aqui es donde el adapter consigue en
+        // tiempo real la listaProfesionalesDeTeatro
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaProfesionalesDeTeatro.collect {
@@ -47,6 +55,8 @@ class ListaProfesionalesFragment : Fragment() {
             }
         }
 
+        // se consigue de la propiedad esLineal del viewModel
+        // para establecer el acomodo de la lista adecuado
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.esLineal.collect {
@@ -55,8 +65,13 @@ class ListaProfesionalesFragment : Fragment() {
             }
         }
 
+        // se establece el profesionalesAdapter que conecta la
+        // informacion obtenida por el adapter con el reciclerView
         binding.miRecyclerView.adapter = profesionalesAdapter
 
+        // OnQueryTextListener es una interfaz que requiere la
+        // implementacion de dos métodos, uno para cuando cambia el
+        // String de busqueda y otro para cuando se da al boton de buscar
         binding.busqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
@@ -68,7 +83,7 @@ class ListaProfesionalesFragment : Fragment() {
             }
 
             // y esta se llama cuando cambia el texto introducido
-            // (notese que en ambas funciones setBusquedaQuery()
+            // (notese que en ambas funciones setPalabrasClave()
             // regresa un true indicando su correcto funcionamiento)
             override fun onQueryTextChange(query: String?): Boolean {
                 return if (query != null)
@@ -76,11 +91,15 @@ class ListaProfesionalesFragment : Fragment() {
                 else false
             }
         }
-
         )
 
+        // cambia el src del icono al ser presionado
+        // notese que para getIcono() se cambia el valor
+        // de esLineal del viewModel con cada llamada
         binding.icono.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
+        // cuando se presiona el item necesitamos enfocar dicho profesional
+        // y realizar la transicion al DetallesProfesionalesFragment
         profesionalesAdapter.accionAlPresionarItem = {
             viewModelPrincipal.setProfesionalEnfocado(it)
             getTransicion().commit()
@@ -88,6 +107,8 @@ class ListaProfesionalesFragment : Fragment() {
     }
 
     private fun getIcono(): Drawable? {
+        // esta funcion confia en que esLineal siempre tiene un valor inicial de
+        // true por eso esLineal no esta establecido en los sharedPreferences
         return if (viewModelPrincipal.switchEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
@@ -95,6 +116,9 @@ class ListaProfesionalesFragment : Fragment() {
     }
 
     private fun getLayoutManager(esLineal: Boolean): LayoutManager {
+        // a diferencia de getIcono, aqui no queremos que esLineal
+        // cambie con cada llamada pues esta se hara con cada cambio
+        // de configuracion y cada aparicion de este Fragment
         return if (esLineal)
             LinearLayoutManager(requireContext())
         else
@@ -103,17 +127,22 @@ class ListaProfesionalesFragment : Fragment() {
 
     private fun getTransicion(): FragmentTransaction {
         return requireActivity().supportFragmentManager.beginTransaction().apply {
+            // establece la animacion para esta transicion
             setCustomAnimations(
                 R.anim.entrar_desde_derecha,
                 R.anim.salir_hacia_izquierda,
                 R.anim.entrar_desde_izquierda,
                 R.anim.salir_hacia_derecha
             )
+            // reemplaza (no agrega) el DetallesProfesionalesFragment
             replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
+            // se guarda con la etiqueta correspondiente
             addToBackStack("detallesProfesionales")
         }
     }
 
+    // se sobreescriben estos metodos unicamente para
+    // el correcto funcionamiento del nuestro binding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
