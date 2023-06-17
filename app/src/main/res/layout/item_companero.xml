@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:checkable="true"
-    android:theme="@style/SelectableItemBackground"
+    app:rippleColor="@drawable/color_card_view"
+    android:backgroundTint="?attr/colorOnPrimary"
     app:cardElevation="10dp">
 
     <LinearLayout
