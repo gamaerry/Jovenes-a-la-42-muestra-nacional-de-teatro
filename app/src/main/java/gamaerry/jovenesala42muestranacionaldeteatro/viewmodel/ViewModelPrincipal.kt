@@ -61,4 +61,14 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             _listaProfesionalesDeTeatro.value = it
         }.launchIn(viewModelScope)
     }
+
+    fun setProfesionalesGuardados(ids: Set<String>){
+        val listaGuardados = ArrayList<ProfesionalDelTeatro>()
+        ids.forEach { id ->
+            repositorio.getProfesionalPorId(id).onEach {
+                it?.let { listaGuardados.add(it) }
+            }.launchIn(viewModelScope)
+        } // esto es suspendible: corroborar si funciona
+        _listaProfesionalesDeTeatro.value = listaGuardados
+    }
 }

@@ -14,11 +14,6 @@ val Activity.myPrefs: SharedPreferences
 val Activity.guardados: MutableSet<String>?
     get() = myPrefs.getStringSet("guardados", emptySet())
 
-
-fun Activity.getGuardados(): MutableSet<String> {
-    return guardados!!
-}
-
 fun Activity.setGuardado(id: Int) {
     myPrefs.edit().putStringSet(
         "guardados",
