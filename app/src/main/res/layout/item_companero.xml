@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:checkable="true"
-    app:rippleColor="@drawable/color_card_view"
     android:backgroundTint="?attr/colorOnPrimary"
-    app:cardElevation="10dp">
+    android:checkable="true"
+    app:cardElevation="10dp"
+    app:cardForegroundColor="@drawable/color_card_view"
+    app:rippleColor="?attr/colorPrimary">
 
     <LinearLayout
         android:layout_width="match_parent"
