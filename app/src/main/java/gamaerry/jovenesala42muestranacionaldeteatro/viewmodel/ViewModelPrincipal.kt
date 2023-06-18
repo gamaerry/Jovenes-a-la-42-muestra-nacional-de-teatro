@@ -22,6 +22,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _listaProfesionalesDeTeatro = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
     val listaProfesionalesDeTeatro: StateFlow<List<ProfesionalDelTeatro>> get() = _listaProfesionalesDeTeatro
 
+    // aqui es donde se almacenan a los profesionales guardados
+    private val _listaGuardada = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
+    val listaGuardada: StateFlow<List<ProfesionalDelTeatro>> get() = _listaGuardada
+
     // aqui se almacena al profesional a mostrar
     private val _profesionalEnfocado = MutableStateFlow<ProfesionalDelTeatro?>(null)
     val profesionalEnfocado: StateFlow<ProfesionalDelTeatro?> get() = _profesionalEnfocado
@@ -62,13 +66,14 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
-    fun setProfesionalesGuardados(ids: Set<String>){
-        val listaGuardados = ArrayList<ProfesionalDelTeatro>()
-        ids.forEach { id ->
+    // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
+    fun setListaGuardada(ids: Set<String>?){
+        val guardados = ArrayList<ProfesionalDelTeatro>()
+        ids?.forEach { id ->
             repositorio.getProfesionalPorId(id).onEach {
-                it?.let { listaGuardados.add(it) }
+                it?.let { guardados.add(it) }
             }.launchIn(viewModelScope)
         } // esto es suspendible: corroborar si funciona
-        _listaProfesionalesDeTeatro.value = listaGuardados
+        _listaGuardada.value = guardados
     }
 }
