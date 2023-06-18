@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,7 +71,11 @@ class ListaProfesionalesFragment : Fragment() {
 
         // se establece el profesionalesAdapter que conecta la
         // informacion obtenida por el adapter con el reciclerView
-        binding.miRecyclerView.adapter = profesionalesAdapter
+        binding.miRecyclerView.adapter = profesionalesAdapter.apply {
+            // con esta linea evitamos que nuestro recyclerView se regrese al principio cuando se restaure
+            // (para esto es necesario implementar la dependencia especifica de RecyclerView en el build.gradle)
+            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
 
         // OnQueryTextListener es una interfaz que requiere la
         // implementacion de dos métodos, uno para cuando cambia el
