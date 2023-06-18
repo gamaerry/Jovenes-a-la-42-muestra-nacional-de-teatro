@@ -1,6 +1,8 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
+import android.graphics.Color
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +15,9 @@ import coil.load
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
+import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
@@ -26,6 +30,7 @@ import javax.inject.Inject
 class DetallesProfesionalesFragment : Fragment() {
     private var _binding: FragmentDetallesProfesionalesBinding? = null
     private val binding get() = _binding!!
+
     @Inject
     lateinit var especialidadesAdapter: EspecialidadesAdapter
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
@@ -50,6 +55,16 @@ class DetallesProfesionalesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val animacion = MaterialContainerTransform().apply {
+            duration = 300L
+            scrimColor = Color.TRANSPARENT
+        }
+        sharedElementEnterTransition = animacion
+        sharedElementReturnTransition = animacion
     }
 
     override fun onCreateView(

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -17,10 +18,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -100,9 +103,9 @@ class ListaProfesionalesFragment : Fragment() {
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesAdapter.accionAlPresionarItem = {
-            viewModelPrincipal.setProfesionalEnfocado(it)
-            getTransicion().commit()
+        profesionalesAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
+            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
+            getTransicion(itemView).commit()
         }
     }
 
@@ -125,15 +128,10 @@ class ListaProfesionalesFragment : Fragment() {
             GridLayoutManager(requireContext(), 2)
     }
 
-    private fun getTransicion(): FragmentTransaction {
+    private fun getTransicion(itemView: View): FragmentTransaction {
         return requireActivity().supportFragmentManager.beginTransaction().apply {
-            // establece la animacion para esta transicion
-            setCustomAnimations(
-                R.anim.entrar_desde_derecha,
-                R.anim.salir_hacia_izquierda,
-                R.anim.entrar_desde_izquierda,
-                R.anim.salir_hacia_derecha
-            )
+            // Agrega la transición compartida desde el objeto seleccionado
+            addSharedElement(itemView, "detallesProfesionales")
             // reemplaza (no agrega) el DetallesProfesionalesFragment
             replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
             // se guarda con la etiqueta correspondiente
@@ -141,6 +139,15 @@ class ListaProfesionalesFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(false).apply{
+            duration = 300L
+        }
+        reenterTransition = MaterialElevationScale(true).apply{
+            duration = 300L
+        }
+    }
     // se sobreescriben estos metodos unicamente para
     // el correcto funcionamiento del nuestro binding
     override fun onCreateView(

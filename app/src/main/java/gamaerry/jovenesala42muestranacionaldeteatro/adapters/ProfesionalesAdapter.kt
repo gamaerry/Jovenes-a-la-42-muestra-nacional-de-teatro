@@ -1,6 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -22,7 +23,7 @@ constructor() :
         ProfesionalDiffUtil
     ) {
     // accion al presionar contenedor del profesional
-    lateinit var accionAlPresionarItem: (ProfesionalDelTeatro) -> Unit
+    lateinit var accionAlPresionarItem: (ProfesionalDelTeatro, View) -> Unit
 
     // se crea el viewHolder correspondiente
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -46,7 +47,8 @@ constructor() :
 
         // en esta funcion cada item del recyclerView recibe a su respectivo profesional
         fun enlazar(profesional: ProfesionalDelTeatro) {
-            itemView.setOnClickListener { accionAlPresionarItem(profesional) }
+            itemView.transitionName = profesional.id.toString()
+            itemView.setOnClickListener { accionAlPresionarItem(profesional, it) }
             itemView.setOnLongClickListener {(it as MaterialCardView)
                 it.isChecked = !it.isChecked
                 true
