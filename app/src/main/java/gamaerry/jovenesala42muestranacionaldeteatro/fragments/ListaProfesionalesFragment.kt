@@ -69,6 +69,13 @@ class ListaProfesionalesFragment : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED){
+                viewModelPrincipal.enGuardados.collect{
+                }
+            }
+        }
+
         // se establece el profesionalesAdapter que conecta la
         // informacion obtenida por el adapter con el reciclerView
         binding.miRecyclerView.adapter = profesionalesAdapter.apply {
@@ -80,7 +87,31 @@ class ListaProfesionalesFragment : Fragment() {
         // OnQueryTextListener es una interfaz que requiere la
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
-        binding.busqueda.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        binding.busqueda.setOnQueryTextListener(buscar(view))
+
+        // cambia el src del icono al ser presionado
+        // notese que para getIcono() se cambia el valor
+        // de esLineal del viewModel con cada llamada
+        binding.guardado.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+
+        // cuando se presiona el item necesitamos enfocar dicho profesional
+        // y realizar la transicion al DetallesProfesionalesFragment
+        profesionalesAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
+            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
+            getTransicion(itemView).commit()
+        }
+
+        binding.navegacion.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.inicio -> viewModelPrincipal.setEnGuardados(false)
+                R.id.guardados -> viewModelPrincipal.setEnGuardados(true)
+            }
+            true
+        }
+    }
+
+    private fun buscar(view: View): SearchView.OnQueryTextListener {
+        return object : SearchView.OnQueryTextListener {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -99,19 +130,7 @@ class ListaProfesionalesFragment : Fragment() {
                 else false
             }
         }
-        )
 
-        // cambia el src del icono al ser presionado
-        // notese que para getIcono() se cambia el valor
-        // de esLineal del viewModel con cada llamada
-        binding.icono.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
-
-        // cuando se presiona el item necesitamos enfocar dicho profesional
-        // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
-            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
-            getTransicion(itemView).commit()
-        }
     }
 
     private fun getIcono(): Drawable? {
