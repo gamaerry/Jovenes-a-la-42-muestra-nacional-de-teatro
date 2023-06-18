@@ -50,20 +50,27 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
 
     // establece las palabras clave que devolveran la lista correspondiente en cada busqueda
     // (notese que si palabrasClave.value es "" room devolvera toda la base de datos)
-    fun setPalabrasClave(busqueda: String): Boolean {
+    fun setPalabrasClave(busqueda: String, guardados: Boolean): Boolean {
         palabrasClave.value = busqueda
         // es necesario actualizar en cada actualizacion de
         // palabras clave nuestra listaProfesionalesDeTeatro
-        getProfesionales()
+        getProfesionales(guardados)
         // devuelve true para indicar una busqueda exitosa
         return true
     }
 
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
-    fun getProfesionales() {
-        repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-            _listaProfesionalesDeTeatro.value = it
-        }.launchIn(viewModelScope)
+    fun getProfesionales(guardados: Boolean) {
+        if (guardados) {
+            val listaGuardadaTmp = _listaGuardada.value
+            repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
+                _listaGuardada.value = it.filter { profesional ->  listaGuardadaTmp.contains(profesional) }
+            }.launchIn(viewModelScope)
+        }
+        else
+            repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
+                _listaProfesionalesDeTeatro.value = it
+            }.launchIn(viewModelScope)
     }
 
     // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada

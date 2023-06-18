@@ -2,14 +2,13 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -18,20 +17,16 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
-import com.google.android.material.transition.MaterialElevationScale
-import dagger.hilt.android.AndroidEntryPoint
-import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
+import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class ListaProfesionalesFragment : Fragment() {
+class ListaGuardadaFragment : Fragment() {
     // los binding enlazan a las vistas con el codigo
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
@@ -45,15 +40,14 @@ class ListaProfesionalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // creado el fragmento se consiguen todos a los
-        // profesionales con palabrasClaves establecidas en ""
-        viewModelPrincipal.getProfesionales(false)
+        // creado el fragmento se consiguen todos a los profesionales guardados
+        viewModelPrincipal.setListaGuardada(requireActivity().guardados?.toSet())
 
         // de aqui es donde el adapter consigue en
-        // tiempo real la listaProfesionalesDeTeatro
+        // tiempo real la listaGuardada
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaProfesionalesDeTeatro.collect {
+                viewModelPrincipal.listaGuardada.collect {
                     profesionalesAdapter.submitList(it)
                 }
             }
@@ -70,7 +64,7 @@ class ListaProfesionalesFragment : Fragment() {
         }
 
         // se establece el profesionalesAdapter que conecta la
-        // informacion obtenida por el adapter con el reciclerView
+        // informacion obtenida del viewModel con el reciclerView
         binding.miRecyclerView.adapter = profesionalesAdapter.apply {
             // con esta linea evitamos que nuestro recyclerView se regrese al principio cuando se restaure
             // (para esto es necesario implementar la dependencia especifica de RecyclerView en el build.gradle)
@@ -86,7 +80,7 @@ class ListaProfesionalesFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return if (query != null) {
                     view.ocultarTeclado()
-                    viewModelPrincipal.setPalabrasClave(query, false)
+                    viewModelPrincipal.setPalabrasClave(query, true)
                 } else false
             }
 
@@ -95,7 +89,7 @@ class ListaProfesionalesFragment : Fragment() {
             // regresa un true indicando su correcto funcionamiento)
             override fun onQueryTextChange(query: String?): Boolean {
                 return if (query != null)
-                    viewModelPrincipal.setPalabrasClave(query, false)
+                    viewModelPrincipal.setPalabrasClave(query, true)
                 else false
             }
         }
@@ -123,7 +117,7 @@ class ListaProfesionalesFragment : Fragment() {
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
     }
 
-    private fun getLayoutManager(esLineal: Boolean): LayoutManager {
+    private fun getLayoutManager(esLineal: Boolean): RecyclerView.LayoutManager {
         // a diferencia de getIcono, aqui no queremos que esLineal
         // cambie con cada llamada pues esta se hara con cada cambio
         // de configuracion y cada aparicion de este Fragment
@@ -144,15 +138,6 @@ class ListaProfesionalesFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false).apply{
-            duration = 300L
-        }
-        reenterTransition = MaterialElevationScale(true).apply{
-            duration = 300L
-        }
-    }
     // se sobreescriben estos metodos unicamente para
     // el correcto funcionamiento del nuestro binding
     override fun onCreateView(
