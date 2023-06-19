@@ -15,10 +15,7 @@ import javax.inject.Singleton
 
 // en el contexto de los adapter en android "item" hace referencia a los contenedores que se reutilizan
 // (de ahi el termino recyclerView) para mostrar informacion, en este caso emitida por nuestro viewModel
-@Singleton
-class ProfesionalesAdapter
-@Inject
-constructor() :
+class ProfesionalesAdapter :
     ListAdapter<ProfesionalDelTeatro, ProfesionalesAdapter.ProfesionalDelTeatroViewHolder>(
         ProfesionalDiffUtil
     ) {
@@ -49,7 +46,8 @@ constructor() :
         fun enlazar(profesional: ProfesionalDelTeatro) {
             itemView.transitionName = profesional.id.toString()
             itemView.setOnClickListener { accionAlPresionarItem(profesional, it) }
-            itemView.setOnLongClickListener {(it as MaterialCardView)
+            itemView.setOnLongClickListener {
+                (it as MaterialCardView)
                 it.isChecked = !it.isChecked
                 true
             }

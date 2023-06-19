@@ -29,6 +29,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @AndroidEntryPoint
 class ListaProfesionalesFragment : Fragment() {
@@ -36,9 +37,15 @@ class ListaProfesionalesFragment : Fragment() {
     private var _binding: FragmentListaProfesionalesBinding? = null
     private val binding get() = _binding!!
 
-    // gracias a la inyeccion de dependencias no uso constructor
+    // gracias a la inyeccion de dependencias no uso constructor sin embargo,
+    // puesto que eran necesarios dos adapters hago uso de las etiquetas de hilt
     @Inject
+    @Named("inicio")
     lateinit var profesionalesAdapter: ProfesionalesAdapter
+
+    @Inject
+    @Named("guardados")
+    lateinit var profesionalesGuardadosAdapter: ProfesionalesAdapter
 
     // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
@@ -59,6 +66,16 @@ class ListaProfesionalesFragment : Fragment() {
             }
         }
 
+        // de aqui es donde el otro adapter
+        // consigue en tiempo real la listaGuardada
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModelPrincipal.listaGuardada.collect {
+                    profesionalesGuardadosAdapter.submitList(it)
+                }
+            }
+        }
+
         // se consigue de la propiedad esLineal del viewModel
         // para establecer el acomodo de la lista adecuado
         viewLifecycleOwner.lifecycleScope.launch {
@@ -72,17 +89,15 @@ class ListaProfesionalesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED){
                 viewModelPrincipal.enGuardados.collect{
-                }
+                    // se establece el profesionalesAdapter correspondiente que conecta la
+                    // informacion obtenida por el adapter con el reciclerView
+                    if (it)
+                        binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
+                    else
+                        binding.miRecyclerView.adapter = profesionalesAdapter}
             }
         }
 
-        // se establece el profesionalesAdapter que conecta la
-        // informacion obtenida por el adapter con el reciclerView
-        binding.miRecyclerView.adapter = profesionalesAdapter.apply {
-            // con esta linea evitamos que nuestro recyclerView se regrese al principio cuando se restaure
-            // (para esto es necesario implementar la dependencia especifica de RecyclerView en el build.gradle)
-            stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        }
 
         // OnQueryTextListener es una interfaz que requiere la
         // implementacion de dos métodos, uno para cuando cambia el
@@ -92,11 +107,18 @@ class ListaProfesionalesFragment : Fragment() {
         // cambia el src del icono al ser presionado
         // notese que para getIcono() se cambia el valor
         // de esLineal del viewModel con cada llamada
-        binding.guardado.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
         profesionalesAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
+            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
+            getTransicion(itemView).commit()
+        }
+
+        // cuando se presiona el item necesitamos enfocar dicho profesional
+        // y realizar la transicion al DetallesProfesionalesFragment
+        profesionalesGuardadosAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
         }
