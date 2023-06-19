@@ -10,8 +10,6 @@ import coil.load
 import com.google.android.material.card.MaterialCardView
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
-import javax.inject.Inject
-import javax.inject.Singleton
 
 // en el contexto de los adapter en android "item" hace referencia a los contenedores que se reutilizan
 // (de ahi el termino recyclerView) para mostrar informacion, en este caso emitida por nuestro viewModel
@@ -20,7 +18,10 @@ class ProfesionalesAdapter :
         ProfesionalDiffUtil
     ) {
     // accion al presionar contenedor del profesional
-    lateinit var accionAlPresionarItem: (ProfesionalDelTeatro, View) -> Unit
+    lateinit var accionAlPresionar: (ProfesionalDelTeatro, View) -> Unit
+
+    // accion al presionar contenedor del profesional
+    lateinit var accionAlPresionarLargo: (MaterialCardView) -> Boolean
 
     // se crea el viewHolder correspondiente
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -45,12 +46,8 @@ class ProfesionalesAdapter :
         // en esta funcion cada item del recyclerView recibe a su respectivo profesional
         fun enlazar(profesional: ProfesionalDelTeatro) {
             itemView.transitionName = profesional.id.toString()
-            itemView.setOnClickListener { accionAlPresionarItem(profesional, it) }
-            itemView.setOnLongClickListener {
-                (it as MaterialCardView)
-                it.isChecked = !it.isChecked
-                true
-            }
+            itemView.setOnClickListener { accionAlPresionar(profesional, it) }
+            itemView.setOnLongClickListener { accionAlPresionarLargo(it as MaterialCardView) }
             nombre.text = profesional.nombre
             especialidad.text = profesional.especialidades
             imagen.load(profesional.urlImagen)

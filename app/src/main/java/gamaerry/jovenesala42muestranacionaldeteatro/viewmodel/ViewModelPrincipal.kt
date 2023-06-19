@@ -1,5 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -83,12 +84,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
 
     // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
     fun setListaGuardada(ids: Set<String>?){
-        val guardados = ArrayList<ProfesionalDelTeatro>()
         ids?.forEach { id ->
             repositorio.getProfesionalPorId(id).onEach {
-                it?.let { guardados.add(it) }
+                it?.let { _listaGuardada.value += it }
             }.launchIn(viewModelScope)
-        } // esto es suspendible: corroborar si funciona
-        _listaGuardada.value = guardados
+        }
     }
 }

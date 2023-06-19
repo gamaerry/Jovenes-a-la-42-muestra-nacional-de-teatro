@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -17,15 +16,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.transition.MaterialElevationScale
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
+import gamaerry.jovenesala42muestranacionaldeteatro.setGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,11 +50,18 @@ class ListaProfesionalesFragment : Fragment() {
     // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
 
+    private val seleccionados: ArrayList<MaterialCardView> = ArrayList()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (seleccionados.isEmpty())
+            mostrarAcomodo()
+        else ocultarAcomodo()
+
         // creado el fragmento se consiguen todos a los
         // profesionales con palabrasClaves establecidas en ""
         viewModelPrincipal.getProfesionales(false)
+        viewModelPrincipal.setListaGuardada(requireActivity().guardados)
 
         // de aqui es donde el adapter consigue en
         // tiempo real la listaProfesionalesDeTeatro
@@ -87,14 +94,15 @@ class ListaProfesionalesFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED){
-                viewModelPrincipal.enGuardados.collect{
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModelPrincipal.enGuardados.collect {
                     // se establece el profesionalesAdapter correspondiente que conecta la
                     // informacion obtenida por el adapter con el reciclerView
                     if (it)
                         binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
                     else
-                        binding.miRecyclerView.adapter = profesionalesAdapter}
+                        binding.miRecyclerView.adapter = profesionalesAdapter
+                }
             }
         }
 
@@ -109,18 +117,36 @@ class ListaProfesionalesFragment : Fragment() {
         // de esLineal del viewModel con cada llamada
         binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
+        binding.guardado.setOnClickListener { _ ->
+            seleccionados.forEach {
+                if (it.isChecked)
+                    requireActivity().setGuardado(it.transitionName)
+            }
+        }
+
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
+        profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesGuardadosAdapter.accionAlPresionarItem = { profesionalDelTeatro, itemView ->
+        profesionalesGuardadosAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
+        }
+
+        profesionalesAdapter.accionAlPresionarLargo = {
+            it.isChecked = !it.isChecked
+            if (it.isChecked)
+                seleccionados.add(it)
+            else seleccionados.remove(it)
+            if (seleccionados.isEmpty())
+                mostrarAcomodo()
+            else ocultarAcomodo()
+            true
         }
 
         binding.navegacion.setOnItemSelectedListener {
@@ -155,6 +181,16 @@ class ListaProfesionalesFragment : Fragment() {
 
     }
 
+    private fun mostrarAcomodo(){
+        binding.acomodo.visibility = View.VISIBLE
+        binding.guardado.visibility = View.GONE
+    }
+
+    private fun ocultarAcomodo(){
+        binding.acomodo.visibility = View.GONE
+        binding.guardado.visibility = View.VISIBLE
+    }
+
     private fun getIcono(): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
@@ -187,13 +223,14 @@ class ListaProfesionalesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false).apply{
+        exitTransition = MaterialElevationScale(false).apply {
             duration = 300L
         }
-        reenterTransition = MaterialElevationScale(true).apply{
+        reenterTransition = MaterialElevationScale(true).apply {
             duration = 300L
         }
     }
+
     // se sobreescriben estos metodos unicamente para
     // el correcto funcionamiento del nuestro binding
     override fun onCreateView(
