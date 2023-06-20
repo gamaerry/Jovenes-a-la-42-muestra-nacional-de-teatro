@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +41,7 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
+    // estado que representa si el usuario esta en la pestana de guardados o no
     fun setEnGuardados(enGuardados: Boolean){
         _enGuardados.value = enGuardados
     }
@@ -71,12 +71,15 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
     fun getProfesionales(guardados: Boolean) {
         if (guardados) {
+            // se guarda el estado actual de la listaGuardada para luego filtrar de la
+            // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             val listaGuardadaTmp = _listaGuardada.value
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaGuardada.value = it.filter { profesional ->  listaGuardadaTmp.contains(profesional) }
             }.launchIn(viewModelScope)
         }
         else
+            // no es necesario ningun filtrado en caso de tratarse del menu de inicio
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaProfesionalesDeTeatro.value = it
             }.launchIn(viewModelScope)
@@ -85,8 +88,8 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
     fun setListaGuardada(ids: Set<String>?){
         ids?.forEach { id ->
-            repositorio.getProfesionalPorId(id).onEach {
-                it?.let { _listaGuardada.value += it }
+            repositorio.getProfesionalPorId(id).onEach { profesional ->
+                profesional?.let { _listaGuardada.value += it }
             }.launchIn(viewModelScope)
         }
     }
