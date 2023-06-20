@@ -89,7 +89,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     fun setListaGuardada(ids: Set<String>?){
         ids?.forEach { id ->
             repositorio.getProfesionalPorId(id).onEach { profesional ->
-                profesional?.let { _listaGuardada.value += it }
+                profesional?.let {
+                    if(!listaGuardada.value.contains(it))
+                        _listaGuardada.value += it
+                }
             }.launchIn(viewModelScope)
         }
     }
