@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp"
     android:backgroundTint="?attr/colorOnPrimary"
+    android:transitionName="detallesProfesionales"
     app:cardElevation="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +30,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/botonesDeEspecialidades"
-            style="@style/Widget.MaterialComponents.TimePicker.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
