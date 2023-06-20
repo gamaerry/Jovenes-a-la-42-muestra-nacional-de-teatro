@@ -22,6 +22,13 @@ fun Activity.setGuardado(id: String) {
     ).apply()
 }
 
+fun Activity.removeGuardado(id: String) {
+    myPrefs.edit().putStringSet(
+        "guardados",
+        guardados!!.toMutableSet().apply { remove(id) }
+    ).apply()
+}
+
 // funcion de extension para obtener la lista de
 // especialidades de cada entidad ProfesionalDelTeatro,
 // que usaran los botones del DetallesProfesionalesFragment
