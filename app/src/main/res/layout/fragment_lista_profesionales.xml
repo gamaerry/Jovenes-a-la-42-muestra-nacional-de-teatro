@@ -16,22 +16,20 @@
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:gravity="center">
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/busqueda"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
                     android:layout_marginStart="16dp"
                     android:background="@drawable/barra_de_busqueda"
-                    android:elevation="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/acomodo"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:elevation="10dp" />
 
                 <ImageView
                     android:id="@+id/acomodo"
@@ -39,12 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="12dp"
-                    android:src="@drawable/ic_list"
-                    app:layout_constraintBottom_toBottomOf="@+id/busqueda"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/busqueda"
-                    app:layout_constraintTop_toTopOf="@+id/busqueda" />
+                    android:src="@drawable/ic_list" />
 
                 <ImageView
                     android:id="@+id/guardado"
@@ -53,14 +46,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="12dp"
                     android:src="@drawable/ic_archive"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="@+id/busqueda"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/busqueda"
-                    app:layout_constraintTop_toTopOf="@+id/busqueda" />
+                    android:visibility="gone" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
