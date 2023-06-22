@@ -52,20 +52,10 @@ class ListaGuardadosFragment : Fragment() {
             mostrarAcomodo()
         else ocultarAcomodo()
 
-        // creado el fragmento se consiguen todos a los
-        // profesionales con palabrasClaves establecidas en ""
-        viewModelPrincipal.getProfesionales(false)
+        // creado el fragmento se consiguen
+        // todos a los profesionales guardados
         viewModelPrincipal.setListaGuardada(requireActivity().guardados)
-
-        // de aqui es donde el adapter consigue en
-        // tiempo real la listaProfesionalesDeTeatro
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaProfesionalesDeTeatro.collect {
-                    profesionalesAdapter.submitList(it)
-                }
-            }
-        }
+        binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
 
         // de aqui es donde el otro adapter
         // consigue en tiempo real la listaGuardada
@@ -83,19 +73,6 @@ class ListaGuardadosFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.esLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.enGuardados.collect {
-                    // se establece el profesionalesAdapter correspondiente que conecta la
-                    // informacion obtenida por el adapter con el reciclerView
-                    if (it)
-                        binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
-                    else
-                        binding.miRecyclerView.adapter = profesionalesAdapter
                 }
             }
         }
@@ -121,19 +98,12 @@ class ListaGuardadosFragment : Fragment() {
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
-            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
-            getTransicion(itemView).commit()
-        }
-
-        // cuando se presiona el item necesitamos enfocar dicho profesional
-        // y realizar la transicion al DetallesProfesionalesFragment
         profesionalesGuardadosAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
         }
 
-        profesionalesAdapter.accionAlPresionarLargo = {
+        profesionalesGuardadosAdapter.accionAlPresionarLargo = {
             it.isChecked = !it.isChecked
             if (it.isChecked)
                 seleccionados.add(it)

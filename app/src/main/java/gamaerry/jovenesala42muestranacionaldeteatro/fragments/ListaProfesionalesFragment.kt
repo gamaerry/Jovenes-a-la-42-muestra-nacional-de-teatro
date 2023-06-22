@@ -29,7 +29,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.setGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 @AndroidEntryPoint
 class ListaProfesionalesFragment : Fragment() {
@@ -40,12 +39,7 @@ class ListaProfesionalesFragment : Fragment() {
     // gracias a la inyeccion de dependencias no uso constructor sin embargo,
     // puesto que eran necesarios dos adapters hago uso de las etiquetas de hilt
     @Inject
-    @Named("inicio")
     lateinit var profesionalesAdapter: ProfesionalesAdapter
-
-    @Inject
-    @Named("guardados")
-    lateinit var profesionalesGuardadosAdapter: ProfesionalesAdapter
 
     // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
@@ -61,7 +55,7 @@ class ListaProfesionalesFragment : Fragment() {
         // creado el fragmento se consiguen todos a los
         // profesionales con palabrasClaves establecidas en ""
         viewModelPrincipal.getProfesionales(false)
-        viewModelPrincipal.setListaGuardada(requireActivity().guardados)
+        binding.miRecyclerView.adapter = profesionalesAdapter
 
         // de aqui es donde el adapter consigue en
         // tiempo real la listaProfesionalesDeTeatro
@@ -73,35 +67,12 @@ class ListaProfesionalesFragment : Fragment() {
             }
         }
 
-        // de aqui es donde el otro adapter
-        // consigue en tiempo real la listaGuardada
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaGuardada.collect {
-                    profesionalesGuardadosAdapter.submitList(it)
-                }
-            }
-        }
-
         // se consigue de la propiedad esLineal del viewModel
         // para establecer el acomodo de la lista adecuado
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.esLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.enGuardados.collect {
-                    // se establece el profesionalesAdapter correspondiente que conecta la
-                    // informacion obtenida por el adapter con el reciclerView
-                    if (it)
-                        binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
-                    else
-                        binding.miRecyclerView.adapter = profesionalesAdapter
                 }
             }
         }
@@ -128,13 +99,6 @@ class ListaProfesionalesFragment : Fragment() {
         // cuando se presiona el item necesitamos enfocar dicho profesional
         // y realizar la transicion al DetallesProfesionalesFragment
         profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
-            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
-            getTransicion(itemView).commit()
-        }
-
-        // cuando se presiona el item necesitamos enfocar dicho profesional
-        // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesGuardadosAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
         }
