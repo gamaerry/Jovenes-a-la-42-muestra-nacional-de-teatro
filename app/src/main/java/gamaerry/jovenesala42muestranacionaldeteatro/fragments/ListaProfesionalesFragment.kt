@@ -54,7 +54,7 @@ class ListaProfesionalesFragment : Fragment() {
 
         // creado el fragmento se consiguen todos a los
         // profesionales con palabrasClaves establecidas en ""
-        viewModelPrincipal.getProfesionales(false)
+        viewModelPrincipal.setProfesionales(false)
         binding.miRecyclerView.adapter = profesionalesAdapter
 
         // de aqui es donde el adapter consigue en

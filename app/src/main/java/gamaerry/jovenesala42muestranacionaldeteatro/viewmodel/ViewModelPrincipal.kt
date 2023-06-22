@@ -54,13 +54,13 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         palabrasClave.value = busqueda
         // es necesario actualizar en cada actualizacion de
         // palabras clave nuestra listaProfesionalesDeTeatro
-        getProfesionales(guardados)
+        setProfesionales(guardados)
         // devuelve true para indicar una busqueda exitosa
         return true
     }
 
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
-    fun getProfesionales(guardados: Boolean) {
+    fun setProfesionales(guardados: Boolean) {
         if (guardados) {
             // se guarda el estado actual de la listaGuardada para luego filtrar de la
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
