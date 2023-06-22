@@ -93,7 +93,7 @@ class ListaProfesionalesFragment : Fragment() {
                 if (it.isChecked)
                     requireActivity().setGuardado(it.transitionName)
             }
-            viewModelPrincipal.setListaGuardada(requireActivity().guardados)
+            viewModelPrincipal.updateListaGuardada(requireActivity().guardados)
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional

@@ -77,7 +77,7 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     }
 
     // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
-    fun setListaGuardada(ids: Set<String>?){
+    fun updateListaGuardada(ids: Set<String>?){
         ids?.forEach { id ->
             repositorio.getProfesionalPorId(id).onEach { profesional ->
                 profesional?.let {
