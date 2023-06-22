@@ -149,14 +149,6 @@ class ListaProfesionalesFragment : Fragment() {
             else ocultarAcomodo()
             true
         }
-
-        binding.navegacion.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.inicio -> viewModelPrincipal.setEnGuardados(false)
-                R.id.guardados -> viewModelPrincipal.setEnGuardados(true)
-            }
-            true
-        }
     }
 
     private fun buscar(view: View): SearchView.OnQueryTextListener {
