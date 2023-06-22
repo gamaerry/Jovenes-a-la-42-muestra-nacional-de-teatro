@@ -169,22 +169,18 @@ class ListaProfesionalesFragment : Fragment() {
 
     private fun getTransicion(itemView: View): FragmentTransaction {
         return requireActivity().supportFragmentManager.beginTransaction().apply {
+            exitTransition = MaterialElevationScale(false).apply {
+                duration = 300L
+            }
+            reenterTransition = MaterialElevationScale(true).apply {
+                duration = 300L
+            }
             // Agrega la transición compartida desde el objeto seleccionado
             addSharedElement(itemView, "detallesProfesionales")
             // reemplaza (no agrega) el DetallesProfesionalesFragment
             replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
             // se guarda con la etiqueta correspondiente
             addToBackStack("detallesProfesionales")
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false).apply {
-            duration = 300L
-        }
-        reenterTransition = MaterialElevationScale(true).apply {
-            duration = 300L
         }
     }
 
