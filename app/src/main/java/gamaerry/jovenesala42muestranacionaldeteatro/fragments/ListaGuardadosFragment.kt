@@ -29,7 +29,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.setGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import javax.inject.Named
 
 @AndroidEntryPoint
 class ListaGuardadosFragment : Fragment() {
@@ -54,14 +53,14 @@ class ListaGuardadosFragment : Fragment() {
 
         // creado el fragmento se consiguen
         // todos a los profesionales guardados
-        viewModelPrincipal.updateListaGuardada(requireActivity().guardados)
+        viewModelPrincipal.updateGuardados(requireActivity().guardados)
         binding.miRecyclerView.adapter = profesionalesGuardadosAdapter
 
         // de aqui es donde el otro adapter
         // consigue en tiempo real la listaGuardada
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaGuardada.collect {
+                viewModelPrincipal.listaGuardados.collect {
                     profesionalesGuardadosAdapter.submitList(it)
                 }
             }
@@ -93,7 +92,7 @@ class ListaGuardadosFragment : Fragment() {
                 if (it.isChecked)
                     requireActivity().setGuardado(it.transitionName)
             }
-            viewModelPrincipal.updateListaGuardada(requireActivity().guardados)
+            viewModelPrincipal.updateGuardados(requireActivity().guardados)
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional

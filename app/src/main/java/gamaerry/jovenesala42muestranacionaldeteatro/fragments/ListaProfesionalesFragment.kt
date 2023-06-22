@@ -54,14 +54,14 @@ class ListaProfesionalesFragment : Fragment() {
 
         // creado el fragmento se consiguen todos a los
         // profesionales con palabrasClaves establecidas en ""
-        viewModelPrincipal.setProfesionales(false)
+        viewModelPrincipal.setListaProfesionales(false)
         binding.miRecyclerView.adapter = profesionalesAdapter
 
         // de aqui es donde el adapter consigue en
         // tiempo real la listaProfesionalesDeTeatro
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaProfesionalesDeTeatro.collect {
+                viewModelPrincipal.listaInicio.collect {
                     profesionalesAdapter.submitList(it)
                 }
             }
@@ -93,7 +93,7 @@ class ListaProfesionalesFragment : Fragment() {
                 if (it.isChecked)
                     requireActivity().setGuardado(it.transitionName)
             }
-            viewModelPrincipal.updateListaGuardada(requireActivity().guardados)
+            viewModelPrincipal.updateGuardados(requireActivity().guardados)
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional

@@ -18,29 +18,39 @@ import javax.inject.Inject
 class ViewModelPrincipal
 @Inject
 constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
-    // aqui es donde se almacenan a los profesionales del reciclerView
-    private val _listaProfesionalesDeTeatro = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
-    val listaProfesionalesDeTeatro: StateFlow<List<ProfesionalDelTeatro>> get() = _listaProfesionalesDeTeatro
+    // aqui es donde se almacenan a los profesionales del inicio
+    private val _listaInicio = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
+    val listaInicio: StateFlow<List<ProfesionalDelTeatro>> get() = _listaInicio
 
     // aqui es donde se almacenan a los profesionales guardados
-    private val _listaGuardada = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
-    val listaGuardada: StateFlow<List<ProfesionalDelTeatro>> get() = _listaGuardada
+    private val _listaGuardados = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
+    val listaGuardados: StateFlow<List<ProfesionalDelTeatro>> get() = _listaGuardados
 
     // aqui se almacena al profesional a mostrar
     private val _profesionalEnfocado = MutableStateFlow<ProfesionalDelTeatro?>(null)
     val profesionalEnfocado: StateFlow<ProfesionalDelTeatro?> get() = _profesionalEnfocado
 
-    // aqui es donde se almacena la listaDeNotas
-    private val _esLineal = MutableStateFlow(false)
-    val esLineal: StateFlow<Boolean> get() = _esLineal
+    // aqui es donde se almacena el tipo de acomodo
+    private val _guardadosEsLineal = MutableStateFlow(false)
+    val guardadosEsLineal: StateFlow<Boolean> get() = _guardadosEsLineal
+
+    // aqui es donde se almacena el tipo de acomodo
+    private val _inicioEsLineal = MutableStateFlow(false)
+    val inicioEsLineal: StateFlow<Boolean> get() = _inicioEsLineal
 
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
     // cambia el valor del acomodo y lo regresa
-    fun switchEsLineal(): Boolean {
-        _esLineal.value = !_esLineal.value
-        return esLineal.value
+    fun switchInicioEsLineal(): Boolean {
+        _inicioEsLineal.value = !_inicioEsLineal.value
+        return inicioEsLineal.value
+    }
+
+    // cambia el valor del acomodo y lo regresa
+    fun switchGuardadosEsLineal(): Boolean {
+        _guardadosEsLineal.value = !_guardadosEsLineal.value
+        return guardadosEsLineal.value
     }
 
     // establece al profesional seleccionado en su variable correspondiente
@@ -54,35 +64,35 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         palabrasClave.value = busqueda
         // es necesario actualizar en cada actualizacion de
         // palabras clave nuestra listaProfesionalesDeTeatro
-        setProfesionales(guardados)
+        setListaProfesionales(guardados)
         // devuelve true para indicar una busqueda exitosa
         return true
     }
 
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
-    fun setProfesionales(guardados: Boolean) {
+    fun setListaProfesionales(guardados: Boolean) {
         if (guardados) {
             // se guarda el estado actual de la listaGuardada para luego filtrar de la
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
-            val listaGuardadaTmp = _listaGuardada.value
+            val listaGuardadaTmp = _listaGuardados.value
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                _listaGuardada.value = it.filter { profesional ->  listaGuardadaTmp.contains(profesional) }
+                _listaGuardados.value = it.filter { profesional ->  listaGuardadaTmp.contains(profesional) }
             }.launchIn(viewModelScope)
         }
         else
             // no es necesario ningun filtrado en caso de tratarse del menu de inicio
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                _listaProfesionalesDeTeatro.value = it
+                _listaInicio.value = it
             }.launchIn(viewModelScope)
     }
 
     // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
-    fun updateListaGuardada(ids: Set<String>?){
+    fun updateGuardados(ids: Set<String>?){
         ids?.forEach { id ->
             repositorio.getProfesionalPorId(id).onEach { profesional ->
                 profesional?.let {
-                    if(!listaGuardada.value.contains(it))
-                        _listaGuardada.value += it
+                    if(!listaGuardados.value.contains(it))
+                        _listaGuardados.value += it
                 }
             }.launchIn(viewModelScope)
         }
