@@ -34,17 +34,8 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _esLineal = MutableStateFlow(false)
     val esLineal: StateFlow<Boolean> get() = _esLineal
 
-    // aqui es donde se almacena la listaDeNotas
-    private val _enGuardados = MutableStateFlow(false)
-    val enGuardados: StateFlow<Boolean> get() = _enGuardados
-
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
-
-    // estado que representa si el usuario esta en la pestana de guardados o no
-    fun setEnGuardados(enGuardados: Boolean){
-        _enGuardados.value = enGuardados
-    }
 
     // cambia el valor del acomodo y lo regresa
     fun switchEsLineal(): Boolean {
