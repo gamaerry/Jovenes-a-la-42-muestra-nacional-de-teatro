@@ -97,4 +97,9 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             }.launchIn(viewModelScope)
         }
     }
+
+    // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
+    fun removeGuardado(id: Int){
+        _listaGuardados.value = _listaGuardados.value.filter { it.id != id }
+    }
 }

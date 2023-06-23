@@ -27,6 +27,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
+import gamaerry.jovenesala42muestranacionaldeteatro.removeGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.setGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -90,13 +91,19 @@ class ListaGuardadosFragment : Fragment() {
         // de esLineal del viewModel con cada llamada
         binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
+        binding.guardado.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_unarchive))
         binding.guardado.setOnClickListener { _ ->
             seleccionados.forEach {
-                if (it.isChecked)
-                    requireActivity().setGuardado(it.transitionName)
+                if (it.isChecked){
+                    // borrar al profesional a nivel del sharedPreference del Activity
+                    requireActivity().removeGuardado(it.transitionName)
+                    // borrar al profesional a nivel del viewModel (esto
+                    // a su vez acutaliza el adapter y luego al recicler)
+                    viewModelPrincipal.removeGuardado(it.transitionName.toInt())
+                }
+
             }
-            viewModelPrincipal.updateGuardados(requireActivity().guardados)
-            Toast.makeText(requireActivity(), "Profesional(es) guardado(s)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Profesional(es) eliminado(s)", Toast.LENGTH_SHORT).show()
             limpiarSeleccion()
             mostrarAcomodo()
         }
