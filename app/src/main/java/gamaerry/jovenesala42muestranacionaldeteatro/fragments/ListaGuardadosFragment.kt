@@ -167,20 +167,19 @@ class ListaGuardadosFragment : Fragment() {
     }
 
     private fun getTransicion(itemView: View): FragmentTransaction {
-        return requireActivity().supportFragmentManager.beginTransaction().apply {
-            exitTransition = MaterialElevationScale(false).apply {
-                duration = 300L
-            }
-            reenterTransition = MaterialElevationScale(true).apply {
-                duration = 300L
-            }
-            // Agrega la transición compartida desde el objeto seleccionado
-            addSharedElement(itemView, "detallesProfesionales")
-            // reemplaza (no agrega) el DetallesProfesionalesFragment
-            replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
-            // se guarda con la etiqueta correspondiente
-            addToBackStack("detallesProfesionales")
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 300L
         }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 300L
+        }
+        return requireActivity().supportFragmentManager.beginTransaction()
+            // Agrega la transición compartida desde el objeto seleccionado
+            .addSharedElement(itemView, "detallesProfesionales")
+            // reemplaza (no agrega) el DetallesProfesionalesFragment
+            .replace(R.id.contenedorPrincipal, DetallesProfesionalesFragment())
+            // se guarda con la etiqueta correspondiente
+            .addToBackStack("detallesProfesionales")
     }
 
     // se sobreescriben estos metodos unicamente para

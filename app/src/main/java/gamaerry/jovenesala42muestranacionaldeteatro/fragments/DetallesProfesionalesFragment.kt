@@ -17,6 +17,7 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
+import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
@@ -72,11 +73,13 @@ class DetallesProfesionalesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetallesProfesionalesBinding.inflate(inflater, container, false)
+        (requireActivity() as MainActivity).desaparecerNavegacion()
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        (requireActivity() as MainActivity).aparecerNavegacion()
         _binding = null
     }
 }
