@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setItemNavegacionInicio(){
+        binding.navegacion.selectedItemId = R.id.inicio
+    }
+
     fun aparecerNavegacion() {
         binding.navegacion.visibility = View.VISIBLE
     }

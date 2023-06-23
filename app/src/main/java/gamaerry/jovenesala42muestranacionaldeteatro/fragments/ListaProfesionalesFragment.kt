@@ -50,6 +50,7 @@ class ListaProfesionalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as MainActivity).setItemNavegacionInicio()
         if (seleccionados.isEmpty())
             mostrarAcomodo()
         else ocultarAcomodo()
