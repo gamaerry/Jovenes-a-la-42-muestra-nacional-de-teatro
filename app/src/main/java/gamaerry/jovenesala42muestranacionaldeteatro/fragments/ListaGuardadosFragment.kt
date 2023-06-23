@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -47,9 +48,13 @@ class ListaGuardadosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (seleccionados.isEmpty())
-            mostrarAcomodo()
-        else ocultarAcomodo()
+        // en cada creacion de este fragment se establece el check de cada
+        // cardView en false (así como su estado de seleccionado que se reinicia)
+        binding.miRecyclerView.children.forEach { it as MaterialCardView
+            it.isChecked = false
+        }
+        // es necesario en cada creacion mostrar el icono de acomodo
+        mostrarAcomodo()
 
         // creado el fragmento se consiguen
         // todos a los profesionales guardados
