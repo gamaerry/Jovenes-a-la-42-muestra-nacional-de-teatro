@@ -3,7 +3,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
@@ -15,7 +14,7 @@ val Activity.myPrefs: SharedPreferences
 val Activity.guardados: MutableSet<String>?
     get() = myPrefs.getStringSet("guardados", emptySet())
 
-fun Activity.setGuardado(id: String) {
+fun Activity.addGuardado(id: String) {
     myPrefs.edit().putStringSet(
         "guardados",
         guardados!!.toMutableSet().apply { add(id) }

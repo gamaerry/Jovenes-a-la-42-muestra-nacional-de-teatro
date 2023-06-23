@@ -76,30 +76,26 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             val listaGuardadaTmp = _listaGuardados.value
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                _listaGuardados.value = it.filter { profesional ->  listaGuardadaTmp.contains(profesional) }
+                _listaGuardados.value =
+                    it.filter { profesional -> listaGuardadaTmp.contains(profesional) }
             }.launchIn(viewModelScope)
-        }
-        else
-            // no es necesario ningun filtrado en caso de tratarse del menu de inicio
+        } else
+        // no es necesario ningun filtrado en caso de tratarse del menu de inicio
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaInicio.value = it
             }.launchIn(viewModelScope)
     }
 
-    // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
-    fun updateGuardados(ids: Set<String>?){
-        ids?.forEach { id ->
-            repositorio.getProfesionalPorId(id).onEach { profesional ->
-                profesional?.let {
-                    if(!listaGuardados.value.contains(it))
-                        _listaGuardados.value += it
-                }
-            }.launchIn(viewModelScope)
-        }
+    // a partir del id pasado se actualiza la listaGuardada
+    fun addGuardado(id: String) {
+        repositorio.getProfesionalPorId(id).onEach {
+            if (!listaGuardados.value.contains(it))
+                _listaGuardados.value += it!!
+        }.launchIn(viewModelScope)
     }
 
-    // a partir del conjunto de ids guardadas en la actividad se llena la listaGuardada
-    fun removeGuardado(id: Int){
+    // a partir del id pasado se actualiza la listaGuardada
+    fun removeGuardado(id: Int) {
         _listaGuardados.value = _listaGuardados.value.filter { it.id != id }
     }
 }
