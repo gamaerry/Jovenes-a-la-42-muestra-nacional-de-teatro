@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -48,12 +49,9 @@ class ListaGuardadosFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // en cada creacion de este fragment se establece el check de cada
-        // cardView en false (así como su estado de seleccionado que se reinicia)
-        binding.miRecyclerView.children.forEach { it as MaterialCardView
-            it.isChecked = false
-        }
-        // es necesario en cada creacion mostrar el icono de acomodo
+        // es necesario en cada creacion limpiar la
+        // seleccion y mostrar el icono de acomodo
+        limpiarSeleccion()
         mostrarAcomodo()
 
         // creado el fragmento se consiguen
@@ -98,6 +96,9 @@ class ListaGuardadosFragment : Fragment() {
                     requireActivity().setGuardado(it.transitionName)
             }
             viewModelPrincipal.updateGuardados(requireActivity().guardados)
+            Toast.makeText(requireActivity(), "Profesional(es) guardado(s)", Toast.LENGTH_SHORT).show()
+            limpiarSeleccion()
+            mostrarAcomodo()
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
@@ -116,6 +117,14 @@ class ListaGuardadosFragment : Fragment() {
                 mostrarAcomodo()
             else ocultarAcomodo()
             true
+        }
+    }
+
+    private fun limpiarSeleccion() {
+        // en cada creacion de este fragment se establece el check de cada
+        // cardView en false (así como color de seleccionado que se reinicia)
+        binding.miRecyclerView.children.forEach { it as MaterialCardView
+            it.isChecked = false
         }
     }
 

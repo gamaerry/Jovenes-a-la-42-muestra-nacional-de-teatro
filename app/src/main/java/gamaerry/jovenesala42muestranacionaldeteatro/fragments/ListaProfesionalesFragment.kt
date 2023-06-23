@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
@@ -54,12 +55,9 @@ class ListaProfesionalesFragment : Fragment() {
         // esta linea se ocupa cuando de Guardados se hace un popStack a Inicio
         // que por defecto no cambia el item de navegacion correspondiente
         (requireActivity() as MainActivity).setItemNavegacionInicio()
-        // en cada creacion de este fragment se establece el check de cada
-        // cardView en false (así como su estado de seleccionado que se reinicia)
-        binding.miRecyclerView.children.forEach { it as MaterialCardView
-            it.isChecked = false
-        }
-        // es necesario en cada creacion mostrar el icono de acomodo
+        // es necesario en cada creacion limpiar la
+        // seleccion y mostrar el icono de acomodo
+        limpiarSeleccion()
         mostrarAcomodo()
 
         // creado el fragmento se consiguen todos a los
@@ -99,6 +97,9 @@ class ListaProfesionalesFragment : Fragment() {
                     requireActivity().setGuardado(it.transitionName)
             }
             viewModelPrincipal.updateGuardados(requireActivity().guardados)
+            Toast.makeText(requireActivity(), "Profesional(es) guardado(s)", Toast.LENGTH_SHORT).show()
+            limpiarSeleccion()
+            mostrarAcomodo()
         }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
@@ -124,6 +125,15 @@ class ListaProfesionalesFragment : Fragment() {
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
         binding.busqueda.setOnQueryTextListener(buscar(view))
+    }
+
+
+    private fun limpiarSeleccion() {
+        // en cada creacion de este fragment se establece el check de cada
+        // cardView en false (así como color de seleccionado que se reinicia)
+        binding.miRecyclerView.children.forEach { it as MaterialCardView
+            it.isChecked = false
+        }
     }
 
     private fun buscar(view: View): SearchView.OnQueryTextListener {
