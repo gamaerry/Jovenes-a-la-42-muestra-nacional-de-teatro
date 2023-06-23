@@ -2,10 +2,12 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaProfesionalesFragment
-import gamaerry.jovenesala42muestranacionaldeteatro.fragments.MainFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -15,13 +17,37 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // con esta condicion se asegura que ambos
-        // FragmentContainerView se llenen una sola vez
-        if (savedInstanceState == null){
+        // con esta condicion se asegura de que se llame una sola vez
+        if (savedInstanceState == null)
             supportFragmentManager.beginTransaction()
-                .add(R.id.contenedorPrincipal, MainFragment()).commit()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.contenedorDeListas, ListaProfesionalesFragment()).commit()
+                .add(R.id.contenedorPrincipal, ListaProfesionalesFragment()).commit()
+
+        binding.navegacion.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.inicio -> supportFragmentManager.popBackStack()
+                R.id.guardados -> supportFragmentManager.beginTransaction()
+                    // usa estas animaciones ya definidas
+                    .setCustomAnimations(
+                        R.anim.entrar_desde_derecha,
+                        R.anim.salir_hacia_izquierda,
+                        R.anim.entrar_desde_izquierda,
+                        R.anim.salir_hacia_derecha
+                    )
+                    // reemplaza (no agrega) el DetallesProfesionalesFragment
+                    .replace(R.id.contenedorPrincipal, ListaGuardadosFragment())
+                    // se guarda con la etiqueta correspondiente
+                    .addToBackStack("listaGuardados")
+                    .commit()
+            }
+            true
         }
+    }
+
+    fun aparecerNavegacion() {
+        binding.navegacion.visibility = View.VISIBLE
+    }
+
+    fun desaparecerNavegacion() {
+        binding.navegacion.visibility = View.GONE
     }
 }
