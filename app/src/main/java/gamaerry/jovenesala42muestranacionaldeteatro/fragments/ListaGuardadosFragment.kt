@@ -70,7 +70,7 @@ class ListaGuardadosFragment : Fragment() {
         // para establecer el acomodo de la lista adecuado
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.esLineal.collect {
+                viewModelPrincipal.guardadosEsLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
                 }
             }
@@ -150,7 +150,7 @@ class ListaGuardadosFragment : Fragment() {
     private fun getIcono(): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
-        return if (viewModelPrincipal.switchEsLineal())
+        return if (viewModelPrincipal.switchGuardadosEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)

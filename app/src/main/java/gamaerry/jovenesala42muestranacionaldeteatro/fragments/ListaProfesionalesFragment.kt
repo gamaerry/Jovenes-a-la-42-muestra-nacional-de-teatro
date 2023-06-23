@@ -71,22 +71,17 @@ class ListaProfesionalesFragment : Fragment() {
         // para establecer el acomodo de la lista adecuado
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.esLineal.collect {
+                viewModelPrincipal.inicioEsLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
                 }
             }
         }
 
-
-        // OnQueryTextListener es una interfaz que requiere la
-        // implementacion de dos métodos, uno para cuando cambia el
-        // String de busqueda y otro para cuando se da al boton de buscar
-        binding.busqueda.setOnQueryTextListener(buscar(view))
-
         // cambia el src del icono al ser presionado
         // notese que para getIcono() se cambia el valor
         // de esLineal del viewModel con cada llamada
         binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+
 
         binding.guardado.setOnClickListener { _ ->
             seleccionados.forEach {
@@ -113,6 +108,12 @@ class ListaProfesionalesFragment : Fragment() {
             else ocultarAcomodo()
             true
         }
+
+
+        // OnQueryTextListener es una interfaz que requiere la
+        // implementacion de dos métodos, uno para cuando cambia el
+        // String de busqueda y otro para cuando se da al boton de buscar
+        binding.busqueda.setOnQueryTextListener(buscar(view))
     }
 
     private fun buscar(view: View): SearchView.OnQueryTextListener {
@@ -151,7 +152,7 @@ class ListaProfesionalesFragment : Fragment() {
     private fun getIcono(): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
-        return if (viewModelPrincipal.switchEsLineal())
+        return if (viewModelPrincipal.switchInicioEsLineal())
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
