@@ -1,13 +1,18 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.drawable.Drawable
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.view.allViews
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,24 +25,35 @@ import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.removeGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.addGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import javax.inject.Inject
 
 abstract class ListaFragment : Fragment() {
     // los binding enlazan a las vistas con el codigo
-    var _binding: FragmentListaProfesionalesBinding? = null
-    val binding get() = _binding!!
+    private var _binding: FragmentListaProfesionalesBinding? = null
+    protected val binding get() = _binding!!
     // se van guardando aqui los items seleccionados
     private val seleccionados: ArrayList<MaterialCardView> = ArrayList()
     // gracias a la inyeccion de dependencias no uso constructor
-    abstract var profesionalesAdapter: ProfesionalesAdapter
+    @Inject
+    protected lateinit var profesionalesAdapter: ProfesionalesAdapter
     // uso un solo viewModel para todas las operaciones de la base de datos
-    abstract val viewModelPrincipal: ViewModelPrincipal
+    protected val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentListaProfesionalesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     fun limpiarSeleccion() {
         // en cada creacion de este fragment se establece el check de cada
         // cardView en false (así como color de seleccionado que se reinicia)
-        binding.miRecyclerView.children.forEach { it as MaterialCardView
+        seleccionados.forEach{
             it.isChecked = false
         }
+        seleccionados.clear()
     }
 
     fun buscar(view: View, enGuardados: Boolean): SearchView.OnQueryTextListener {
@@ -62,12 +78,12 @@ abstract class ListaFragment : Fragment() {
         }
     }
 
-    fun mostrarAcomodo(){
+    private fun mostrarAcomodo(){
         binding.acomodo.visibility = View.VISIBLE
         binding.guardado.visibility = View.GONE
     }
 
-    fun ocultarAcomodo(){
+    private fun ocultarAcomodo(){
         binding.acomodo.visibility = View.GONE
         binding.guardado.visibility = View.VISIBLE
     }
@@ -144,6 +160,12 @@ abstract class ListaFragment : Fragment() {
                     Toast.makeText(requireActivity(), "Profesional(es) guardado(s)", Toast.LENGTH_SHORT).show()
                 }
         }
+        regresarEstadoPredeterminado()
+    }
+
+    fun regresarEstadoPredeterminado(){
+        // es necesario en cada creacion limpiar la
+        // seleccion y mostrar el icono de acomodo
         limpiarSeleccion()
         mostrarAcomodo()
     }

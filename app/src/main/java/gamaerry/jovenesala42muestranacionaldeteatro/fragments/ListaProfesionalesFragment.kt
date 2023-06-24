@@ -1,45 +1,24 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
-import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
-import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class ListaProfesionalesFragment : ListaFragment() {
-    @Inject
-    override lateinit var profesionalesAdapter: ProfesionalesAdapter
-    override val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentListaProfesionalesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        regresarEstadoPredeterminado()
+
         // esta linea se ocupa cuando de Guardados se hace un popStack a Inicio
         // que por defecto no cambia el item de navegacion correspondiente
         (requireActivity() as MainActivity).setItemNavegacionInicio()
-        // es necesario en cada creacion limpiar la
-        // seleccion y mostrar el icono de acomodo
-        limpiarSeleccion()
-        mostrarAcomodo()
 
         // creado el fragmento se consiguen todos a los
         // profesionales con palabrasClaves establecidas en ""
@@ -71,6 +50,8 @@ class ListaProfesionalesFragment : ListaFragment() {
         // de esLineal del viewModel con cada llamada
         binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
 
+        // se define que va a pasar con el icono
+        // que se encarga del guardado de profesionales
         binding.guardado.setOnClickListener { accionDelGuardado(false) }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
@@ -80,6 +61,7 @@ class ListaProfesionalesFragment : ListaFragment() {
             getTransicion(itemView).commit()
         }
 
+        // se selecciona al cardView al mantener presionado
         profesionalesAdapter.accionAlPresionarLargo = { seleccionar(it)}
 
         // OnQueryTextListener es una interfaz que requiere la
