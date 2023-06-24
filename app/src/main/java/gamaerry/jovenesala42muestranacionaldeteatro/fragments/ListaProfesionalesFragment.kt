@@ -48,7 +48,7 @@ class ListaProfesionalesFragment : ListaFragment() {
         // cambia el src del icono al ser presionado
         // notese que para getIcono() se cambia el valor
         // de esLineal del viewModel con cada llamada
-        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono(false)) }
 
         // se define que va a pasar con el icono
         // que se encarga del guardado de profesionales

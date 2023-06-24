@@ -88,10 +88,14 @@ abstract class ListaFragment : Fragment() {
         binding.guardado.visibility = View.VISIBLE
     }
 
-    fun getIcono(): Drawable? {
+    fun getIcono(enGuardados: Boolean): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
-        return if (viewModelPrincipal.switchInicioEsLineal())
+        val esLineal = if (enGuardados)
+            viewModelPrincipal.switchGuardadosEsLineal()
+        else
+            viewModelPrincipal.switchInicioEsLineal()
+        return if (esLineal)
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
         else
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
