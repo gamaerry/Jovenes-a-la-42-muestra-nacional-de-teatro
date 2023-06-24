@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
-import androidx.core.view.allViews
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -20,16 +18,16 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.transition.MaterialElevationScale
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
-import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
 import gamaerry.jovenesala42muestranacionaldeteatro.removeGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.addGuardado
+import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import javax.inject.Inject
 
 abstract class ListaFragment : Fragment() {
     // los binding enlazan a las vistas con el codigo
-    private var _binding: FragmentListaProfesionalesBinding? = null
+    private var _binding: FragmentListaBinding? = null
     protected val binding get() = _binding!!
     // se van guardando aqui los items seleccionados
     private val seleccionados: ArrayList<MaterialCardView> = ArrayList()
@@ -43,11 +41,11 @@ abstract class ListaFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentListaProfesionalesBinding.inflate(inflater, container, false)
+        _binding = FragmentListaBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    fun limpiarSeleccion() {
+    private fun limpiarSeleccion() {
         // en cada creacion de este fragment se establece el check de cada
         // cardView en false (así como color de seleccionado que se reinicia)
         seleccionados.forEach{
