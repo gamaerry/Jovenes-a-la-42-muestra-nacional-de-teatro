@@ -12,10 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-    </style>
-
-    <style name="SelectableItemBackground">
-        <item name="colorControlHighlight">?attr/colorPrimary</item>
-        <item name="android:backgroundTint">?attr/colorOnPrimary</item>
+        <item name="colorAccent">?attr/colorPrimary</item>
     </style>
 </resources>
