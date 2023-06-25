@@ -79,10 +79,24 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
                     it.filter { profesional -> listaGuardados.value.contains(profesional) }
             }.launchIn(viewModelScope)
         } else
-        // no es necesario ningun filtrado en caso de tratarse del menu de inicio
+            // no es necesario ningun filtrado en caso de tratarse del menu de inicio
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaInicio.value = it
             }.launchIn(viewModelScope)
+    }
+
+    fun setListaPorEspecialidad(especialidad: String, guardados: Boolean){
+        if (guardados){
+            _listaGuardados.value = emptyList()
+            repositorio.getProfesionalPorEspecialidad(especialidad).onEach {
+                _listaGuardados.value += it!!
+            }.launchIn(viewModelScope)
+        } else {
+            _listaInicio.value = emptyList()
+            repositorio.getProfesionalPorEspecialidad(especialidad).onEach {
+                _listaInicio.value += it!!
+            }.launchIn(viewModelScope)
+        }
     }
 
     // a partir del id pasado se actualiza la listaGuardada
