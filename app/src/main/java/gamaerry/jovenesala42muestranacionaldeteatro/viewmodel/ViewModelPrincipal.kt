@@ -1,5 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,8 +39,17 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _inicioEsLineal = MutableStateFlow(false)
     val inicioEsLineal: StateFlow<Boolean> get() = _inicioEsLineal
 
+    // aqui es donde se almacena el tipo de acomodo
+    private val _enGuardados = MutableStateFlow(false)
+    val enGuardados: StateFlow<Boolean> get() = _enGuardados
+
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
+
+    init {
+        setListaProfesionales()
+        Log.d("midebug", "init iniciado!!!!!!!!")
+    }
 
     // cambia el valor del acomodo y lo regresa
     fun switchInicioEsLineal(): Boolean {
@@ -53,6 +63,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         return guardadosEsLineal.value
     }
 
+    fun setEnGuardados(enGuardados: Boolean){
+        _enGuardados.value = enGuardados
+    }
+
     // establece al profesional seleccionado en su variable correspondiente
     fun setProfesionalEnfocado(profesional: ProfesionalDelTeatro) {
         _profesionalEnfocado.value = profesional
@@ -60,18 +74,18 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
 
     // establece las palabras clave que devolveran la lista correspondiente en cada busqueda
     // (notese que si palabrasClave.value es "" room devolvera toda la base de datos)
-    fun setPalabrasClave(busqueda: String, guardados: Boolean): Boolean {
+    fun setPalabrasClave(busqueda: String): Boolean {
         palabrasClave.value = busqueda
         // es necesario actualizar en cada actualizacion de
         // palabras clave nuestra listaProfesionalesDeTeatro
-        setListaProfesionales(guardados)
+        setListaProfesionales()
         // devuelve true para indicar una busqueda exitosa
         return true
     }
 
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
-    fun setListaProfesionales(guardados: Boolean) {
-        if (guardados) {
+    private fun setListaProfesionales() {
+        if (enGuardados.value) {
             // se guarda el estado actual de la listaGuardada para luego filtrar de la
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
@@ -83,20 +97,6 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaInicio.value = it
             }.launchIn(viewModelScope)
-    }
-
-    fun setListaPorEspecialidad(especialidad: String, guardados: Boolean){
-        if (guardados){
-            _listaGuardados.value = emptyList()
-            repositorio.getProfesionalPorEspecialidad(especialidad).onEach {
-                _listaGuardados.value += it!!
-            }.launchIn(viewModelScope)
-        } else {
-            _listaInicio.value = emptyList()
-            repositorio.getProfesionalPorEspecialidad(especialidad).onEach {
-                _listaInicio.value += it!!
-            }.launchIn(viewModelScope)
-        }
     }
 
     // a partir del id pasado se actualiza la listaGuardada

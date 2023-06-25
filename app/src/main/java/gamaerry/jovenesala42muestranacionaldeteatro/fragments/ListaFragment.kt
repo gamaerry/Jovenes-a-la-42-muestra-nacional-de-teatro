@@ -59,7 +59,7 @@ abstract class ListaFragment : Fragment() {
         seleccionados.clear()
     }
 
-    fun buscar(view: View, enGuardados: Boolean): SearchView.OnQueryTextListener {
+    fun buscar(view: View): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
@@ -67,7 +67,7 @@ abstract class ListaFragment : Fragment() {
                 return if (query != null) {
                     regresarEstadoPredeterminado()
                     view.ocultarTeclado()
-                    viewModelPrincipal.setPalabrasClave(query, enGuardados)
+                    viewModelPrincipal.setPalabrasClave(query)
                 } else false
             }
 
@@ -77,7 +77,7 @@ abstract class ListaFragment : Fragment() {
             override fun onQueryTextChange(query: String?): Boolean {
                 return if (query != null) {
                     regresarEstadoPredeterminado()
-                    viewModelPrincipal.setPalabrasClave(query, enGuardados)
+                    viewModelPrincipal.setPalabrasClave(query)
                 } else false
             }
         }
@@ -93,10 +93,10 @@ abstract class ListaFragment : Fragment() {
         binding.guardado.visibility = View.VISIBLE
     }
 
-    fun getIcono(enGuardados: Boolean): Drawable? {
+    fun getIcono(): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
-        val esLineal = if (enGuardados)
+        val esLineal = if (viewModelPrincipal.enGuardados.value)
             viewModelPrincipal.switchGuardadosEsLineal()
         else
             viewModelPrincipal.switchInicioEsLineal()
@@ -161,10 +161,10 @@ abstract class ListaFragment : Fragment() {
         return true
     }
 
-    fun accionDelGuardado(enGuardados: Boolean) {
+    fun accionDelGuardado() {
         seleccionados.forEach {
             if (it.isChecked)
-                if (enGuardados) {
+                if (viewModelPrincipal.enGuardados.value) {
                     requireActivity().removeGuardado(it.transitionName)
                     viewModelPrincipal.removeGuardado(it.transitionName.toInt())
                     Toast.makeText(
