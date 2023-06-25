@@ -56,6 +56,17 @@ class DetallesProfesionalesFragment : Fragment() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModelPrincipal.enGuardados.collect { enGuardados ->
+                    especialidadesAdapter.accionAlPresionarEspecialidad = {
+                        requireActivity().supportFragmentManager.popBackStack()
+                        viewModelPrincipal.setListaPorEspecialidad(it, enGuardados)
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
