@@ -74,10 +74,9 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         if (guardados) {
             // se guarda el estado actual de la listaGuardada para luego filtrar de la
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
-            val listaGuardadaTmp = _listaGuardados.value
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaGuardados.value =
-                    it.filter { profesional -> listaGuardadaTmp.contains(profesional) }
+                    it.filter { profesional -> listaGuardados.value.contains(profesional) }
             }.launchIn(viewModelScope)
         } else
         // no es necesario ningun filtrado en caso de tratarse del menu de inicio
