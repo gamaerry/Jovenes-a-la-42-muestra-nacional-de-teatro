@@ -30,8 +30,8 @@ class ListaGuardadosFragment : ListaFragment() {
         // consigue en tiempo real la listaGuardada
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaGuardados.collect {
-                    profesionalesAdapter.submitList(it)
+                viewModelPrincipal.listaGuardados.collect { listaGuardados ->
+                    profesionalesAdapter.submitList(listaGuardados.sortedBy { it.id })
                 }
             }
         }
@@ -53,7 +53,12 @@ class ListaGuardadosFragment : ListaFragment() {
 
         // se define que va a pasar con el icono
         // que se encarga del guardado de profesionales
-        binding.guardado.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_unarchive))
+        binding.guardado.setImageDrawable(
+            ContextCompat.getDrawable(
+                requireContext(),
+                R.drawable.ic_unarchive
+            )
+        )
         binding.guardado.setOnClickListener { accionDelGuardado(true) }
 
         // cuando se presiona el item necesitamos enfocar dicho profesional
