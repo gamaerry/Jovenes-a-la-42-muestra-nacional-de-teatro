@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -14,8 +15,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.transition.MaterialElevationScale
+import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.ocultarTeclado
@@ -147,9 +150,15 @@ abstract class ListaFragment : Fragment() {
         if (cardView.isChecked)
             seleccionados.add(cardView)
         else seleccionados.remove(cardView)
-        if (seleccionados.isEmpty())
+        if (seleccionados.isEmpty()){
+            estadoAlTerminarSeleccion()
             regresarEstadoPredeterminado()
-        else ocultarAcomodo()
+        }
+        else {
+            (binding.cabecera.layoutParams as AppBarLayout.LayoutParams).scrollFlags = 0
+            (requireActivity() as MainActivity).desaparecerNavegacion()
+            ocultarAcomodo()
+        }
         return true
     }
 
@@ -175,6 +184,7 @@ abstract class ListaFragment : Fragment() {
                 }
         }
         regresarEstadoPredeterminado()
+        estadoAlTerminarSeleccion()
     }
 
     fun regresarEstadoPredeterminado() {
@@ -182,5 +192,12 @@ abstract class ListaFragment : Fragment() {
         // seleccion y mostrar el icono de acomodo
         limpiarSeleccion()
         mostrarAcomodo()
+    }
+
+    fun estadoAlTerminarSeleccion(){
+        (binding.cabecera.layoutParams as AppBarLayout.LayoutParams).scrollFlags =
+            AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+        (requireActivity() as MainActivity).aparecerNavegacion()
     }
 }
