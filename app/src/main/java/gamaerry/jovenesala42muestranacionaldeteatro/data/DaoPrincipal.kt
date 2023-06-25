@@ -11,6 +11,10 @@ interface DaoPrincipal {
     @Query("SELECT * FROM profesionales WHERE id = :id")
     suspend fun operacionGetProfesionalPorId(id: String): ProfesionalDelTeatro?
 
+    // busca y regresa al profesional con la especialidad especificada
+    @Query("SELECT * FROM profesionales WHERE id = :especialidad")
+    suspend fun operacionGetProfesionalPorEspecialidad(especialidad: String): ProfesionalDelTeatro?
+
     // busca y regresa una lista de profesionales que cumpla con el criterio de la consulta
     // (que o la especialidad o la descripcion o el estado coincidan con las palabras clave pasadas)
     @Query(
