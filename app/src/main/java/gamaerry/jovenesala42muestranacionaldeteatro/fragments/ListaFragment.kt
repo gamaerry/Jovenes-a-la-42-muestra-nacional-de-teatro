@@ -29,11 +29,14 @@ abstract class ListaFragment : Fragment() {
     // los binding enlazan a las vistas con el codigo
     private var _binding: FragmentListaBinding? = null
     protected val binding get() = _binding!!
+
     // se van guardando aqui los items seleccionados
     private val seleccionados: ArrayList<MaterialCardView> = ArrayList()
+
     // gracias a la inyeccion de dependencias no uso constructor
     @Inject
     protected lateinit var profesionalesAdapter: ProfesionalesAdapter
+
     // uso un solo viewModel para todas las operaciones de la base de datos
     protected val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
 
@@ -48,7 +51,7 @@ abstract class ListaFragment : Fragment() {
     private fun limpiarSeleccion() {
         // en cada creacion de este fragment se establece el check de cada
         // cardView en false (así como color de seleccionado que se reinicia)
-        seleccionados.forEach{
+        seleccionados.forEach {
             it.isChecked = false
         }
         seleccionados.clear()
@@ -60,6 +63,7 @@ abstract class ListaFragment : Fragment() {
             // icono de buscar en el SearchView o en el teclado
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return if (query != null) {
+                    regresarEstadoPredeterminado()
                     view.ocultarTeclado()
                     viewModelPrincipal.setPalabrasClave(query, enGuardados)
                 } else false
@@ -69,19 +73,20 @@ abstract class ListaFragment : Fragment() {
             // (notese que en ambas funciones setPalabrasClave()
             // regresa un true indicando su correcto funcionamiento)
             override fun onQueryTextChange(query: String?): Boolean {
-                return if (query != null)
+                return if (query != null) {
+                    regresarEstadoPredeterminado()
                     viewModelPrincipal.setPalabrasClave(query, enGuardados)
-                else false
+                } else false
             }
         }
     }
 
-    private fun mostrarAcomodo(){
+    private fun mostrarAcomodo() {
         binding.acomodo.visibility = View.VISIBLE
         binding.guardado.visibility = View.GONE
     }
 
-    private fun ocultarAcomodo(){
+    private fun ocultarAcomodo() {
         binding.acomodo.visibility = View.GONE
         binding.guardado.visibility = View.VISIBLE
     }
@@ -143,29 +148,36 @@ abstract class ListaFragment : Fragment() {
             seleccionados.add(cardView)
         else seleccionados.remove(cardView)
         if (seleccionados.isEmpty())
-            mostrarAcomodo()
+            regresarEstadoPredeterminado()
         else ocultarAcomodo()
         return true
     }
 
-    fun accionDelGuardado(enGuardados: Boolean){
+    fun accionDelGuardado(enGuardados: Boolean) {
         seleccionados.forEach {
             if (it.isChecked)
-                if (enGuardados){
+                if (enGuardados) {
                     requireActivity().removeGuardado(it.transitionName)
                     viewModelPrincipal.removeGuardado(it.transitionName.toInt())
-                    Toast.makeText(requireActivity(), "Profesional(es) eliminado(s)", Toast.LENGTH_SHORT).show()
-                }
-                else{
+                    Toast.makeText(
+                        requireActivity(),
+                        "Profesional(es) eliminado(s)",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     requireActivity().addGuardado(it.transitionName)
                     viewModelPrincipal.addGuardado(it.transitionName)
-                    Toast.makeText(requireActivity(), "Profesional(es) guardado(s)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireActivity(),
+                        "Profesional(es) guardado(s)",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
         }
         regresarEstadoPredeterminado()
     }
 
-    fun regresarEstadoPredeterminado(){
+    fun regresarEstadoPredeterminado() {
         // es necesario en cada creacion limpiar la
         // seleccion y mostrar el icono de acomodo
         limpiarSeleccion()
