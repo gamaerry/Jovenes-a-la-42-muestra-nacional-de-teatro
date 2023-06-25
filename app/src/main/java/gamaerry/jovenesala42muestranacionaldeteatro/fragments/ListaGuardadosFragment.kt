@@ -2,7 +2,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,8 +24,6 @@ class ListaGuardadosFragment : ListaFragment() {
             viewModelPrincipal.addGuardado(it)
         }
 
-        binding.miRecyclerView.adapter = profesionalesAdapter
-
         // de aqui es donde el otro adapter
         // consigue en tiempo real la listaGuardada
         viewLifecycleOwner.lifecycleScope.launch {
@@ -47,11 +44,6 @@ class ListaGuardadosFragment : ListaFragment() {
             }
         }
 
-        // cambia el src del icono al ser presionado
-        // notese que para getIcono() se cambia el valor
-        // de esLineal del viewModel con cada llamada
-        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
-
         // se define que va a pasar con el icono
         // que se encarga del guardado de profesionales
         binding.guardado.setImageDrawable(
@@ -60,21 +52,5 @@ class ListaGuardadosFragment : ListaFragment() {
                 R.drawable.ic_unarchive
             )
         )
-        binding.guardado.setOnClickListener { accionDelGuardado() }
-
-        // cuando se presiona el item necesitamos enfocar dicho profesional
-        // y realizar la transicion al DetallesProfesionalesFragment
-        profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
-            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
-            getTransicion(itemView).commit()
-        }
-
-        // se selecciona al cardView al mantener presionado
-        profesionalesAdapter.accionAlPresionarLargo = { seleccionar(it) }
-
-        // OnQueryTextListener es una interfaz que requiere la
-        // implementacion de dos métodos, uno para cuando cambia el
-        // String de busqueda y otro para cuando se da al boton de buscar
-        binding.busqueda.setOnQueryTextListener(buscar(view))
     }
 }

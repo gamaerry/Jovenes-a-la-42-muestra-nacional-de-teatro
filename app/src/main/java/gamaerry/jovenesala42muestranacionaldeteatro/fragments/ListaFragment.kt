@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -48,6 +49,35 @@ abstract class ListaFragment : Fragment() {
     ): View {
         _binding = FragmentListaBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.miRecyclerView.adapter = profesionalesAdapter
+
+        // cambia el src del icono al ser presionado
+        // notese que para getIcono() se cambia el valor
+        // de esLineal del viewModel con cada llamada
+        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+
+        // se define que va a pasar con el icono
+        // que se encarga del guardado de profesionales
+        binding.guardado.setOnClickListener { accionDelGuardado() }
+
+        // cuando se presiona el item necesitamos enfocar dicho profesional
+        // y realizar la transicion al DetallesProfesionalesFragment
+        profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
+            viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
+            getTransicion(itemView).commit()
+        }
+
+        // se selecciona al cardView al mantener presionado
+        profesionalesAdapter.accionAlPresionarLargo = { seleccionar(it)}
+
+        // OnQueryTextListener es una interfaz que requiere la
+        // implementacion de dos métodos, uno para cuando cambia el
+        // String de busqueda y otro para cuando se da al boton de buscar
+        binding.busqueda.setOnQueryTextListener(buscar(view))
     }
 
     private fun limpiarSeleccion() {
