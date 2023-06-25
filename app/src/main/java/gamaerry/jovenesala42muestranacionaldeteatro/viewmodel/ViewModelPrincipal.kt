@@ -48,7 +48,6 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
 
     init {
         setListaProfesionales()
-        Log.d("midebug", "init iniciado!!!!!!!!")
     }
 
     // cambia el valor del acomodo y lo regresa
@@ -97,6 +96,18 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaInicio.value = it
             }.launchIn(viewModelScope)
+    }
+
+    fun setListaPorEspecialidad(especialidad: String){
+        if (enGuardados.value){
+            repositorio.getProfesionalesPorEspecialidad(especialidad).onEach {
+                _listaGuardados.value = it
+            }.launchIn(viewModelScope)
+        } else {
+            repositorio.getProfesionalesPorEspecialidad(especialidad).onEach {
+                _listaInicio.value = it
+            }.launchIn(viewModelScope)
+        }
     }
 
     // a partir del id pasado se actualiza la listaGuardada

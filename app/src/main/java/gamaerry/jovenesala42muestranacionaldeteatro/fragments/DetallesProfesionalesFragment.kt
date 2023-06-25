@@ -2,7 +2,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
-import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,6 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
-import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
@@ -59,10 +57,10 @@ class DetallesProfesionalesFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.enGuardados.collect { enGuardados ->
+                viewModelPrincipal.enGuardados.collect { _ ->
                     especialidadesAdapter.accionAlPresionarEspecialidad = {
                         requireActivity().supportFragmentManager.popBackStack()
-                        viewModelPrincipal.setListaPorEspecialidad(it, enGuardados)
+                        viewModelPrincipal.setListaPorEspecialidad(it)
                     }
                 }
             }
