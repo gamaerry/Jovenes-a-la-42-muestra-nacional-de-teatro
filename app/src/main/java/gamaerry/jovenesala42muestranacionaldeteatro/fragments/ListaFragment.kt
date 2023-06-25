@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -151,7 +150,7 @@ abstract class ListaFragment : Fragment() {
             seleccionados.add(cardView)
         else seleccionados.remove(cardView)
         if (seleccionados.isEmpty()){
-            estadoAlTerminarSeleccion()
+            setComportamientoCabeceraPorDefecto()
             regresarEstadoPredeterminado()
         }
         else {
@@ -184,7 +183,7 @@ abstract class ListaFragment : Fragment() {
                 }
         }
         regresarEstadoPredeterminado()
-        estadoAlTerminarSeleccion()
+        setComportamientoCabeceraPorDefecto()
     }
 
     fun regresarEstadoPredeterminado() {
@@ -192,12 +191,12 @@ abstract class ListaFragment : Fragment() {
         // seleccion y mostrar el icono de acomodo
         limpiarSeleccion()
         mostrarAcomodo()
+        (requireActivity() as MainActivity).aparecerNavegacion()
     }
 
-    fun estadoAlTerminarSeleccion(){
+    private fun setComportamientoCabeceraPorDefecto(){
         (binding.cabecera.layoutParams as AppBarLayout.LayoutParams).scrollFlags =
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                     AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
-        (requireActivity() as MainActivity).aparecerNavegacion()
     }
 }
