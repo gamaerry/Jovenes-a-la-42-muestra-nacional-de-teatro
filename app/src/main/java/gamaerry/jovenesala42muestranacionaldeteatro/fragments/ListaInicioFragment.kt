@@ -10,7 +10,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ListaProfesionalesFragment : ListaFragment() {
+class ListaInicioFragment : ListaFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         regresarEstadoPredeterminado()

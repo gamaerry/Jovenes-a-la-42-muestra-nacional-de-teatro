@@ -3,11 +3,10 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
-import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaProfesionalesFragment
+import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         // con esta condicion se asegura de que se llame una sola vez
         if (savedInstanceState == null)
             supportFragmentManager.beginTransaction()
-                .add(R.id.contenedorPrincipal, ListaProfesionalesFragment()).commit()
+                .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
 
         binding.navegacion.setOnItemSelectedListener {
             when (it.itemId) {
