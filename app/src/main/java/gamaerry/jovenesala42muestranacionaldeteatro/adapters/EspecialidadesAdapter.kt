@@ -20,7 +20,7 @@ constructor() : RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHol
     // (uno manda la receta y el otro los limones).
     // Normalmente es el viewHolder quien recibe la info
     // por eso es poco intuitivo como funciona esta lambda
-    lateinit var accionAlHacerClic: (String) -> Unit
+    lateinit var accionAlPresionarEspecialidad: (String) -> Unit
 
     // tanto este campo como los siguientes metodos
     // son requeridos para la correcta obtencion de
@@ -54,6 +54,7 @@ constructor() : RecyclerView.Adapter<EspecialidadesAdapter.EspecialidadesViewHol
             // cuando se enlaza la informacion con
             // la vista simplemente se muestra
             botonEspecialidad.text = " $especialidad "
+            itemView.setOnClickListener { accionAlPresionarEspecialidad(especialidad) }
         }
     }
 }
