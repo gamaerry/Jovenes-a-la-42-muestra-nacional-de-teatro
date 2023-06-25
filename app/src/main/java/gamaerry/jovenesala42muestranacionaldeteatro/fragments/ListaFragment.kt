@@ -119,10 +119,10 @@ abstract class ListaFragment : Fragment() {
 
     fun getTransicion(itemView: View): FragmentTransaction {
         exitTransition = MaterialElevationScale(false).apply {
-            duration = 300L
+            duration = 250L
         }
         reenterTransition = MaterialElevationScale(true).apply {
-            duration = 300L
+            duration = 250L
         }
         return requireActivity().supportFragmentManager.beginTransaction()
             // Agrega la transición compartida desde el objeto seleccionado
