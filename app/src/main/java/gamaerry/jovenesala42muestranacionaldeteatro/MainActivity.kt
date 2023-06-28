@@ -8,10 +8,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
-import gamaerry.jovenesala42muestranacionaldeteatro.model.getEspecialidades
-import gamaerry.jovenesala42muestranacionaldeteatro.model.getEstados
-import gamaerry.jovenesala42muestranacionaldeteatro.model.getFiltros
-import gamaerry.jovenesala42muestranacionaldeteatro.model.getMuestras
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
