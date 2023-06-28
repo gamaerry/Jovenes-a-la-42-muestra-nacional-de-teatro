@@ -9,7 +9,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 
-class ListaFiltrosAdapter (
+class ListaFiltrosAdapter(
     private val context: Context,
     private val groups: List<String>,
     private val childItems: List<List<String>>
@@ -71,12 +71,12 @@ class ListaFiltrosAdapter (
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        val itemFiltro: View = convertView ?: LayoutInflater.from(context).inflate(
+        val itemFiltro = (convertView ?: LayoutInflater.from(context).inflate(
             R.layout.item_filtro,
             parent,
             false
-        )
-        itemFiltro.findViewById<CheckBox>(R.id.filtro).apply {
+        )) as CheckBox
+        itemFiltro.apply {
             setOnCheckedChangeListener(null)
             text = getChild(groupPosition, childPosition).toString()
             isChecked = estadosCheckBox[groupPosition][childPosition]
