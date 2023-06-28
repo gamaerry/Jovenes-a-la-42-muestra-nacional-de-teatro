@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:background="?attr/colorOnPrimary"
+        android:orientation="vertical"
         tools:context=".MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
@@ -25,12 +26,91 @@
             android:background="?attr/colorOnPrimary"
             app:menu="@menu/menu_navegacion" />
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nvConfiguracion"
+        android:id="@+id/configuracion"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/colorOnPrimary"
-        app:headerLayout="@layout/cabecera_configuracion"
-        app:menu="@menu/menu_configuracion" />
+        android:background="?attr/colorOnPrimary">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="?attr/colorOnPrimary"
+                app:cardElevation="10dp"
+                app:cardForegroundColor="@drawable/color_card_view">
+
+                <TextView
+                    android:id="@+id/nombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:text="@string/saludo"
+                    android:textColor="?attr/colorSecondaryVariant"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Orden"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/porEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:checked="true"
+                    android:layoutDirection="rtl"
+                    android:text="Por estado"
+                    android:textAppearance="?android:attr/textAppearanceListItem" />
+
+                <RadioButton
+                    android:id="@+id/porNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?android:selectableItemBackground"
+                    android:layoutDirection="rtl"
+                    android:text="Por nombre"
+                    android:textAppearance="?android:attr/textAppearanceListItem" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/foter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:text="Filtros"
+                android:textAppearance="?android:attr/textAppearanceListItem"
+                android:textStyle="bold" />
+
+            <ExpandableListView
+                android:id="@+id/filtros"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:childDivider="?attr/colorOnPrimary"
+                android:layoutDirection="rtl"
+                tools:listheader="@layout/item_companero" />
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -4,9 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
+import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
+import gamaerry.jovenesala42muestranacionaldeteatro.model.getEspecialidades
+import gamaerry.jovenesala42muestranacionaldeteatro.model.getEstados
+import gamaerry.jovenesala42muestranacionaldeteatro.model.getFiltros
+import gamaerry.jovenesala42muestranacionaldeteatro.model.getMuestras
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -21,6 +26,8 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
 
+        // se manejan los eventos de la navegacion
+        // haciendo uso del mecanismo backStack de Android
         binding.navegacion.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.inicio -> supportFragmentManager.popBackStack()
@@ -38,6 +45,22 @@ class MainActivity : AppCompatActivity() {
                     .addToBackStack("listaGuardados")
                     .commit()
             }
+            true
+        }
+
+        // se inicializa el navigationView de configuraciones
+        // Establecer el adaptador en el ExpandableListView
+        binding.filtros.setAdapter(ListaFiltrosAdapter(
+            this,
+            getFiltros(),
+            listOf(getEstados(), getEspecialidades(), getMuestras()))
+        )
+
+        binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
+
+        binding.filtros.setOnChildClickListener { parent, view, groupPosition, childPosition, id ->
+            // Acción al hacer clic en un elemento secundario
+            // Realiza la acción deseada para el elemento seleccionado
             true
         }
     }

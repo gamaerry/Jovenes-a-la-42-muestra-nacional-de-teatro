@@ -1,7 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.model
 
 // esta ya no se usa desde que logre importar mi base de datos
-// externa, y este archivo será borrado en la versión final
+// externa, y esta funcion sera borrada en la versión final
 fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
     return listOf(
         ProfesionalDelTeatro(
@@ -38,3 +38,59 @@ fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
         )
     )
 }
+
+fun getFiltros() = listOf("Estado", "Especialidad", "Muestra")
+
+fun getEstados() = listOf(
+    "Aguascalientes",
+    "Baja California",
+    "Baja California Sur",
+    "Campeche",
+    "Chiapas",
+    "Chihuahua",
+    "Ciudad de México",
+    "Coahuila",
+    "Colima",
+    "Durango",
+    "Estado de México",
+    "Guanajuato",
+    "Guerrero",
+    "Hidalgo",
+    "Jalisco",
+    "Michoacán",
+    "Morelos",
+    "Nayarit",
+    "Nuevo León",
+    "Oaxaca",
+    "Puebla",
+    "Querétaro",
+    "Quintana Roo",
+    "San Luis Potosí",
+    "Sinaloa",
+    "Sonora",
+    "Tabasco",
+    "Tamaulipas",
+    "Tlaxcala",
+    "Veracruz",
+    "Yucatán",
+    "Zacatecas"
+)
+
+fun getEspecialidades() = listOf(
+    "Actuación",
+    "Coodirección",
+    "Danza",
+    "Dirección",
+    "Dramaturgia",
+    "Escenografía",
+    "Fotografía",
+    "Gestión cultural",
+    "Iluminación",
+    "Musicalizacion",
+    "Producción técnica",
+    "Sonido",
+    "Vestuario"
+)
+
+fun getMuestras() = listOf("42 MNT en Torreón, Coahuila (2022)")
+
