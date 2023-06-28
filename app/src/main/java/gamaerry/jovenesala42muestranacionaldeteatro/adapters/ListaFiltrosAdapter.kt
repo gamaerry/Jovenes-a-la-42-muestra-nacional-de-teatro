@@ -14,6 +14,7 @@ class ListaFiltrosAdapter (
     private val groups: List<String>,
     private val childItems: List<List<String>>
 ) : BaseExpandableListAdapter() {
+    private val estadosCheckBox = childItems.map { it.map { true }.toMutableList() }
 
     override fun getGroupCount(): Int {
         return groups.size
@@ -75,7 +76,14 @@ class ListaFiltrosAdapter (
             parent,
             false
         )
-        itemFiltro.findViewById<CheckBox>(R.id.filtro).text = getChild(groupPosition, childPosition).toString()
+        itemFiltro.findViewById<CheckBox>(R.id.filtro).apply {
+            setOnCheckedChangeListener(null)
+            text = getChild(groupPosition, childPosition).toString()
+            isChecked = estadosCheckBox[groupPosition][childPosition]
+            setOnCheckedChangeListener { _, check ->
+                estadosCheckBox[groupPosition][childPosition] = check
+            }
+        }
         return itemFiltro
     }
 }
