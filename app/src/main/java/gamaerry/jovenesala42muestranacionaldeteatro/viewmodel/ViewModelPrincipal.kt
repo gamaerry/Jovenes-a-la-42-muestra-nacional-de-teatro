@@ -1,10 +1,9 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import gamaerry.jovenesala42muestranacionaldeteatro.data.RepositorioPrincipal
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.RepositorioPrincipal
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

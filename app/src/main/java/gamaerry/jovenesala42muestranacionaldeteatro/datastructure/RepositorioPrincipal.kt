@@ -1,4 +1,4 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

@@ -1,4 +1,4 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

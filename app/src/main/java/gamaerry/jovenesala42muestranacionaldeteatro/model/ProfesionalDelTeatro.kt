@@ -2,8 +2,7 @@ package gamaerry.jovenesala42muestranacionaldeteatro.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
-import java.util.UUID
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 
 @Entity(tableName = NOMBRE_BASE_DE_DATOS)
 data class ProfesionalDelTeatro(

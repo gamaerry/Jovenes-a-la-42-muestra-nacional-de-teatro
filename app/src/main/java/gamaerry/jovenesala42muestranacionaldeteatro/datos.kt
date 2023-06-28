@@ -1,4 +1,6 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.model
+package gamaerry.jovenesala42muestranacionaldeteatro
+
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 
 // esta ya no se usa desde que logre importar mi base de datos
 // externa, y esta funcion sera borrada en la versión final

@@ -1,8 +1,8 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
 import androidx.room.Dao
 import androidx.room.Query
-import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 
 @Dao

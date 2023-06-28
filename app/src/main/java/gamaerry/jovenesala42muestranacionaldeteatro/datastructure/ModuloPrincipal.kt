@@ -1,4 +1,4 @@
-package gamaerry.jovenesala42muestranacionaldeteatro.data
+package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ProfesionalesAdapter
-import gamaerry.jovenesala42muestranacionaldeteatro.data.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
-import javax.inject.Named
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.BaseDeDatosPrincipal.Companion.NOMBRE_BASE_DE_DATOS
 import javax.inject.Singleton
 
 // el objeto modulo nos sirve para proveer las
