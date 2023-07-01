@@ -3,15 +3,21 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
+import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    @Inject
+    lateinit var listaFiltrosAdapter: ListaFiltrosAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,11 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         // se inicializa el navigationView de configuraciones
         // Establecer el adaptador en el ExpandableListView
-        binding.filtros.setAdapter(ListaFiltrosAdapter(
-            this,
-            getFiltros(),
-            listOf(getEstados(), getEspecialidades(), getMuestras()))
-        )
+        binding.filtros.setAdapter(listaFiltrosAdapter)
 
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
 

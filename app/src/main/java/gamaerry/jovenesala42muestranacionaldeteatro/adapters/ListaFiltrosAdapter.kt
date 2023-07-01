@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,28 +7,35 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 import gamaerry.jovenesala42muestranacionaldeteatro.R
+import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
+import gamaerry.jovenesala42muestranacionaldeteatro.getEstados
+import gamaerry.jovenesala42muestranacionaldeteatro.getFiltros
+import gamaerry.jovenesala42muestranacionaldeteatro.getMuestras
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ListaFiltrosAdapter(
-    private val context: Context,
-    private val groups: List<String>,
-    private val childItems: List<List<String>>
-) : BaseExpandableListAdapter() {
-    private val estadosCheckBox = childItems.map { it.map { true }.toMutableList() }
+@Singleton
+class ListaFiltrosAdapter
+@Inject
+constructor() : BaseExpandableListAdapter() {
+    private val filtros: List<String> = getFiltros()
+    private val itemsFiltros: List<List<String>> = listOf(getEstados(), getEspecialidades(), getMuestras())
+    private val estadosCheckBox = itemsFiltros.map { it.map { true }.toMutableList() }
 
     override fun getGroupCount(): Int {
-        return groups.size
+        return filtros.size
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return childItems[groupPosition].size
+        return itemsFiltros[groupPosition].size
     }
 
     override fun getGroup(groupPosition: Int): Any {
-        return groups[groupPosition]
+        return filtros[groupPosition]
     }
 
     override fun getChild(groupPosition: Int, childPosition: Int): Any {
-        return childItems[groupPosition][childPosition]
+        return itemsFiltros[groupPosition][childPosition]
     }
 
     override fun getGroupId(groupPosition: Int): Long {
@@ -54,7 +60,7 @@ class ListaFiltrosAdapter(
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        val itemMenuFiltro: View = convertView ?: LayoutInflater.from(context).inflate(
+        val itemMenuFiltro: View = convertView ?: LayoutInflater.from(parent?.context).inflate(
             R.layout.item_menu_filtro,
             parent,
             false
@@ -71,7 +77,7 @@ class ListaFiltrosAdapter(
         convertView: View?,
         parent: ViewGroup?
     ): View {
-        val itemFiltro = (convertView ?: LayoutInflater.from(context).inflate(
+        val itemFiltro = (convertView ?: LayoutInflater.from(parent?.context).inflate(
             R.layout.item_filtro,
             parent,
             false
