@@ -61,12 +61,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
-                android:id="@+id/header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                android:text="ORDEN"
+                android:text="@string/orden"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textStyle="bold" />
 
@@ -84,7 +83,7 @@
                     android:background="?android:selectableItemBackground"
                     android:checked="true"
                     android:layoutDirection="rtl"
-                    android:text="Por estado"
+                    android:text="@string/por_estado"
                     android:textAppearance="?android:attr/textAppearanceListItem" />
 
                 <RadioButton
@@ -93,16 +92,15 @@
                     android:layout_height="wrap_content"
                     android:background="?android:selectableItemBackground"
                     android:layoutDirection="rtl"
-                    android:text="Por nombre"
+                    android:text="@string/por_nombre"
                     android:textAppearance="?android:attr/textAppearanceListItem" />
             </RadioGroup>
 
             <TextView
-                android:id="@+id/foter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="FILTROS"
+                android:text="@string/filtros"
                 android:textAppearance="?android:attr/textAppearanceListItem"
                 android:textStyle="bold" />
 
@@ -111,8 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:childDivider="?attr/colorOnPrimary"
-                android:layoutDirection="rtl"
-                tools:listheader="@layout/item_companero" />
+                android:layoutDirection="rtl"/>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

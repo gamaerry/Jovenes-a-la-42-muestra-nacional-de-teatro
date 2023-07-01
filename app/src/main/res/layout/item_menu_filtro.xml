@@ -6,4 +6,5 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:textAppearance="?android:attr/textAppearanceListItem"
     android:gravity="center_vertical"
+    android:text="@string/filtro"
     />

@@ -7,4 +7,10 @@
     <string name="descripcion_acomodo">cambia la forma de acomodar la lista</string>
     <string name="descripcion_guardado">guarda o desarchiva profesionales</string>
     <string name="saludo">¡Hola, Luis Gerardo!</string>
+    <string name="orden">ORDEN</string>
+    <string name="por_estado">Por estado</string>
+    <string name="por_nombre">Por nombre</string>
+    <string name="filtros">FILTROS</string>
+    <string name="estado">Estado</string>
+    <string name="filtro">Filtro</string>
 </resources>
