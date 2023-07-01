@@ -15,6 +15,10 @@ import javax.inject.Singleton
 // el objeto modulo nos sirve para proveer las
 // implementaciones especificas de cada tipo
 // (clase o interfaz) que se requieran inyectar
+// (notese que se instala en el componente
+// Singleton porque el viewModelPrincipal es
+// el que terminara manejando estos datos y su
+// scope es mas general que el del Activity)
 @Module
 @InstallIn(SingletonComponent::class)
 object ModuloPrincipal {
@@ -33,11 +37,4 @@ object ModuloPrincipal {
     @Provides
     @Singleton
     fun proveerDaoPrincipal(baseDeDatos: BaseDeDatosPrincipal) = baseDeDatos.getDaoPrincipal()
-
-    @Provides
-    fun proveerProfesionalesAdapterInicio() = ProfesionalesAdapter().apply {
-        // con esta linea evitamos que nuestro recyclerView se regrese al principio cuando se restaure
-        // (para esto es necesario implementar la dependencia especifica de RecyclerView en el build.gradle)
-        stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-    }
 }

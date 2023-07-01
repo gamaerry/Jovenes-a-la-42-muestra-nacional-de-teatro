@@ -8,15 +8,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.card.MaterialCardView
+import dagger.Provides
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
+import javax.inject.Inject
 
 // en el contexto de los adapter en android "item" hace referencia a los contenedores que se reutilizan
 // (de ahi el termino recyclerView) para mostrar informacion, en este caso emitida por nuestro viewModel
-class ProfesionalesAdapter :
+class ProfesionalesAdapter
+@Inject
+constructor() :
     ListAdapter<ProfesionalDelTeatro, ProfesionalesAdapter.ProfesionalDelTeatroViewHolder>(
         ProfesionalDiffUtil
     ) {
+    init {
+        stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
+    }
+
     // accion al presionar contenedor del profesional
     lateinit var accionAlPresionar: (ProfesionalDelTeatro, View) -> Unit
 
