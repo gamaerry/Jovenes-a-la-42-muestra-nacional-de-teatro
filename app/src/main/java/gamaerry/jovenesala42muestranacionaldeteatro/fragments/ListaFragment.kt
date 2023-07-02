@@ -12,6 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +29,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.removeGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.addGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 abstract class ListaFragment : Fragment() {
@@ -78,6 +82,14 @@ abstract class ListaFragment : Fragment() {
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
         binding.busqueda.setOnQueryTextListener(buscar(view))
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModelPrincipal.ordenadosPorNombre.collect {
+                    viewModelPrincipal.reordenar(it)
+                }
+            }
+        }
     }
 
     private fun limpiarSeleccion() {

@@ -42,6 +42,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _enGuardados = MutableStateFlow(false)
     val enGuardados: StateFlow<Boolean> get() = _enGuardados
 
+    // aqui es donde se almacena el tipo de acomodo
+    private val _ordenadosPorNombre = MutableStateFlow(false)
+    val ordenadosPorNombre: StateFlow<Boolean> get() = _ordenadosPorNombre
+
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
@@ -49,8 +53,18 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         setListaProfesionales()
     }
 
-    fun guardadosEstaVacio(): Boolean {
-        return _listaGuardados.value.isEmpty()
+    fun reordenar(porNombre: Boolean){
+        if (porNombre){
+            _listaInicio.value = listaInicio.value.sortedBy { it.nombre }
+            _listaGuardados.value = listaGuardados.value.sortedBy { it.nombre }
+        } else {
+            _listaInicio.value = listaInicio.value.sortedBy { it.id }
+            _listaGuardados.value = listaGuardados.value.sortedBy { it.id }
+        }
+    }
+
+    fun setOrdenadosPorNombre(porNombre: Boolean){
+        _ordenadosPorNombre.value = porNombre
     }
 
     // cambia el valor del acomodo y lo regresa

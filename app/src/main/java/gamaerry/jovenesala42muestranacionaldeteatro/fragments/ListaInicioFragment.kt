@@ -27,7 +27,7 @@ class ListaInicioFragment : ListaFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaInicio.collect {
                     profesionalesAdapter.submitList(it)
-                    binding.textoDeFondo.text = if (it.isEmpty()) {
+                    binding.textoDeFondo.text = if (it.isEmpty()){
                         binding.textoDeFondo.visibility = View.VISIBLE
                         binding.miRecyclerView.visibility = View.GONE
                         "No hay profesionales que cumplan con los filtros de búsqueda."

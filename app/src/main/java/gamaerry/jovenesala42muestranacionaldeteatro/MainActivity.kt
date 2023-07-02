@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     @Inject
     lateinit var listaFiltrosAdapter: ListaFiltrosAdapter
+    // uso un solo viewModel para todas las operaciones de la base de datos
+    private val viewModelPrincipal: ViewModelPrincipal by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -60,6 +62,12 @@ class MainActivity : AppCompatActivity() {
             // Acción al hacer clic en un elemento secundario
             // Realiza la acción deseada para el elemento seleccionado
             true
+        }
+        binding.orden.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.porNombre -> viewModelPrincipal.setOrdenadosPorNombre(true)
+                R.id.porEstado -> viewModelPrincipal.setOrdenadosPorNombre(false)
+            }
         }
     }
 
