@@ -51,10 +51,6 @@ constructor(
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
-    init {
-        filtrar()
-    }
-
     fun reordenar() {
         if (ordenadosPorNombre) {
             _listaInicio.value = listaInicio.value.sortedBy { it.nombre }

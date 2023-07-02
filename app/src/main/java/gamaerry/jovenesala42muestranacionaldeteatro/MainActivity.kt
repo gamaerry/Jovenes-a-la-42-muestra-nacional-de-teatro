@@ -2,10 +2,8 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
@@ -29,9 +27,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // con esta condicion se asegura de que se llame una sola vez
-        if (savedInstanceState == null)
+        if (savedInstanceState == null){
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+            actualizarListas()
+        }
 
         // se manejan los eventos de la navegacion
         // haciendo uso del mecanismo backStack de Android
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // se inicializa el navigationView de configuraciones
         // Establecer el adaptador en el ExpandableListView
         binding.filtros.setAdapter(listaFiltrosAdapter.apply {
-            actualizarLista = { viewModelPrincipal.filtrar() }
+            actualizarLista = { actualizarListas() }
         })
 
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
@@ -70,6 +70,13 @@ class MainActivity : AppCompatActivity() {
             }
             viewModelPrincipal.reordenar()
         }
+    }
+
+    private fun actualizarListas() {
+        guardados?.forEach {
+            viewModelPrincipal.addGuardado(it)
+        }
+        viewModelPrincipal.filtrar()
     }
 
     fun setItemNavegacionInicio() {

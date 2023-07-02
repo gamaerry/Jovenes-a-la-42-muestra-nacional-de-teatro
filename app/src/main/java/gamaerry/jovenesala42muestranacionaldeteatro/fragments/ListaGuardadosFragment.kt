@@ -18,12 +18,6 @@ class ListaGuardadosFragment : ListaFragment() {
         regresarEstadoPredeterminado()
         viewModelPrincipal.setEnGuardados(true)
 
-        // creado el fragmento se consiguen
-        // todos a los profesionales guardados
-        requireActivity().guardados?.forEach {
-            viewModelPrincipal.addGuardado(it)
-        }
-
         // de aqui es donde el otro adapter
         // consigue en tiempo real la listaGuardada
         viewLifecycleOwner.lifecycleScope.launch {
