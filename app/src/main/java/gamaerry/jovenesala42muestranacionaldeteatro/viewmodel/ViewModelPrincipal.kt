@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -71,6 +70,10 @@ constructor(
         val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
         val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
         repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
+            _listaGuardados.value =
+                it.filter { profesional -> profesional in listaGuardados.value }
+        }.launchIn(viewModelScope)
+        repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
             _listaInicio.value = it
         }.launchIn(viewModelScope)
     }
@@ -123,16 +126,10 @@ constructor(
             }.launchIn(viewModelScope)
     }
 
-    fun setListaPorEspecialidad(especialidad: String) {
-        if (enGuardados.value) {
-            repositorio.getProfesionalesPorEspecialidad(especialidad).onEach {
-                _listaGuardados.value = it
-            }.launchIn(viewModelScope)
-        } else {
-            repositorio.getProfesionalesPorEspecialidad(especialidad).onEach {
-                _listaInicio.value = it
-            }.launchIn(viewModelScope)
-        }
+    fun setFiltroEspecialidad(especialidad: String) {
+        estadosCheckBox[1].forEachIndexed { i, _ -> estadosCheckBox[1][i] = false }
+        estadosCheckBox[1][itemsFiltros[1].indexOf(especialidad)] = true
+        filtrar()
     }
 
     // a partir del id pasado se actualiza la listaGuardada

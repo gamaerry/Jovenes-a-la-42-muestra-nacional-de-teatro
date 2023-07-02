@@ -60,7 +60,7 @@ class DetallesProfesionalesFragment : Fragment() {
                 viewModelPrincipal.enGuardados.collect { _ ->
                     especialidadesAdapter.accionAlPresionarEspecialidad = {
                         requireActivity().supportFragmentManager.popBackStack()
-                        viewModelPrincipal.setListaPorEspecialidad(it)
+                        viewModelPrincipal.setFiltroEspecialidad(it)
                     }
                 }
             }
