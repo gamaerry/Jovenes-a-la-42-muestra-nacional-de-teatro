@@ -98,7 +98,7 @@ abstract class ListaFragment : Fragment() {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return if (!query.isNullOrEmpty()) {
+                return if (query != null) {
                     regresarEstadoPredeterminado()
                     view.ocultarTeclado()
                     viewModelPrincipal.setPalabrasClave(query)
@@ -109,7 +109,7 @@ abstract class ListaFragment : Fragment() {
             // (notese que en ambas funciones setPalabrasClave()
             // regresa un true indicando su correcto funcionamiento)
             override fun onQueryTextChange(query: String?): Boolean {
-                return if (!query.isNullOrEmpty()) {
+                return if (query != null) {
                     regresarEstadoPredeterminado()
                     viewModelPrincipal.setPalabrasClave(query)
                 } else false
