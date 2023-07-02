@@ -12,9 +12,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +26,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.removeGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.addGuardado
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentListaBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 abstract class ListaFragment : Fragment() {
@@ -76,7 +72,7 @@ abstract class ListaFragment : Fragment() {
         }
 
         // se selecciona al cardView al mantener presionado
-        profesionalesAdapter.accionAlPresionarLargo = { seleccionar(it)}
+        profesionalesAdapter.accionAlPresionarLargo = { seleccionar(it) }
 
         // OnQueryTextListener es una interfaz que requiere la
         // implementacion de dos métodos, uno para cuando cambia el
@@ -93,7 +89,7 @@ abstract class ListaFragment : Fragment() {
         seleccionados.clear()
     }
 
-    fun buscar(view: View): SearchView.OnQueryTextListener {
+    private fun buscar(view: View): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
@@ -127,7 +123,7 @@ abstract class ListaFragment : Fragment() {
         binding.guardado.visibility = View.VISIBLE
     }
 
-    fun getIcono(): Drawable? {
+    private fun getIcono(): Drawable? {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
         val esLineal = if (viewModelPrincipal.enGuardados.value)
@@ -150,7 +146,7 @@ abstract class ListaFragment : Fragment() {
             GridLayoutManager(requireContext(), 2)
     }
 
-    fun getTransicion(itemView: View): FragmentTransaction {
+    private fun getTransicion(itemView: View): FragmentTransaction {
         exitTransition = MaterialElevationScale(false).apply {
             duration = 250L
         }
@@ -178,16 +174,15 @@ abstract class ListaFragment : Fragment() {
         _binding = null
     }
 
-    fun seleccionar(cardView: MaterialCardView): Boolean {
+    private fun seleccionar(cardView: MaterialCardView): Boolean {
         cardView.isChecked = !cardView.isChecked
         if (cardView.isChecked)
             seleccionados.add(cardView)
         else seleccionados.remove(cardView)
-        if (seleccionados.isEmpty()){
+        if (seleccionados.isEmpty()) {
             setComportamientoCabeceraPorDefecto()
             regresarEstadoPredeterminado()
-        }
-        else {
+        } else {
             (binding.cabecera.layoutParams as AppBarLayout.LayoutParams).scrollFlags = 0
             (requireActivity() as MainActivity).desaparecerNavegacion()
             ocultarAcomodo()
@@ -195,7 +190,7 @@ abstract class ListaFragment : Fragment() {
         return true
     }
 
-    fun accionDelGuardado() {
+    private fun accionDelGuardado() {
         seleccionados.forEach {
             if (it.isChecked)
                 if (viewModelPrincipal.enGuardados.value) {
@@ -228,7 +223,7 @@ abstract class ListaFragment : Fragment() {
         (requireActivity() as MainActivity).aparecerNavegacion()
     }
 
-    private fun setComportamientoCabeceraPorDefecto(){
+    private fun setComportamientoCabeceraPorDefecto() {
         (binding.cabecera.layoutParams as AppBarLayout.LayoutParams).scrollFlags =
             AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
                     AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
