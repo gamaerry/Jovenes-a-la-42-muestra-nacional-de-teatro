@@ -25,6 +25,6 @@ interface DaoPrincipal {
     )
     suspend fun operacionGetListaDeProfesionales(palabrasClave: String): List<ProfesionalDelTeatro>
 
-    @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE estado IN (:estados) AND especialidades IN (:especialidades)")
-    suspend fun operacionGetProfesionalesPorFiltros(estados: List<String>, especialidades: List<String>): List<ProfesionalDelTeatro>
+    @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE estado IN (:estados) ")
+    suspend fun operacionGetProfesionalesPorEstados(estados: List<String>): List<ProfesionalDelTeatro>
 }

@@ -2,6 +2,7 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.activityViewModels
@@ -16,8 +17,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
     @Inject
     lateinit var listaFiltrosAdapter: ListaFiltrosAdapter
+
     // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,14 +57,12 @@ class MainActivity : AppCompatActivity() {
 
         // se inicializa el navigationView de configuraciones
         // Establecer el adaptador en el ExpandableListView
-        binding.filtros.setAdapter(listaFiltrosAdapter)
+        binding.filtros.setAdapter(listaFiltrosAdapter.apply {
+            actualizarLista = { viewModelPrincipal.filtrar() }
+        })
 
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
 
-        binding.filtros.setOnChildClickListener { parent, view, groupPosition, childPosition, id ->
-            viewModelPrincipal.filtrar()
-            true
-        }
         binding.orden.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.porNombre -> viewModelPrincipal.ordenadosPorNombre = true
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setItemNavegacionInicio(){
+    fun setItemNavegacionInicio() {
         binding.navegacion.selectedItemId = R.id.inicio
     }
 

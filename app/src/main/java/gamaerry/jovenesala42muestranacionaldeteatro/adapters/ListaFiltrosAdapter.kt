@@ -19,6 +19,7 @@ constructor(
     private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
 ) : BaseExpandableListAdapter() {
     private val filtros: List<String> = getFiltros()
+    lateinit var actualizarLista: () -> Unit
 
     override fun getGroupCount(): Int {
         return filtros.size
@@ -86,6 +87,7 @@ constructor(
             isChecked = estadosCheckBox[groupPosition][childPosition]
             setOnCheckedChangeListener { _, check ->
                 estadosCheckBox[groupPosition][childPosition] = check
+                actualizarLista()
             }
         }
         return itemFiltro

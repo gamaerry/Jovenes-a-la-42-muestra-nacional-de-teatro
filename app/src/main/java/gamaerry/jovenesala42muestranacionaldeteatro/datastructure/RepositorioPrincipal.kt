@@ -1,5 +1,8 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
+import android.util.Log
+import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -25,7 +28,16 @@ constructor(private val daoPrincipal: DaoPrincipal) {
         emit(daoPrincipal.operacionGetProfesionalesPorEspecialidad(especialidad))
     }.catch { it.printStackTrace() }
 
-    fun getProfesionalesPorFiltros(estados: List<String>, especialidades: List<String>, muestra: List<String>) = flow {
-        emit(daoPrincipal.operacionGetProfesionalesPorFiltros(estados, especialidades))
+    fun getProfesionalesPorFiltros(
+        estados: List<String>,
+        especialidades: List<String>,
+        muestra: List<String>
+    ) = flow {
+        val filtroEstados = daoPrincipal.operacionGetProfesionalesPorEstados(estados)
+        val filtroEspecialidades = filtroEstados.filter { profesional ->
+            profesional.especialidades.extraerLista().any { it in especialidades }
+        }
+        emit(if (muestra.isEmpty()) emptyList() else filtroEspecialidades)
     }.catch { it.printStackTrace() }
+
 }

@@ -43,7 +43,18 @@ fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
 
 fun getFiltros() = listOf("Estado", "Especialidad", "Muestra")
 
+// especialidades temporales (no definitivas)
 fun getEstados() = listOf(
+    "Baja california",
+    "Chiapas",
+    "Chihuahua",
+    "Colima",
+    "Michoacán",
+    "Tabasco",
+    "Yucatán",
+)
+
+/*fun getEstados() = listOf(
     "Aguascalientes",
     "Baja California",
     "Baja California Sur",
@@ -76,17 +87,17 @@ fun getEstados() = listOf(
     "Veracruz",
     "Yucatán",
     "Zacatecas"
-)
+)*/
 
 // especialidades temporales (no definitivas)
 fun getEspecialidades() = listOf(
     "Actuación",
-    "Coordinacion cultural",
+    "Coordinación cultural",
     "Dirección",
     "Dramaturgia",
     "Fotografía",
     "Gestión cultural",
-    "Musicalizacion",
+    "Musicalización",
     "Operación técnica",
     "Promoción",
 )

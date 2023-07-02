@@ -1,5 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,7 +53,7 @@ constructor(
     private val palabrasClave = MutableStateFlow("")
 
     init {
-        setListaProfesionales()
+        filtrar()
     }
 
     fun reordenar() {
@@ -66,7 +67,12 @@ constructor(
     }
 
     fun filtrar() {
-        TODO("Not yet implemented")
+        val estados = itemsFiltros[0].filterIndexed { i, _ -> estadosCheckBox[0][i] }
+        val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
+        val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
+        repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
+            _listaInicio.value = it
+        }.launchIn(viewModelScope)
     }
 
     // cambia el valor del acomodo y lo regresa
@@ -108,7 +114,7 @@ constructor(
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaGuardados.value =
-                    it.filter { profesional -> listaGuardados.value.contains(profesional) }
+                    it.filter { profesional -> profesional in listaGuardados.value }
             }.launchIn(viewModelScope)
         } else
         // no es necesario ningun filtrado en caso de tratarse del menu de inicio
