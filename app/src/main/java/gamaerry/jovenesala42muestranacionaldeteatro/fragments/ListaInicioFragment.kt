@@ -1,6 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,9 +26,12 @@ class ListaInicioFragment : ListaFragment() {
         // tiempo real la listaProfesionalesDeTeatro
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.listaInicio.collect {
-                    profesionalesAdapter.submitList(it)
-                    binding.textoDeFondo.text = if (it.isEmpty()){
+                viewModelPrincipal.listaInicio.collect { listaInicio ->
+                    if (viewModelPrincipal.ordenadosPorNombre)
+                        profesionalesAdapter.submitList(listaInicio.sortedBy { it.nombre })
+                    else
+                        profesionalesAdapter.submitList(listaInicio.sortedBy { it.id })
+                    binding.textoDeFondo.text = if (listaInicio.isEmpty()){
                         binding.textoDeFondo.visibility = View.VISIBLE
                         binding.miRecyclerView.visibility = View.GONE
                         "No hay profesionales que cumplan con los filtros de búsqueda."
