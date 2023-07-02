@@ -24,4 +24,7 @@ interface DaoPrincipal {
                 " OR estado LIKE '%' || :palabrasClave || '%'"
     )
     suspend fun operacionGetListaDeProfesionales(palabrasClave: String): List<ProfesionalDelTeatro>
+
+    @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE estado IN (:estados) AND especialidades IN (:especialidades)")
+    suspend fun operacionGetProfesionalesPorFiltros(estados: List<String>, especialidades: List<String>): List<ProfesionalDelTeatro>
 }

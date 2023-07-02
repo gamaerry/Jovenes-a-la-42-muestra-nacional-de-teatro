@@ -21,8 +21,11 @@ constructor(private val daoPrincipal: DaoPrincipal) {
         emit(daoPrincipal.operacionGetProfesionalPorId(id))
     }.catch { it.printStackTrace() }
 
-    // puesto que el id es unico, se asegura la emision de un solo profesional
     fun getProfesionalesPorEspecialidad(especialidad: String) = flow {
         emit(daoPrincipal.operacionGetProfesionalesPorEspecialidad(especialidad))
+    }.catch { it.printStackTrace() }
+
+    fun getProfesionalesPorFiltros(estados: List<String>, especialidades: List<String>, muestra: List<String>) = flow {
+        emit(daoPrincipal.operacionGetProfesionalesPorFiltros(estados, especialidades))
     }.catch { it.printStackTrace() }
 }
