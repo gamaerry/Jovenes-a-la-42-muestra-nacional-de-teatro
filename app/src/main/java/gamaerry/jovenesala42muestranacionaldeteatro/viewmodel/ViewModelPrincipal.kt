@@ -4,6 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.RepositorioPrincipal
+import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
+import gamaerry.jovenesala42muestranacionaldeteatro.getEstados
+import gamaerry.jovenesala42muestranacionaldeteatro.getFiltros
+import gamaerry.jovenesala42muestranacionaldeteatro.getMuestras
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +22,8 @@ import javax.inject.Inject
 class ViewModelPrincipal
 @Inject
 constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
+    var ordenadosPorNombre = false
+
     // aqui es donde se almacenan a los profesionales del inicio
     private val _listaInicio = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
     val listaInicio: StateFlow<List<ProfesionalDelTeatro>> get() = _listaInicio
@@ -42,10 +48,6 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
     private val _enGuardados = MutableStateFlow(false)
     val enGuardados: StateFlow<Boolean> get() = _enGuardados
 
-    // aqui es donde se almacena el tipo de acomodo
-    private val _ordenadosPorNombre = MutableStateFlow(false)
-    val ordenadosPorNombre: StateFlow<Boolean> get() = _ordenadosPorNombre
-
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
@@ -53,18 +55,14 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         setListaProfesionales()
     }
 
-    fun reordenar(porNombre: Boolean){
-        if (porNombre){
+    fun reordenar(){
+        if (ordenadosPorNombre){
             _listaInicio.value = listaInicio.value.sortedBy { it.nombre }
             _listaGuardados.value = listaGuardados.value.sortedBy { it.nombre }
         } else {
             _listaInicio.value = listaInicio.value.sortedBy { it.id }
             _listaGuardados.value = listaGuardados.value.sortedBy { it.id }
         }
-    }
-
-    fun setOrdenadosPorNombre(porNombre: Boolean){
-        _ordenadosPorNombre.value = porNombre
     }
 
     // cambia el valor del acomodo y lo regresa
@@ -109,7 +107,7 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
                     it.filter { profesional -> listaGuardados.value.contains(profesional) }
             }.launchIn(viewModelScope)
         } else
-            // no es necesario ningun filtrado en caso de tratarse del menu de inicio
+        // no es necesario ningun filtrado en caso de tratarse del menu de inicio
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaInicio.value = it
             }.launchIn(viewModelScope)

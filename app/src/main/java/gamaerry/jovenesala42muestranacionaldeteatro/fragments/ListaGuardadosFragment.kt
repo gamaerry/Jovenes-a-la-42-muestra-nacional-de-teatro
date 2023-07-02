@@ -29,7 +29,7 @@ class ListaGuardadosFragment : ListaFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaGuardados.collect { listaGuardados ->
-                    if (viewModelPrincipal.ordenadosPorNombre.value)
+                    if (viewModelPrincipal.ordenadosPorNombre)
                         profesionalesAdapter.submitList(listaGuardados.sortedBy { it.nombre })
                     else
                         profesionalesAdapter.submitList(listaGuardados.sortedBy { it.id })

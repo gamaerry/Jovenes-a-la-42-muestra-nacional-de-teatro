@@ -65,9 +65,10 @@ class MainActivity : AppCompatActivity() {
         }
         binding.orden.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.porNombre -> viewModelPrincipal.setOrdenadosPorNombre(true)
-                R.id.porEstado -> viewModelPrincipal.setOrdenadosPorNombre(false)
+                R.id.porNombre -> viewModelPrincipal.ordenadosPorNombre = true
+                R.id.porEstado -> viewModelPrincipal.ordenadosPorNombre = false
             }
+            viewModelPrincipal.reordenar()
         }
     }
 

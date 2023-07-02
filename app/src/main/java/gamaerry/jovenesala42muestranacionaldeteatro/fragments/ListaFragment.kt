@@ -82,14 +82,6 @@ abstract class ListaFragment : Fragment() {
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
         binding.busqueda.setOnQueryTextListener(buscar(view))
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModelPrincipal.ordenadosPorNombre.collect {
-                    viewModelPrincipal.reordenar(it)
-                }
-            }
-        }
     }
 
     private fun limpiarSeleccion() {
