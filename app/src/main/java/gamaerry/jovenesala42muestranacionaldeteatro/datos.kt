@@ -78,9 +78,21 @@ fun getEstados() = listOf(
     "Zacatecas"
 )
 
+// especialidades temporales (no definitivas)
 fun getEspecialidades() = listOf(
     "Actuación",
-    "Coodirección",
+    "Coordinacion cultural",
+    "Dirección",
+    "Dramaturgia",
+    "Fotografía",
+    "Gestión cultural",
+    "Musicalizacion",
+    "Operación técnica",
+    "Promoción",
+)
+
+/*fun getEspecialidades() = listOf(
+    "Actuación",
     "Danza",
     "Dirección",
     "Dramaturgia",
@@ -92,7 +104,7 @@ fun getEspecialidades() = listOf(
     "Producción técnica",
     "Sonido",
     "Vestuario"
-)
+)*/
 
 fun getMuestras() = listOf("42 MNT en Torreón, Coahuila (2022)")
 
