@@ -30,6 +30,19 @@ class ListaGuardadosFragment : ListaFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaGuardados.collect { listaGuardados ->
                     profesionalesAdapter.submitList(listaGuardados.sortedBy { it.id })
+                    if (listaGuardados.isEmpty()){
+                        binding.textoDeFondo.text =
+                            if (requireActivity().guardados!!.isEmpty())
+                                "Lista de profesionales guardados vacía."
+                            else
+                                "No hay profesionales que cumplan con los filtros de búsqueda."
+                        binding.textoDeFondo.visibility = View.VISIBLE
+                        binding.miRecyclerView.visibility = View.GONE
+                    } else {
+                        binding.textoDeFondo.text = ""
+                        binding.textoDeFondo.visibility = View.GONE
+                        binding.miRecyclerView.visibility = View.VISIBLE
+                    }
                 }
             }
         }

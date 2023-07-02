@@ -49,6 +49,10 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         setListaProfesionales()
     }
 
+    fun guardadosEstaVacio(): Boolean {
+        return _listaGuardados.value.isEmpty()
+    }
+
     // cambia el valor del acomodo y lo regresa
     fun switchInicioEsLineal(): Boolean {
         _inicioEsLineal.value = !_inicioEsLineal.value

@@ -25,9 +25,9 @@
                     android:id="@+id/busqueda"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="12dp"
-                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:background="@drawable/barra_de_busqueda"
                     android:elevation="8dp" />
@@ -56,11 +56,21 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/textoDeFondo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:gravity="center"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/miRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/navegacion"
         android:paddingHorizontal="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

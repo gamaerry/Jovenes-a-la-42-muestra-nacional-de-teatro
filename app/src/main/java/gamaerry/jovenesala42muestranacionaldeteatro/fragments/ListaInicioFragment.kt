@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
+import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -26,6 +27,15 @@ class ListaInicioFragment : ListaFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaInicio.collect {
                     profesionalesAdapter.submitList(it)
+                    binding.textoDeFondo.text = if (it.isEmpty()) {
+                        binding.textoDeFondo.visibility = View.VISIBLE
+                        binding.miRecyclerView.visibility = View.GONE
+                        "No hay profesionales que cumplan con los filtros de búsqueda."
+                    } else {
+                        binding.textoDeFondo.visibility = View.GONE
+                        binding.miRecyclerView.visibility = View.VISIBLE
+                        ""
+                    }
                 }
             }
         }
