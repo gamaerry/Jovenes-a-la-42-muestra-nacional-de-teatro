@@ -23,6 +23,7 @@ constructor(
     private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
 ) : ViewModel() {
     var ordenadosPorNombre = false
+    val idsGuardados = mutableSetOf<Int>()
 
     // aqui es donde se almacenan a los profesionales del inicio
     private val _listaInicio = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
@@ -113,7 +114,7 @@ constructor(
             // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
                 _listaGuardados.value =
-                    it.filter { profesional -> profesional in listaGuardados.value }
+                    it.filter { profesional -> profesional.id in idsGuardados }
             }.launchIn(viewModelScope)
         } else
         // no es necesario ningun filtrado en caso de tratarse del menu de inicio
@@ -130,14 +131,16 @@ constructor(
 
     // a partir del id pasado se actualiza la listaGuardada
     fun addGuardado(id: String) {
+        idsGuardados.add(id.toInt())
         repositorio.getProfesionalPorId(id).onEach {
-            if (!listaGuardados.value.contains(it))
+            if (it !in listaGuardados.value)
                 _listaGuardados.value += it!!
         }.launchIn(viewModelScope)
     }
 
     // a partir del id pasado se actualiza la listaGuardada
     fun removeGuardado(id: Int) {
-        _listaGuardados.value = _listaGuardados.value.filter { it.id != id }
+        idsGuardados.remove(id)
+        _listaGuardados.value = _listaGuardados.value.filter {id in idsGuardados}
     }
 }
