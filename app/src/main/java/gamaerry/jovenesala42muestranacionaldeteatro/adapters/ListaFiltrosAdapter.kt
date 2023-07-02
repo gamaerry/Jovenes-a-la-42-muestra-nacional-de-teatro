@@ -7,20 +7,18 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.CheckBox
 import android.widget.TextView
 import gamaerry.jovenesala42muestranacionaldeteatro.R
-import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
-import gamaerry.jovenesala42muestranacionaldeteatro.getEstados
 import gamaerry.jovenesala42muestranacionaldeteatro.getFiltros
-import gamaerry.jovenesala42muestranacionaldeteatro.getMuestras
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ListaFiltrosAdapter
 @Inject
-constructor() : BaseExpandableListAdapter() {
+constructor(
+    private val itemsFiltros: @JvmSuppressWildcards List<List<String>>,
+    private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
+) : BaseExpandableListAdapter() {
     private val filtros: List<String> = getFiltros()
-    private val itemsFiltros: List<List<String>> = listOf(getEstados(), getEspecialidades(), getMuestras())
-    private val estadosCheckBox = itemsFiltros.map { it.map { true }.toMutableList() }
 
     override fun getGroupCount(): Int {
         return filtros.size

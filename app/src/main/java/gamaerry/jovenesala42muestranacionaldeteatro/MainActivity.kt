@@ -59,8 +59,7 @@ class MainActivity : AppCompatActivity() {
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
 
         binding.filtros.setOnChildClickListener { parent, view, groupPosition, childPosition, id ->
-            // Acción al hacer clic en un elemento secundario
-            // Realiza la acción deseada para el elemento seleccionado
+            viewModelPrincipal.filtrar()
             true
         }
         binding.orden.setOnCheckedChangeListener { _, checkedId ->

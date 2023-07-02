@@ -4,10 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.RepositorioPrincipal
-import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
-import gamaerry.jovenesala42muestranacionaldeteatro.getEstados
-import gamaerry.jovenesala42muestranacionaldeteatro.getFiltros
-import gamaerry.jovenesala42muestranacionaldeteatro.getMuestras
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelPrincipal
 @Inject
-constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
+constructor(
+    private val repositorio: RepositorioPrincipal,
+    private val itemsFiltros: @JvmSuppressWildcards List<List<String>>,
+    private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
+) : ViewModel() {
     var ordenadosPorNombre = false
 
     // aqui es donde se almacenan a los profesionales del inicio
@@ -55,14 +55,18 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         setListaProfesionales()
     }
 
-    fun reordenar(){
-        if (ordenadosPorNombre){
+    fun reordenar() {
+        if (ordenadosPorNombre) {
             _listaInicio.value = listaInicio.value.sortedBy { it.nombre }
             _listaGuardados.value = listaGuardados.value.sortedBy { it.nombre }
         } else {
             _listaInicio.value = listaInicio.value.sortedBy { it.id }
             _listaGuardados.value = listaGuardados.value.sortedBy { it.id }
         }
+    }
+
+    fun filtrar() {
+        TODO("Not yet implemented")
     }
 
     // cambia el valor del acomodo y lo regresa
@@ -77,7 +81,7 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
         return guardadosEsLineal.value
     }
 
-    fun setEnGuardados(enGuardados: Boolean){
+    fun setEnGuardados(enGuardados: Boolean) {
         _enGuardados.value = enGuardados
     }
 
@@ -113,8 +117,8 @@ constructor(private val repositorio: RepositorioPrincipal) : ViewModel() {
             }.launchIn(viewModelScope)
     }
 
-    fun setListaPorEspecialidad(especialidad: String){
-        if (enGuardados.value){
+    fun setListaPorEspecialidad(especialidad: String) {
+        if (enGuardados.value) {
             repositorio.getProfesionalesPorEspecialidad(especialidad).onEach {
                 _listaGuardados.value = it
             }.launchIn(viewModelScope)
