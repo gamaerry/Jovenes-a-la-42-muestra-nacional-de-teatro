@@ -23,7 +23,7 @@ constructor(
     private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
 ) : ViewModel() {
     var ordenadosPorNombre = false
-    val idsGuardados = mutableSetOf<Int>()
+    private val idsGuardados = mutableSetOf<Int>()
 
     // aqui es donde se almacenan a los profesionales del inicio
     private val _listaInicio = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
@@ -76,15 +76,13 @@ constructor(
     }
 
     // cambia el valor del acomodo y lo regresa
-    fun switchInicioEsLineal(): Boolean {
+    fun switchInicioEsLineal() {
         _inicioEsLineal.value = !_inicioEsLineal.value
-        return inicioEsLineal.value
     }
 
     // cambia el valor del acomodo y lo regresa
-    fun switchGuardadosEsLineal(): Boolean {
+    fun switchGuardadosEsLineal() {
         _guardadosEsLineal.value = !_guardadosEsLineal.value
-        return guardadosEsLineal.value
     }
 
     fun setEnGuardados(enGuardados: Boolean) {

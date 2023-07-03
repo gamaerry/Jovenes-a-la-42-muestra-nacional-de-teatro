@@ -49,6 +49,12 @@ class ListaGuardadosFragment : ListaFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.guardadosEsLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
+                    binding.acomodo.setImageDrawable(
+                        if (it)
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
+                        else
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
+                    )
                 }
             }
         }

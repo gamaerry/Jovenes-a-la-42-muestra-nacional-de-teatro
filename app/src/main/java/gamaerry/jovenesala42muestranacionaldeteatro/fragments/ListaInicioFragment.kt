@@ -1,14 +1,14 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
-import gamaerry.jovenesala42muestranacionaldeteatro.guardados
+import gamaerry.jovenesala42muestranacionaldeteatro.R
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,7 +31,7 @@ class ListaInicioFragment : ListaFragment() {
                         profesionalesAdapter.submitList(listaInicio.sortedBy { it.nombre })
                     else
                         profesionalesAdapter.submitList(listaInicio.sortedBy { it.id })
-                    binding.textoDeFondo.text = if (listaInicio.isEmpty()){
+                    binding.textoDeFondo.text = if (listaInicio.isEmpty()) {
                         binding.textoDeFondo.visibility = View.VISIBLE
                         binding.miRecyclerView.visibility = View.GONE
                         "No hay profesionales que cumplan con los filtros de búsqueda."
@@ -50,6 +50,12 @@ class ListaInicioFragment : ListaFragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.inicioEsLineal.collect {
                     binding.miRecyclerView.layoutManager = getLayoutManager(it)
+                    binding.acomodo.setImageDrawable(
+                        if (it)
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
+                        else
+                            ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
+                    )
                 }
             }
         }

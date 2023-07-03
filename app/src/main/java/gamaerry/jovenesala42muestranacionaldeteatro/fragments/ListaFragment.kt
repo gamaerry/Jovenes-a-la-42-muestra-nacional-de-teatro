@@ -1,14 +1,11 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
@@ -58,7 +55,7 @@ abstract class ListaFragment : Fragment() {
         // cambia el src del icono al ser presionado
         // notese que para getIcono() se cambia el valor
         // de esLineal del viewModel con cada llamada
-        binding.acomodo.setOnClickListener { (it as ImageView).setImageDrawable(getIcono()) }
+        binding.acomodo.setOnClickListener { cambiarAcomodo() }
 
         // se define que va a pasar con el icono
         // que se encarga del guardado de profesionales
@@ -123,17 +120,13 @@ abstract class ListaFragment : Fragment() {
         binding.guardado.visibility = View.VISIBLE
     }
 
-    private fun getIcono(): Drawable? {
+    private fun cambiarAcomodo() {
         // esta funcion confia en que esLineal siempre tiene un valor inicial de
         // true por eso esLineal no esta establecido en los sharedPreferences
-        val esLineal = if (viewModelPrincipal.enGuardados.value)
+        if (viewModelPrincipal.enGuardados.value)
             viewModelPrincipal.switchGuardadosEsLineal()
         else
             viewModelPrincipal.switchInicioEsLineal()
-        return if (esLineal)
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_grid)
-        else
-            ContextCompat.getDrawable(requireContext(), R.drawable.ic_list)
     }
 
     fun getLayoutManager(esLineal: Boolean): RecyclerView.LayoutManager {
