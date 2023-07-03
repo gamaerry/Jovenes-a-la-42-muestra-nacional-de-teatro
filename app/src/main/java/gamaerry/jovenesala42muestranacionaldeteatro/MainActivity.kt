@@ -78,9 +78,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.restablecerFiltros.setOnClickListener {
-            viewModelPrincipal.reestablecerFiltros()
+            restablecerExpandableListView()
             viewModelPrincipal.filtrar()
         }
+    }
+
+    fun restablecerExpandableListView() {
+        for (i in getFiltros().indices)
+            binding.filtros.collapseGroup(i)
+        viewModelPrincipal.restablecerFiltros()
     }
 
     private fun actualizarListas() {

@@ -75,14 +75,14 @@ abstract class ListaFragment : Fragment() {
         // OnQueryTextListener es una interfaz que requiere la
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
-        binding.busqueda.setOnQueryTextListener(buscar(view))
+        binding.busqueda.setOnQueryTextListener(buscar())
     }
 
     fun cerrarBusqueda() {
         if (!binding.busqueda.query.isNullOrEmpty()){
             binding.busqueda.setOnQueryTextListener(null)
             binding.busqueda.onActionViewCollapsed()
-            binding.busqueda.setOnQueryTextListener(buscar(requireView()))
+            binding.busqueda.setOnQueryTextListener(buscar())
         }
     }
 
@@ -95,14 +95,14 @@ abstract class ListaFragment : Fragment() {
         seleccionados.clear()
     }
 
-    private fun buscar(view: View): SearchView.OnQueryTextListener {
+    private fun buscar(): SearchView.OnQueryTextListener {
         return object : SearchView.OnQueryTextListener {
             // esta funcion se llama cuando se presiona el
             // icono de buscar en el SearchView o en el teclado
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return if (query != null) {
                     regresarEstadoPredeterminado()
-                    view.ocultarTeclado()
+                    requireView().ocultarTeclado()
                     viewModelPrincipal.setPalabrasClave(query)
                 } else false
             }
@@ -113,7 +113,9 @@ abstract class ListaFragment : Fragment() {
             override fun onQueryTextChange(query: String?): Boolean {
                 return if (query != null && binding.busqueda.width > 0) {
                     regresarEstadoPredeterminado()
-                    viewModelPrincipal.reestablecerFiltros()
+                    // el searchView por su funcion deberia ser uno solo y estar en
+                    // el activity sin embargo por cuestiones de diseno se queda aqui
+                    (requireActivity() as MainActivity).restablecerExpandableListView()
                     viewModelPrincipal.setPalabrasClave(query)
                 } else false
             }

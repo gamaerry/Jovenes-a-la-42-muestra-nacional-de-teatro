@@ -52,7 +52,7 @@ constructor(
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
-    fun reestablecerFiltros() {
+    fun restablecerFiltros() {
         estadosCheckBox.forEachIndexed { i, filtros ->
             filtros.forEachIndexed { j, _ -> estadosCheckBox[i][j] = true }
         }
