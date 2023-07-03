@@ -75,6 +75,11 @@ class MainActivity : AppCompatActivity() {
             }
             viewModelPrincipal.reordenar()
         }
+
+        binding.restablecerFiltros.setOnClickListener {
+            viewModelPrincipal.reestablecerFiltros()
+            viewModelPrincipal.filtrar()
+        }
     }
 
     private fun actualizarListas() {

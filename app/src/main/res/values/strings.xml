@@ -13,4 +13,5 @@
     <string name="filtros">FILTROS</string>
     <string name="estado">Estado</string>
     <string name="filtro">Filtro</string>
+    <string name="restablecer_filtros">Restablecer filtros</string>
 </resources>

@@ -31,7 +31,6 @@
         android:id="@+id/configuracion"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:background="?attr/colorOnPrimary">
 
         <LinearLayout
@@ -108,9 +107,23 @@
             <ExpandableListView
                 android:id="@+id/filtros"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:childDivider="?attr/colorOnPrimary"
                 android:layoutDirection="rtl"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/restablecerFiltros"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:text="@string/restablecer_filtros"
+                android:layout_gravity="bottom|center_horizontal"/>
         </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
