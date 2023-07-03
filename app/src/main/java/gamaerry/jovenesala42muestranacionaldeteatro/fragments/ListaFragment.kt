@@ -1,7 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +76,14 @@ abstract class ListaFragment : Fragment() {
         // implementacion de dos métodos, uno para cuando cambia el
         // String de busqueda y otro para cuando se da al boton de buscar
         binding.busqueda.setOnQueryTextListener(buscar(view))
+    }
+
+    fun cerrarBusqueda() {
+        if (!binding.busqueda.query.isNullOrEmpty()){
+            binding.busqueda.setOnQueryTextListener(null)
+            binding.busqueda.onActionViewCollapsed()
+            binding.busqueda.setOnQueryTextListener(buscar(requireView()))
+        }
     }
 
     private fun limpiarSeleccion() {

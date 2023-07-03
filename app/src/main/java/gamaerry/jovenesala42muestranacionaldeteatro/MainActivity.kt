@@ -2,8 +2,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Gravity
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -12,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
@@ -20,7 +19,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     @Inject
     lateinit var listaFiltrosAdapter: ListaFiltrosAdapter
 
@@ -63,7 +61,10 @@ class MainActivity : AppCompatActivity() {
         // se inicializa el navigationView de configuraciones
         // Establecer el adaptador en el ExpandableListView
         binding.filtros.setAdapter(listaFiltrosAdapter.apply {
-            actualizarLista = { actualizarListas() }
+            actualizarLista = {
+                (supportFragmentManager.fragments[0] as ListaFragment).cerrarBusqueda()
+                actualizarListas()
+            }
         })
 
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
@@ -114,4 +115,5 @@ class MainActivity : AppCompatActivity() {
         }
         binding.configuracion.visibility = View.GONE
     }
+
 }
