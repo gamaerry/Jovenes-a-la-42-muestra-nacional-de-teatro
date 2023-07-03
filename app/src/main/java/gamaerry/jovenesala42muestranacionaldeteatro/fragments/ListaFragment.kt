@@ -66,6 +66,7 @@ abstract class ListaFragment : Fragment() {
         profesionalesAdapter.accionAlPresionar = { profesionalDelTeatro, itemView ->
             viewModelPrincipal.setProfesionalEnfocado(profesionalDelTeatro)
             getTransicion(itemView).commit()
+            (requireActivity() as MainActivity).desaparecerConfiguracion()
         }
 
         // se selecciona al cardView al mantener presionado
@@ -214,6 +215,7 @@ abstract class ListaFragment : Fragment() {
         limpiarSeleccion()
         mostrarAcomodo()
         (requireActivity() as MainActivity).aparecerNavegacion()
+        (requireActivity() as MainActivity).aparecerConfiguracion()
     }
 
     private fun setComportamientoCabeceraPorDefecto() {

@@ -2,8 +2,13 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.GravityCompat
+import androidx.core.view.updateLayoutParams
+import androidx.drawerlayout.widget.DrawerLayout
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
@@ -89,5 +94,19 @@ class MainActivity : AppCompatActivity() {
 
     fun desaparecerNavegacion() {
         binding.navegacion.visibility = View.GONE
+    }
+
+    fun aparecerConfiguracion() {
+        binding.configuracion.updateLayoutParams {
+            (this as DrawerLayout.LayoutParams).gravity = GravityCompat.START
+        }
+        binding.configuracion.visibility = View.VISIBLE
+    }
+
+    fun desaparecerConfiguracion() {
+        binding.configuracion.updateLayoutParams {
+            (this as DrawerLayout.LayoutParams).gravity = 0
+        }
+        binding.configuracion.visibility = View.GONE
     }
 }
