@@ -1,6 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -103,8 +104,9 @@ abstract class ListaFragment : Fragment() {
             // (notese que en ambas funciones setPalabrasClave()
             // regresa un true indicando su correcto funcionamiento)
             override fun onQueryTextChange(query: String?): Boolean {
-                return if (query != null) {
+                return if (query != null && binding.busqueda.width > 0) {
                     regresarEstadoPredeterminado()
+                    viewModelPrincipal.reestablecerFiltros()
                     viewModelPrincipal.setPalabrasClave(query)
                 } else false
             }

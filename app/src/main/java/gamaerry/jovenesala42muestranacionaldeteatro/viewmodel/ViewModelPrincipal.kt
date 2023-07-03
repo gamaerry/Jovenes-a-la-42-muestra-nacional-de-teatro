@@ -52,6 +52,12 @@ constructor(
     // representa el filtrado de busqueda
     private val palabrasClave = MutableStateFlow("")
 
+    fun reestablecerFiltros() {
+        estadosCheckBox.forEachIndexed { i, filtros ->
+            filtros.forEachIndexed { j, _ -> estadosCheckBox[i][j] = true }
+        }
+    }
+
     fun reordenar() {
         if (ordenadosPorNombre) {
             _listaInicio.value = listaInicio.value.sortedBy { it.nombre }
@@ -139,6 +145,6 @@ constructor(
     // a partir del id pasado se actualiza la listaGuardada
     fun removeGuardado(id: Int) {
         idsGuardados.remove(id)
-        _listaGuardados.value = _listaGuardados.value.filter {id in idsGuardados}
+        _listaGuardados.value = _listaGuardados.value.filter { id in idsGuardados }
     }
 }
