@@ -103,7 +103,7 @@ abstract class ListaFragment : Fragment() {
                 return if (query != null) {
                     regresarEstadoPredeterminado()
                     requireView().ocultarTeclado()
-                    viewModelPrincipal.setPalabrasClave(query)
+                    viewModelPrincipal.buscar(query)
                 } else false
             }
 
@@ -116,7 +116,7 @@ abstract class ListaFragment : Fragment() {
                     // el searchView por su funcion deberia ser uno solo y estar en
                     // el activity sin embargo por cuestiones de diseno se queda aqui
                     (requireActivity() as MainActivity).restablecerExpandableListView()
-                    viewModelPrincipal.setPalabrasClave(query)
+                    viewModelPrincipal.buscar(query)
                 } else false
             }
         }

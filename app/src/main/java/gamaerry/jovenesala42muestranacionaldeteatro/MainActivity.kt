@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null){
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-            actualizarListas()
+            viewModelPrincipal.updateListas(guardados!!)
         }
 
         // se manejan los eventos de la navegacion
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding.filtros.setAdapter(listaFiltrosAdapter.apply {
             actualizarLista = {
                 (supportFragmentManager.fragments[0] as ListaFragment).cerrarBusqueda()
-                actualizarListas()
+                viewModelPrincipal.updateListas(guardados!!)
             }
         })
 
@@ -84,13 +84,6 @@ class MainActivity : AppCompatActivity() {
         for (i in getFiltros().indices)
             binding.filtros.collapseGroup(i)
         viewModelPrincipal.restablecerFiltros()
-    }
-
-    private fun actualizarListas() {
-        guardados?.forEach {
-            viewModelPrincipal.addGuardado(it)
-        }
-        viewModelPrincipal.filtrar()
     }
 
     fun setItemNavegacionInicio() {

@@ -49,16 +49,6 @@ constructor(
     private val _enGuardados = MutableStateFlow(false)
     val enGuardados: StateFlow<Boolean> get() = _enGuardados
 
-    // representa el filtrado de busqueda
-    private val palabrasClave = MutableStateFlow("")
-
-    fun restablecerFiltros() {
-        estadosCheckBox.forEachIndexed { i, filtros ->
-            filtros.forEachIndexed { j, _ -> estadosCheckBox[i][j] = true }
-        }
-        filtrar()
-    }
-
     fun reordenar() {
         if (ordenadosPorNombre) {
             _listaInicio.value = listaInicio.value.sortedBy { it.nombre }
@@ -67,17 +57,6 @@ constructor(
             _listaInicio.value = listaInicio.value.sortedBy { it.id }
             _listaGuardados.value = listaGuardados.value.sortedBy { it.id }
         }
-    }
-
-    fun filtrar() {
-        val estados = itemsFiltros[0].filterIndexed { i, _ -> estadosCheckBox[0][i] }
-        val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
-        val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
-        repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
-            _listaInicio.value = it
-            _listaGuardados.value =
-                it.filter { profesional -> profesional.id in idsGuardados }
-        }.launchIn(viewModelScope)
     }
 
     // cambia el valor del acomodo y lo regresa
@@ -101,43 +80,64 @@ constructor(
 
     // establece las palabras clave que devolveran la lista correspondiente en cada busqueda
     // (notese que si palabrasClave.value es "" room devolvera toda la base de datos)
-    fun setPalabrasClave(busqueda: String): Boolean {
-        palabrasClave.value = busqueda
+    fun buscar(busqueda: String): Boolean {
         // es necesario actualizar en cada actualizacion de
         // palabras clave nuestra listaProfesionalesDeTeatro
-        setListaProfesionales()
+        repositorio.getListaDeProfesionales(busqueda).onEach {
+            if (enGuardados.value) // filtra de acuerdo a los ids guardados
+                _listaGuardados.value = it.filter { profesional -> profesional.id in idsGuardados }
+            else // no es necesario ningun filtrado en caso de tratarse del menu de inicio
+                _listaInicio.value = it
+        }.launchIn(viewModelScope)
         // devuelve true para indicar una busqueda exitosa
         return true
     }
 
-    // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
-    private fun setListaProfesionales() {
-            repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                if (enGuardados.value) // filtra de acuerdo a los ids guardados
-                    _listaGuardados.value = it.filter { profesional -> profesional.id in idsGuardados }
-                else // no es necesario ningun filtrado en caso de tratarse del menu de inicio
-                    _listaInicio.value = it
-            }.launchIn(viewModelScope)
+    private fun filtrarListas() {
+        val estados = itemsFiltros[0].filterIndexed { i, _ -> estadosCheckBox[0][i] }
+        val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
+        val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
+        repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
+            _listaInicio.value = it
+            _listaGuardados.value = it.filter { profesional -> profesional.id in idsGuardados }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun updateGuardados() {
+        repositorio.getListaDeProfesionales("").onEach {
+            _listaGuardados.value = it.filter { profesional -> profesional.id in idsGuardados }
+        }.launchIn(viewModelScope)
+    }
+
+    fun restablecerFiltros() {
+        estadosCheckBox.forEachIndexed { i, filtros ->
+            filtros.forEachIndexed { j, _ ->
+                estadosCheckBox[i][j] = true
+            }
+        }
+        filtrarListas()
     }
 
     fun setFiltroEspecialidad(especialidad: String) {
         estadosCheckBox[1].forEachIndexed { i, _ -> estadosCheckBox[1][i] = false }
         estadosCheckBox[1][itemsFiltros[1].indexOf(especialidad)] = true
-        filtrar()
+        filtrarListas()
     }
 
     // a partir del id pasado se actualiza la listaGuardada
     fun addGuardado(id: String) {
         idsGuardados.add(id.toInt())
-        repositorio.getProfesionalPorId(id).onEach {
-            if (it !in listaGuardados.value)
-                _listaGuardados.value += it!!
-        }.launchIn(viewModelScope)
+        updateGuardados()
     }
 
     // a partir del id pasado se actualiza la listaGuardada
     fun removeGuardado(id: Int) {
         idsGuardados.remove(id)
-        _listaGuardados.value = _listaGuardados.value.filter { id in idsGuardados }
+        updateGuardados()
+    }
+
+    fun updateListas(guardados: MutableSet<String>) {
+        idsGuardados.addAll(guardados.map { it.toInt() })
+        filtrarListas()
     }
 }
