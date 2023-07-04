@@ -77,10 +77,7 @@ class MainActivity : AppCompatActivity() {
             viewModelPrincipal.reordenar()
         }
 
-        binding.restablecerFiltros.setOnClickListener {
-            restablecerExpandableListView()
-            viewModelPrincipal.filtrar()
-        }
+        binding.restablecerFiltros.setOnClickListener { restablecerExpandableListView() }
     }
 
     fun restablecerExpandableListView() {

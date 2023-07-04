@@ -56,6 +56,7 @@ constructor(
         estadosCheckBox.forEachIndexed { i, filtros ->
             filtros.forEachIndexed { j, _ -> estadosCheckBox[i][j] = true }
         }
+        filtrar()
     }
 
     fun reordenar() {
@@ -73,11 +74,9 @@ constructor(
         val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
         val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
         repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
-            _listaGuardados.value =
-                it.filter { profesional -> profesional in listaGuardados.value }
-        }.launchIn(viewModelScope)
-        repositorio.getProfesionalesPorFiltros(estados, especialidades, muestra).onEach {
             _listaInicio.value = it
+            _listaGuardados.value =
+                it.filter { profesional -> profesional.id in idsGuardados }
         }.launchIn(viewModelScope)
     }
 
@@ -113,17 +112,11 @@ constructor(
 
     // a partir de las palabras clave realiza la busqueda de los profesionales a mostrar
     private fun setListaProfesionales() {
-        if (enGuardados.value) {
-            // se guarda el estado actual de la listaGuardada para luego filtrar de la
-            // busqueda en la base de datos unicamente aquellos que esten en listaGuardada
             repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                _listaGuardados.value =
-                    it.filter { profesional -> profesional.id in idsGuardados }
-            }.launchIn(viewModelScope)
-        } else
-        // no es necesario ningun filtrado en caso de tratarse del menu de inicio
-            repositorio.getListaDeProfesionales(palabrasClave.value).onEach {
-                _listaInicio.value = it
+                if (enGuardados.value) // filtra de acuerdo a los ids guardados
+                    _listaGuardados.value = it.filter { profesional -> profesional.id in idsGuardados }
+                else // no es necesario ningun filtrado en caso de tratarse del menu de inicio
+                    _listaInicio.value = it
             }.launchIn(viewModelScope)
     }
 
