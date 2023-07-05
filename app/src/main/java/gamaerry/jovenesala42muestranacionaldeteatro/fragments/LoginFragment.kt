@@ -1,30 +1,18 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import coil.load
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
-import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
-import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
-import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.setUsuario
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -34,7 +22,35 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.botonEntrar.setOnClickListener {  }
+        binding.botonEntrar.setOnClickListener {
+            val id = binding.campoId.text.toString()
+            if (id.isEmpty())
+                Toast.makeText(
+                    requireActivity(),
+                    "Por favor, introduzca su id asignado",
+                    Toast.LENGTH_SHORT
+                ).show()
+            else {
+                viewModelPrincipal.setUsuario(id.toInt())
+                if (viewModelPrincipal.usuario == null) {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Id no válido, intente de nuevo",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    binding.campoId.text.clear()
+                } else {
+                    requireActivity().setUsuario(viewModelPrincipal.usuario)
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+                    Toast.makeText(
+                        requireActivity(),
+                        "¡Bienvenidx, ${viewModelPrincipal.usuario}!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
     override fun onCreateView(
