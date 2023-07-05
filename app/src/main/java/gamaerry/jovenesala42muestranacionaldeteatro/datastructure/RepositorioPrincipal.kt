@@ -31,4 +31,7 @@ constructor(private val daoPrincipal: DaoPrincipal) {
         emit(if (muestra.isEmpty()) emptyList() else filtroEspecialidades)
     }.catch { it.printStackTrace() }
 
+    fun getNombrePorId(id: Int) = flow {
+        emit(daoPrincipal.operacionGetNombrePorId(id))
+    }.catch { it.printStackTrace() }
 }

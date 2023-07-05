@@ -19,4 +19,7 @@ interface DaoPrincipal {
 
     @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE estado IN (:estados) ")
     suspend fun operacionGetProfesionalesPorEstados(estados: List<String>): List<ProfesionalDelTeatro>
+
+    @Query("SELECT nombre FROM $NOMBRE_BASE_DE_DATOS WHERE id = :id")
+    suspend fun operacionGetNombrePorId(id: Int): String?
 }
