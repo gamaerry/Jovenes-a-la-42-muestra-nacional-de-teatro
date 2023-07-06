@@ -52,6 +52,7 @@ class LoginFragment : Fragment() {
                             supportFragmentManager.beginTransaction()
                                 .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                             actualizarListas()
+                            setSaludo()
                         }
                         Toast.makeText(
                             requireActivity(),

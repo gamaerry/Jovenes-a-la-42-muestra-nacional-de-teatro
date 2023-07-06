@@ -15,6 +15,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
+        android:id="@+id/viewC"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/wave2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/viewA" />
+
+    <View
         android:id="@+id/viewB"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -40,9 +50,10 @@
         android:layout_margin="16dp"
         android:text="@string/bienvenido_joven_teatrero"
         android:textColor="?attr/colorOnPrimary"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/viewA"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/viewA" />
 

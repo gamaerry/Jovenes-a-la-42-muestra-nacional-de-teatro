@@ -36,10 +36,10 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction()
                     .add(R.id.contenedorPrincipal, LoginFragment()).commit()
             else{
-                binding.saludo.text = "¡Saludos, $usuario!"
                 supportFragmentManager.beginTransaction()
                     .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                 actualizarListas()
+                setSaludo()
             }
         }
 
@@ -85,6 +85,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.restablecerFiltros.setOnClickListener { restablecerExpandableListView() }
+    }
+
+    fun setSaludo() {
+        binding.saludo.text = "¡Saludos, $usuario!"
     }
 
     fun actualizarListas() {
