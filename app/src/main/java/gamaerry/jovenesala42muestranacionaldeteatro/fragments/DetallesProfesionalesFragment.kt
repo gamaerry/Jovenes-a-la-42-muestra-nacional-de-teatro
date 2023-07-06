@@ -83,12 +83,14 @@ class DetallesProfesionalesFragment : Fragment() {
     ): View {
         _binding = FragmentDetallesProfesionalesBinding.inflate(inflater, container, false)
         (requireActivity() as MainActivity).desaparecerNavegacion()
+        (requireActivity() as MainActivity).desaparecerConfiguracion()
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
         (requireActivity() as MainActivity).aparecerNavegacion()
+        (requireActivity() as MainActivity).aparecerConfiguracion()
         _binding = null
     }
 }

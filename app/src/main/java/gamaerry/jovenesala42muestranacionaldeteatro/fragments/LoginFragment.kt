@@ -78,6 +78,7 @@ class LoginFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         (requireActivity() as MainActivity).aparecerNavegacion()
+        (requireActivity() as MainActivity).aparecerConfiguracion()
         _binding = null
     }
 }
