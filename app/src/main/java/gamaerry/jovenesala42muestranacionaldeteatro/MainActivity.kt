@@ -13,6 +13,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBind
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
+import gamaerry.jovenesala42muestranacionaldeteatro.fragments.LoginFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import javax.inject.Inject
 
@@ -31,9 +32,15 @@ class MainActivity : AppCompatActivity() {
 
         // con esta condicion se asegura de que se llame una sola vez
         if (savedInstanceState == null){
-            supportFragmentManager.beginTransaction()
-                .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-            viewModelPrincipal.updateListas(guardados!!)
+            if (usuario == null)
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.contenedorPrincipal, LoginFragment()).commit()
+            else{
+                binding.saludo.text = "¡Saludos, $usuario!"
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+                actualizarListas()
+            }
         }
 
         // se manejan los eventos de la navegacion
@@ -63,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         binding.filtros.setAdapter(listaFiltrosAdapter.apply {
             actualizarLista = {
                 (supportFragmentManager.fragments[0] as ListaFragment).cerrarBusqueda()
-                viewModelPrincipal.updateListas(guardados!!)
+                actualizarListas()
             }
         })
 
@@ -78,6 +85,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.restablecerFiltros.setOnClickListener { restablecerExpandableListView() }
+    }
+
+    fun actualizarListas() {
+        viewModelPrincipal.updateListas(guardados!!)
     }
 
     fun restablecerExpandableListView() {

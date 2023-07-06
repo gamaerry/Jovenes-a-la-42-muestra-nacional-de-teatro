@@ -23,7 +23,6 @@ constructor(
     private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
 ) : ViewModel() {
     var ordenadosPorNombre = false
-    var usuario: String? = null
     private val idsGuardados = mutableSetOf<Int>()
 
     // aqui es donde se almacenan a los profesionales del inicio
@@ -45,6 +44,10 @@ constructor(
     // aqui es donde se almacena el tipo de acomodo
     private val _inicioEsLineal = MutableStateFlow(false)
     val inicioEsLineal: StateFlow<Boolean> get() = _inicioEsLineal
+
+    // aqui es donde se almacena el tipo de acomodo
+    private val _usuario = MutableStateFlow<String?>("")
+    val usuario: StateFlow<String?> get() = _usuario
 
     // aqui es donde se almacena el tipo de acomodo
     private val _enGuardados = MutableStateFlow(false)
@@ -143,6 +146,6 @@ constructor(
     }
 
     fun setUsuario(id: Int) {
-        repositorio.getNombrePorId(id).onEach { usuario = it }.launchIn(viewModelScope)
+        repositorio.getNombrePorId(id).onEach { _usuario.value = it }.launchIn(viewModelScope)
     }
 }

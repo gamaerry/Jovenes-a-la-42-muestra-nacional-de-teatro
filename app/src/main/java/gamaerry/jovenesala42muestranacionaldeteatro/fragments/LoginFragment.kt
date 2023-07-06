@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.setUsuario
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -30,24 +34,31 @@ class LoginFragment : Fragment() {
                     "Por favor, introduzca su id asignado",
                     Toast.LENGTH_SHORT
                 ).show()
-            else {
-                viewModelPrincipal.setUsuario(id.toInt())
-                if (viewModelPrincipal.usuario == null) {
-                    Toast.makeText(
-                        requireActivity(),
-                        "Id no válido, intente de nuevo",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    binding.campoId.text.clear()
-                } else {
-                    requireActivity().setUsuario(viewModelPrincipal.usuario)
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-                    Toast.makeText(
-                        requireActivity(),
-                        "¡Bienvenidx, ${viewModelPrincipal.usuario}!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            else viewModelPrincipal.setUsuario(id.toInt())
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModelPrincipal.usuario.collect {
+                    if (it == null) {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Id no válido, intente de nuevo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.campoId.text.clear()
+                    } else if (it.isNotEmpty()) {
+                        (requireActivity() as MainActivity).apply {
+                            setUsuario(it)
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+                            actualizarListas()
+                        }
+                        Toast.makeText(
+                            requireActivity(),
+                            "¡Bienvenidx, ${it}!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
