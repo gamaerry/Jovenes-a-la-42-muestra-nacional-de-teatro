@@ -97,7 +97,7 @@ constructor(
         return true
     }
 
-    private fun filtrarListas() {
+    fun filtrarListas() {
         val estados = itemsFiltros[0].filterIndexed { i, _ -> estadosCheckBox[0][i] }
         val especialidades = itemsFiltros[1].filterIndexed { i, _ -> estadosCheckBox[1][i] }
         val muestra = itemsFiltros[2].filterIndexed { i, _ -> estadosCheckBox[2][i] }
@@ -119,7 +119,6 @@ constructor(
                 estadosCheckBox[i][j] = true
             }
         }
-        filtrarListas()
     }
 
     fun setFiltroEspecialidad(especialidad: String) {

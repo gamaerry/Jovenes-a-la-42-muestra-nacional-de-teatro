@@ -84,7 +84,13 @@ class MainActivity : AppCompatActivity() {
             viewModelPrincipal.reordenar()
         }
 
-        binding.restablecerFiltros.setOnClickListener { restablecerExpandableListView() }
+        binding.restablecerFiltros.setOnClickListener {
+            restablecerExpandableListView()
+            viewModelPrincipal.filtrarListas()
+            // filtrarListas dentro del restablecerExpandableListView
+            // provocaba una busqueda erronea, ya que al buscar tambien
+            // se necesita restablecerExpandableListView pero no filtrar
+        }
     }
 
     fun setSaludo() {
