@@ -71,6 +71,7 @@ class LoginFragment : Fragment() {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         (requireActivity() as MainActivity).desaparecerNavegacion()
+        (requireActivity() as MainActivity).desaparecerConfiguracion()
         return binding.root
     }
 
