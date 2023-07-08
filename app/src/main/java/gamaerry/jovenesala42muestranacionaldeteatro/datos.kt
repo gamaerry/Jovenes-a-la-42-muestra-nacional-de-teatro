@@ -41,6 +41,7 @@ fun getProfesionalesDePrueba(): List<ProfesionalDelTeatro> {
     )
 }
 
+//lista de todos los filtros
 fun getFiltros() = listOf("Estado", "Especialidad", "Muestra")
 
 // especialidades temporales (no definitivas)
@@ -54,7 +55,8 @@ fun getEstados() = listOf(
     "Yucatán",
 )
 
-/*fun getEstados() = listOf(
+/*//lista de los estados de la republica mexicana
+fun getEstados() = listOf(
     "Aguascalientes",
     "Baja California",
     "Baja California Sur",
@@ -101,9 +103,10 @@ fun getEspecialidades() = listOf(
     "Operación técnica",
     "Promoción",
 )
-
-/*fun getEspecialidades() = listOf(
+/*//lista de todas las especialidades
+fun getEspecialidades() = listOf(
     "Actuación",
+    "Coordinación"
     "Danza",
     "Dirección",
     "Dramaturgia",
@@ -117,5 +120,6 @@ fun getEspecialidades() = listOf(
     "Vestuario"
 )*/
 
+// lista de todas las MNT hasta ahora
 fun getMuestras() = listOf("42 MNT en Torreón, Coahuila (2022)")
 
