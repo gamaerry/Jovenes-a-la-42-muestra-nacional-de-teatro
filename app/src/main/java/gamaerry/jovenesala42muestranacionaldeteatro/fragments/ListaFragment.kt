@@ -77,7 +77,7 @@ abstract class ListaFragment : Fragment() {
         binding.busqueda.setOnQueryTextListener(buscar())
     }
 
-    fun cerrarBusqueda() {
+    fun limpiarBusqueda() {
         if (!binding.busqueda.query.isNullOrEmpty()){
             binding.busqueda.setOnQueryTextListener(null)
             binding.busqueda.onActionViewCollapsed()

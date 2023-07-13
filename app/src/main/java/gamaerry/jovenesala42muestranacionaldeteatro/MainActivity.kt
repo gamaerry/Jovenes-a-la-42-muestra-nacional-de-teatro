@@ -88,8 +88,7 @@ class MainActivity : AppCompatActivity() {
             // check de los filtros actualicen a las listas, ademas de limpiar la 
             // busqueda para que no interfiera con el filtrado (notese que el orden importa)
             actualizarLista = {
-                //todo: reformat cerrarBusqueda to limpiarBusqueda
-                (supportFragmentManager.fragments[0] as ListaFragment).cerrarBusqueda()
+                (supportFragmentManager.fragments[0] as ListaFragment).limpiarBusqueda()
                 actualizarListas()
             }
         })
