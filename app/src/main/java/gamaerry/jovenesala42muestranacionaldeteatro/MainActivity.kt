@@ -59,25 +59,24 @@ class MainActivity : AppCompatActivity() {
                 // para regresar al primero (notese que si se presiona desde el mismo
                 // inicio no termina la actividad porque el backStack esta vacio)
                 R.id.inicio -> supportFragmentManager.popBackStack()
-                R.id.guardados -> {
+                R.id.guardados ->
                     // la condicion es para que al presionar "guardados" se haga una transicion
                     // solo cuando el backstack este vacio y evitar instanciar mas de un "guardados"
-                    // todo: if (supportFragmentManager.backStackEntryCount == 0)
-                    supportFragmentManager.beginTransaction()
-                        // usa estas animaciones ya definidas
-                        .setCustomAnimations(
-                            R.anim.entrar_desde_derecha,
-                            R.anim.salir_hacia_izquierda,
-                            R.anim.entrar_desde_izquierda,
-                            R.anim.salir_hacia_derecha
-                        )
-                        // reemplaza (no agrega) el DetallesProfesionalesFragment
-                        .replace(R.id.contenedorPrincipal, ListaGuardadosFragment())
-                        // se guarda con la etiqueta correspondiente
-                        .addToBackStack("listaGuardados")
-                        // ejecuta la transicion
-                        .commit()
-                }
+                    if (supportFragmentManager.backStackEntryCount == 0)
+                        supportFragmentManager.beginTransaction()
+                            // usa estas animaciones ya definidas
+                            .setCustomAnimations(
+                                R.anim.entrar_desde_derecha,
+                                R.anim.salir_hacia_izquierda,
+                                R.anim.entrar_desde_izquierda,
+                                R.anim.salir_hacia_derecha
+                            )
+                            // reemplaza (no agrega) el DetallesProfesionalesFragment
+                            .replace(R.id.contenedorPrincipal, ListaGuardadosFragment())
+                            // se guarda con la etiqueta correspondiente
+                            .addToBackStack("listaGuardados")
+                            // ejecuta la transicion
+                            .commit()
             }
             true
         }
@@ -126,7 +125,7 @@ class MainActivity : AppCompatActivity() {
         if (usuario == null)
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, LoginFragment()).commit()
-            //(notese que no se puede establecer el saludo aun porque usuario es null)
+        //(notese que no se puede establecer el saludo aun porque usuario es null)
         else {
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
