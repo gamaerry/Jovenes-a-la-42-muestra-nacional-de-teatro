@@ -11,16 +11,21 @@ import android.view.inputmethod.InputMethodManager
 val Activity.myPrefs: SharedPreferences
     get() = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
+// conjunto mutable de los profesionales guardados
 val Activity.guardados: MutableSet<String>?
     get() = myPrefs.getStringSet("guardados", emptySet())
 
+// variable string que guarda unicamente el nombre del usuario
 val Activity.usuario: String?
     get() = myPrefs.getString("usuario", null)
 
+// el metodo mutador de la varible usuario
 fun Activity.setUsuario(usuarioBuscado: String?) {
     myPrefs.edit().putString("usuario", usuarioBuscado).apply()
 }
 
+// agrega el mismo conjunto con un nuevo emento id
+// (notese que el conjunto guardados guarda solo los id)
 fun Activity.addGuardado(id: String) {
     myPrefs.edit().putStringSet(
         "guardados",
@@ -28,6 +33,7 @@ fun Activity.addGuardado(id: String) {
     ).apply()
 }
 
+// agrega el mismo conjunto eliminando el id pasado
 fun Activity.removeGuardado(id: String) {
     myPrefs.edit().putStringSet(
         "guardados",
