@@ -17,9 +17,11 @@ interface DaoPrincipal {
     )
     suspend fun operacionGetListaDeProfesionales(palabrasClave: String): List<ProfesionalDelTeatro>
 
+    // busca y regresa a cada profesional cuyo estado coincida con alguno de la lista pasada
     @Query("SELECT * FROM $NOMBRE_BASE_DE_DATOS WHERE estado IN (:estados) ")
     suspend fun operacionGetProfesionalesPorEstados(estados: List<String>): List<ProfesionalDelTeatro>
 
+    // busca y regresa al profesional con el id dado
     @Query("SELECT nombre FROM $NOMBRE_BASE_DE_DATOS WHERE id = :id")
     suspend fun operacionGetNombrePorId(id: Int): String?
 }
