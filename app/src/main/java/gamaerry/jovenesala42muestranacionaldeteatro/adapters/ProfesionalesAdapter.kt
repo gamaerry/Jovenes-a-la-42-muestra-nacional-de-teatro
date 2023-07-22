@@ -22,6 +22,8 @@ constructor() :
         ProfesionalDiffUtil
     ) {
     init {
+        // con esta linea evitamos que nuestro recyclerView se regrese al principio cuando se restaure
+        // (para esto fue necesario implementar la dependencia especifica de RecyclerView en el build.gradle)
         stateRestorationPolicy = StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
@@ -53,9 +55,19 @@ constructor() :
 
         // en esta funcion cada item del recyclerView recibe a su respectivo profesional
         fun enlazar(profesional: ProfesionalDelTeatro) {
+            // se establece el transitionName de cada item con el id de su
+            // respectivo profesional para poder guardar o eliminar a este
+            // (mediante su id) en el conjunto mutable guardados
             itemView.transitionName = profesional.id.toString()
+            // puesto que el viewModel esta solo al alcance de los fragment,
+            // la acción se establece en el ListaFragment y esta linea solo
+            // proporciona al profesional y al view necesarios
             itemView.setOnClickListener { accionAlPresionar(profesional, it) }
+            // se pasa el view especificamente como un MaterialCardView
+            // pues se necesita utilizar su propiedad isChecked
             itemView.setOnLongClickListener { accionAlPresionarLargo(it as MaterialCardView) }
+            // las siguientes tres lineas llenan con la informacion
+            // del profesional a cada elemento visual del item
             nombre.text = profesional.nombre
             especialidad.text = profesional.especialidades
             imagen.load(profesional.urlImagen)
