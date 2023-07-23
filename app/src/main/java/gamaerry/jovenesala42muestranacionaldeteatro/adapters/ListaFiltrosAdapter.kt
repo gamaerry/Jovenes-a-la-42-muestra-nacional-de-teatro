@@ -24,6 +24,7 @@ constructor(
 ) : BaseExpandableListAdapter() {
     // obtiene los tres tipos de filtros
     private val filtros: List<String> = getFiltros()
+
     // aqui se almacena la accion de actualizar las listas
     lateinit var actualizarLista: () -> Unit
 
@@ -35,7 +36,8 @@ constructor(
 
     override fun getGroup(groupPosition: Int) = filtros[groupPosition]
 
-    override fun getChild(groupPosition: Int, childPosition: Int) = itemsFiltros[groupPosition][childPosition]
+    override fun getChild(groupPosition: Int, childPosition: Int) =
+        itemsFiltros[groupPosition][childPosition]
 
     override fun getGroupId(groupPosition: Int) = groupPosition.toLong()
 
@@ -60,8 +62,7 @@ constructor(
             false
         )
         // se le asigna el nombre correspondiente al item submenu
-        val etiqueta: TextView = itemMenuFiltro.findViewById(android.R.id.text1)
-        etiqueta.text = getGroup(groupPosition)
+        (itemMenuFiltro as TextView).text = getGroup(groupPosition)
         // finalmente regresa dicho item submenu para su utilizacion
         return itemMenuFiltro
     }
@@ -99,7 +100,7 @@ constructor(
                 actualizarLista()
             }
         }
-        // finalmente regresa dicho item submenu para su utilizacion
+        // finalmente regresa dicho item checkbox para su utilizacion
         return itemFiltro
     }
 }
