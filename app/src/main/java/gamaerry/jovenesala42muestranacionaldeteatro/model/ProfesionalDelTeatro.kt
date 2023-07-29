@@ -13,6 +13,6 @@ data class ProfesionalDelTeatro(
     val descripcion: String,
     val estado: String,
     val urlImagen: String,
-    /*val correo: String,
-    val facebook: String*/
+    val correo: String,
+    val facebook: String
 )
