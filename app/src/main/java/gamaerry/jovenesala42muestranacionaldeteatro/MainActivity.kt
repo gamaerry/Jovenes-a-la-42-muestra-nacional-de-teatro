@@ -46,6 +46,9 @@ class MainActivity : AppCompatActivity() {
         // lo tanto en cada cambio de configuracion-)
         // de acuerdo a la logica requerida
         setComportamientos()
+        // establece el nombre del usuario para el
+        // saludo en cada cambio de configuración
+        setSaludo()
     }
 
     private fun setComportamientos() {
@@ -129,9 +132,6 @@ class MainActivity : AppCompatActivity() {
         else {
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-            // tambien lo es establecer el nombre del
-            // usuario para el saludo del navigationView
-            setSaludo()
         }
         // es necesaria la actualizacion de ambas listas en este inicio
         // (notese que las listas se actualizan aun desde el login)
