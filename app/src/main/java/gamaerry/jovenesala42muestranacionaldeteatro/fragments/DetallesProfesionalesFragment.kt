@@ -41,6 +41,9 @@ class DetallesProfesionalesFragment : Fragment() {
         binding.textButton.setOnClickListener { _ ->
             (requireActivity() as MainActivity).enviarCorreo(it.correo)
         }
+        binding.textButton2.setOnClickListener { _ ->
+            (requireActivity() as MainActivity).abrirPerfilFacebook(it.facebook)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

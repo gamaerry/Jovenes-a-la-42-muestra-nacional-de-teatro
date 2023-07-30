@@ -205,4 +205,11 @@ class MainActivity : AppCompatActivity() {
         }
         startActivity(Intent.createChooser(intent, "Elige la aplicación de correo"))
     }
+
+    fun abrirPerfilFacebook(facebook: String){
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse("fb://facewebmodal/f?href=$facebook")
+        }
+        startActivity(intent)
+    }
 }
