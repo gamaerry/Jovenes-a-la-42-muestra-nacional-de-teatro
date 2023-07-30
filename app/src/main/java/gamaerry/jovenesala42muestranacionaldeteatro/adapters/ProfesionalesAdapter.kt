@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.google.android.material.card.MaterialCardView
-import dagger.Provides
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
 import javax.inject.Inject

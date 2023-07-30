@@ -142,7 +142,8 @@ class MainActivity : AppCompatActivity() {
 
     fun setSaludo() {
         // cambia el saludo correspondiente del navigationView
-        binding.saludo.text = "¡Saludos, $usuario!"
+        val saludo = "¡Saludos, $usuario!"
+        binding.saludo.text = saludo
     }
 
     private fun actualizarListas() {

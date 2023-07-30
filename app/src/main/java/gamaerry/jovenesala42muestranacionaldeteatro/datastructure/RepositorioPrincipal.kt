@@ -1,8 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
-import android.util.Log
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
