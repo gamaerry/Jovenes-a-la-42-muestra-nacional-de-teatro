@@ -78,7 +78,7 @@ abstract class ListaFragment : Fragment() {
     }
 
     fun limpiarBusqueda() {
-        if (!binding.busqueda.query.isNullOrEmpty()){
+        if (!binding.busqueda.query.isNullOrEmpty()) {
             binding.busqueda.setOnQueryTextListener(null)
             binding.busqueda.onActionViewCollapsed()
             binding.busqueda.setOnQueryTextListener(buscar())
@@ -166,7 +166,6 @@ abstract class ListaFragment : Fragment() {
             .addToBackStack("detallesProfesionales")
     }
 
-    // todo: descubrir porque ListaProfesionalesFragment la ocupa y ListaGuardadosFragment no
     override fun onResume() {
         super.onResume()
         exitTransition = null
@@ -195,26 +194,28 @@ abstract class ListaFragment : Fragment() {
     }
 
     private fun accionDelGuardado() {
+        val masDeUno = seleccionados.size > 1
+        var seGuardo = false
         seleccionados.forEach {
             if (it.isChecked)
                 if (viewModelPrincipal.enGuardados.value) {
                     requireActivity().removeGuardado(it.transitionName)
                     viewModelPrincipal.removeGuardado(it.transitionName.toInt())
-                    Toast.makeText(
-                        requireActivity(),
-                        "Profesional(es) eliminado(s)",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 } else {
                     requireActivity().addGuardado(it.transitionName)
                     viewModelPrincipal.addGuardado(it.transitionName)
-                    Toast.makeText(
-                        requireActivity(),
-                        "Profesional(es) guardado(s)",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    seGuardo = true
                 }
         }
+        val aviso = if (masDeUno)
+            "Profesionales " + if (seGuardo) "guardados" else "eliminados"
+        else
+            "Profesional " + if (seGuardo) "guardado" else "eliminado"
+        Toast.makeText(
+            requireActivity(),
+            aviso,
+            Toast.LENGTH_SHORT
+        ).show()
         regresarEstadoPredeterminado()
         setComportamientoCabeceraPorDefecto()
     }
