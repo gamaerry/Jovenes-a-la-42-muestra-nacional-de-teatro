@@ -38,10 +38,10 @@ class DetallesProfesionalesFragment : Fragment() {
         binding.descripcion.text = it?.descripcion
         binding.imagen?.load(it?.urlImagen)
         especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
-        binding.textButton.setOnClickListener { _ ->
+        binding.contacto1.setOnClickListener { _ ->
             (requireActivity() as MainActivity).enviarCorreo(it.correo)
         }
-        binding.textButton2.setOnClickListener { _ ->
+        binding.contacto2.setOnClickListener { _ ->
             (requireActivity() as MainActivity).abrirPerfilFacebook(it.facebook)
         }
     }
