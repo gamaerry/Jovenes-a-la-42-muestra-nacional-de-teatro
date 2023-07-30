@@ -38,6 +38,9 @@ class DetallesProfesionalesFragment : Fragment() {
         binding.descripcion.text = it?.descripcion
         binding.imagen?.load(it?.urlImagen)
         especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
+        binding.textButton.setOnClickListener { _ ->
+            (requireActivity() as MainActivity).enviarCorreo(it.correo)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

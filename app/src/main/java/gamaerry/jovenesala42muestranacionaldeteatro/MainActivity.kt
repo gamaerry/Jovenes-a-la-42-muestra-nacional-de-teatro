@@ -1,5 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -196,4 +198,11 @@ class MainActivity : AppCompatActivity() {
         binding.configuracion.visibility = View.GONE
     }
 
+    fun enviarCorreo(correo: String){
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(correo))
+            data = Uri.parse("mailto:")
+        }
+        startActivity(Intent.createChooser(intent, "Elige la aplicación de correo"))
+    }
 }
