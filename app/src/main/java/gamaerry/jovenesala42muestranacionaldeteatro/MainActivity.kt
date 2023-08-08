@@ -4,11 +4,18 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
@@ -16,7 +23,9 @@ import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.LoginFragment
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import java.util.ArrayList
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,6 +60,25 @@ class MainActivity : AppCompatActivity() {
         // establece el nombre del usuario para el
         // saludo en cada cambio de configuración
         setSaludo()
+        getFromFirebase()
+    }
+
+    private fun getFromFirebase() {
+        val referencia = Firebase.database.getReference("profesionales")
+
+        referencia.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                val value = dataSnapshot.getValue<ArrayList<ProfesionalDelTeatro>>()
+                Log.d("miDebug", "-------> El valor es: $value")
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Failed to read value
+                Log.w("miDebug", "--------> Ha sucedido un error en la recuperacion", error.toException())
+            }
+        })
     }
 
     private fun setComportamientos() {
