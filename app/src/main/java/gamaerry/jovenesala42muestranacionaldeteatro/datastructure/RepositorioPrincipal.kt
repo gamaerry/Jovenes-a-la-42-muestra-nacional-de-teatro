@@ -14,9 +14,9 @@ class RepositorioPrincipal(
     // es basicamente la ejecucion de una consulta de sql
     fun getListaDeProfesionales(palabrasClave: String) = flow {
         emit(listaCompleta.value.filter {
-            it.descripcion.contains(palabrasClave, true) &&
-                    it.nombre.contains(palabrasClave, true) &&
-                    it.estado.contains(palabrasClave, true) &&
+            it.descripcion.contains(palabrasClave, true) ||
+                    it.nombre.contains(palabrasClave, true) ||
+                    it.estado.contains(palabrasClave, true) ||
                     it.especialidades.contains(palabrasClave, true)
         })
     }.catch { it.printStackTrace() }
