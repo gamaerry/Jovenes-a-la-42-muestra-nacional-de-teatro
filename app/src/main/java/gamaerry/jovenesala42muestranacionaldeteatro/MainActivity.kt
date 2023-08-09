@@ -4,28 +4,24 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.RepositorioPrincipal
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.LoginFragment
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
-import java.util.ArrayList
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     // (notese que este clase es Singleton y no necesita estar en el modulo)
     @Inject
     lateinit var listaFiltrosAdapter: ListaFiltrosAdapter
+
+    @Inject
+    lateinit var repositorioPrincipal: RepositorioPrincipal
 
     // uso un solo viewModel (Singleton) para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by viewModels()
@@ -146,6 +145,13 @@ class MainActivity : AppCompatActivity() {
         }
         // es necesaria la actualizacion de ambas listas en este inicio
         // (notese que las listas se actualizan aun desde el login)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.CREATED) {
+                repositorioPrincipal.listaCompleta.collect {
+                    actualizarListas()
+                }
+            }
+        }
         actualizarListas()
     }
 
