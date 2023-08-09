@@ -31,16 +31,19 @@ object ModuloPrincipal {
     @Provides
     @Singleton
     fun proveerRepositorio() = RepositorioPrincipal().apply {
-        Firebase.database.getReference("profesionales")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    listaCompleta.value = dataSnapshot.getValue<List<ProfesionalDelTeatro>>()!!
-                }
+        Firebase.database.apply {
+            setPersistenceEnabled(true)
+            getReference("profesionales")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        dataSnapshot.getValue<List<ProfesionalDelTeatro>>()?.let { listaCompleta.value = it }
+                    }
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("midebug", "Algo ha fallado :(")
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("midebug", "Algo ha fallado :(")
+                    }
+                })
+        }
     }
 
     // la instancia del dao se crea a partir de la base de datos ya proveida
