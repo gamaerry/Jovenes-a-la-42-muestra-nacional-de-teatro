@@ -60,25 +60,6 @@ class MainActivity : AppCompatActivity() {
         // establece el nombre del usuario para el
         // saludo en cada cambio de configuración
         setSaludo()
-        getFromFirebase()
-    }
-
-    private fun getFromFirebase() {
-        val referencia = Firebase.database.getReference("profesionales")
-
-        referencia.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val value = dataSnapshot.getValue<ArrayList<ProfesionalDelTeatro>>()
-                Log.d("miDebug", "-------> El valor es: $value")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w("miDebug", "--------> Ha sucedido un error en la recuperacion", error.toException())
-            }
-        })
     }
 
     private fun setComportamientos() {
