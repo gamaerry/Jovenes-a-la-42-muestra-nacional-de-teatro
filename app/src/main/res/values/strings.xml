@@ -3,7 +3,7 @@
     <string name="imagen">Imagen del compañero</string>
     <string name="nombre">Nombre</string>
     <string name="especialidad">"  Especialidad  "</string>
-    <string name="descripcion">Una descripción detallada del compañero lo suficientemente grande como para que yo pueda visualizar en el xml y poder realizar ajustes correspondientes.</string>
+    <string name="descripcion">Descripción</string>
     <string name="descripcion_acomodo">cambia la forma de acomodar la lista</string>
     <string name="descripcion_guardado">guarda o desarchiva profesionales</string>
     <string name="saludo">¡Hola, usuario!</string>
@@ -17,4 +17,17 @@
     <string name="bienvenido_joven_teatrero">¡Bienvenido, joven teatrero! Introduzca su id</string>
     <string name="id">id</string>
     <string name="entrar">Entrar</string>
+    <string name="edite_detalles">Edite sus detalles profesionales</string>
+    <string name="seleccione_especialidades">Seleccione sus especialidades</string>
+    <string name="actuacion">Actuación</string>
+    <string name="coordinacion">Coordinación</string>
+    <string name="danza">Danza</string>
+    <string name="direccion">Dirección</string>
+    <string name="dramaturgia">Dramaturgia</string>
+    <string name="escenografia">Escenografía</string>
+    <string name="gestion_cultural">Gestión cultural</string>
+    <string name="iluminacion">Iluminación</string>
+    <string name="musicalizacion">Musicalización</string>
+    <string name="produccion">Producción</string>
+    <string name="vestuario">Vestuario</string>
 </resources>
