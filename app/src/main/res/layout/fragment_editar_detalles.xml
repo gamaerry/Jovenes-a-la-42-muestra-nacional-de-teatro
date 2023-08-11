@@ -1,158 +1,314 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorOnPrimary"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        android:id="@+id/edite"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/edite_detalles"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/campo1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:background="?attr/colorOnPrimary">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edite">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nombre"
+        <TextView
+            android:id="@+id/edite"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/edite_detalles"
+            android:textColor="?attr/colorSecondaryVariant"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/nombre" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edite">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/campo2"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp"
-        app:layout_constraintVertical_weight="1"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campo1">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nombre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/nombre" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/descripcion"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/descripcion" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo1"
+            app:layout_constraintVertical_weight="1">
 
-    <TextView
-        android:id="@+id/seleccione"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="4dp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/seleccione_especialidades"
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/campo2" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descripcion"
+                android:gravity="start"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:hint="@string/descripcion" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chips"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/seleccione">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/actuacion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/seleccione"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/actuacion"/>
+            android:layout_margin="8dp"
+            android:text="@string/seleccione_especialidades"
+            android:textColor="?attr/colorSecondaryVariant"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo2" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/coordinacion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chips"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/coordinacion"/>
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seleccione">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/danza"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/actuacion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/actuacion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/coordinacion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/coordinacion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/danza"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/danza"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/direccion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/direccion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/dramaturgia"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dramaturgia"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/escenografia"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/escenografia"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/gestion_cultural"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gestion_cultural"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/iluminacion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/iluminacion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/musicalizacion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/musicalizacion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/produccion"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/produccion"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/vestuario"
+                style="@style/Widget.MaterialComponents.Chip.Filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vestuario"
+                android:textColor="?attr/colorOnPrimary"
+                app:checkedIconTint="?attr/colorOnPrimary"
+                app:chipBackgroundColor="@drawable/color_chips" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <TextView
+            android:id="@+id/agregue"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/danza"/>
+            android:layout_margin="8dp"
+            android:text="@string/agregue_contacto"
+            android:textColor="?attr/colorSecondaryVariant"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chips" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/direccion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo3"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/direccion"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/agregue">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/dramaturgia"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/email" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo4"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/dramaturgia"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo3">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/escenografia"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/facebook"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/facebook" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo5"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/escenografia"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo4">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/gestion_cultural"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/instagram"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/instagram" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo6"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/gestion_cultural"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo5">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/iluminacion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiktok"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/tiktok" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/campo7"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/iluminacion"/>
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="4dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/campo6">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/musicalizacion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/musicalizacion"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/produccion"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/produccion"/>
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/vestuario"
-            style="@style/Widget.Material3.Chip.Filter.Elevated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/vestuario"/>
-
-    </com.google.android.material.chip.ChipGroup>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/wp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/numero_telefono" />
+            <Button
+                android:id="@+id/botonEntrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@drawable/campos_login"
+                android:padding="10dp"
+                android:text="@string/guardar"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/verde_700"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/wp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

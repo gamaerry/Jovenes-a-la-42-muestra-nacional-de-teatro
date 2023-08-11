@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -16,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.ListaFiltrosAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ActivityMainBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.RepositorioPrincipal
+import gamaerry.jovenesala42muestranacionaldeteatro.fragments.EditarDetallesFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
         // establecer el adaptador en el ExpandableListView
         binding.filtros.setAdapter(listaFiltrosAdapter.apply {
             // esta funcion lambda es escencial para que el cambio de los estados
-            // check de los filtros actualicen a las listas, ademas de limpiar la 
+            // check de los filtros actualicen a las listas, ademas de limpiar la
             // busqueda para que no interfiera con el filtrado (notese que el orden importa)
             actualizarLista = {
                 (supportFragmentManager.fragments[0] as ListaFragment).limpiarBusqueda()
@@ -108,26 +110,38 @@ class MainActivity : AppCompatActivity() {
         // este listener es necesario para que se "expanda" el expandableListView
         binding.filtros.setOnGroupClickListener { _, _, _, _ -> false }
 
-        // el viewModel se encarga de ordenar las vistas, el radioGroup solo 
+        // el viewModel se encarga de ordenar las vistas, el radioGroup solo
         // cambia el estado de la variable publica booleana ordenadosPorNombre
         binding.orden.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.porNombre -> viewModelPrincipal.ordenadosPorNombre = true
                 R.id.porEstado -> viewModelPrincipal.ordenadosPorNombre = false
             }
-            // ejecuta el reordenamiento que corresponde al valor de ordenadosPorNombre 
+            // ejecuta el reordenamiento que corresponde al valor de ordenadosPorNombre
             viewModelPrincipal.reordenar()
         }
 
-        // el boton reestablecer filtros establece en true todos los checkBox, 
+        // el boton reestablecer filtros establece en true todos los checkBox,
         // contrae (colapsa) cada filtro, además de hacer un filtrado de nueva
-        // cuenta para actualizar las listas con todos los filtros activados 
+        // cuenta para actualizar las listas con todos los filtros activados
         binding.restablecerFiltros.setOnClickListener {
             restablecerExpandableListView()
             viewModelPrincipal.filtrarListas()
             // (filtrarListas dentro del restablecerExpandableListView
             // provocaba una busqueda erronea, ya que al buscar tambien
             // se necesita restablecerExpandableListView pero no filtrar)
+        }
+        binding.editarDetalles.setOnClickListener {
+            binding.drawer.closeDrawer(GravityCompat.START)
+            Handler().postDelayed({
+                supportFragmentManager.beginTransaction()
+                    // reemplaza (no agrega) el DetallesProfesionalesFragment
+                    .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
+                    // se guarda con la etiqueta correspondiente
+                    .addToBackStack("editarDetalles")
+                    // ejecuta la transicion
+                    .commit()
+            }, 500)
         }
     }
 
@@ -214,7 +228,7 @@ class MainActivity : AppCompatActivity() {
         binding.configuracion.visibility = View.GONE
     }
 
-    fun enviarCorreo(correo: String){
+    fun enviarCorreo(correo: String) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(correo))
             data = Uri.parse("mailto:")
@@ -222,7 +236,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(intent, "Elige la aplicación de correo"))
     }
 
-    fun abrirPerfilFacebook(facebook: String){
+    fun abrirPerfilFacebook(facebook: String) {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse("fb://facewebmodal/f?href=$facebook")
         }
