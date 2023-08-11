@@ -7,6 +7,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import kotlinx.coroutines.launch
@@ -23,6 +24,8 @@ class ListaGuardadosFragment : ListaFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaGuardados.collect { listaGuardados ->
+                    if (viewModelPrincipal.enGuardados.value)
+                        (requireActivity() as MainActivity).setContador("${listaGuardados.size} resultados")
                     if (viewModelPrincipal.ordenadosPorNombre)
                         profesionalesAdapter.submitList(listaGuardados.sortedBy { it.nombre })
                     else

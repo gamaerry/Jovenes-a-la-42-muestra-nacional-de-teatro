@@ -27,6 +27,8 @@ class ListaInicioFragment : ListaFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.listaInicio.collect { listaInicio ->
+                    if (!viewModelPrincipal.enGuardados.value)
+                        (requireActivity() as MainActivity).setContador("${listaInicio.size} resultados")
                     if (viewModelPrincipal.ordenadosPorNombre)
                         profesionalesAdapter.submitList(listaInicio.sortedBy { it.nombre })
                     else

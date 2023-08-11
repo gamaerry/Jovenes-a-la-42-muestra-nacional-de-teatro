@@ -145,6 +145,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun setContador(resultados: String) {
+        binding.contador.text = resultados
+    }
+
     private fun inicio() {
         // si el usuario todavia no se ha ingresado, se lanza el fragmento
         // del login y si ya esta ingresado y establecido en la variable 
