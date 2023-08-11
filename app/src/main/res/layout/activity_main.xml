@@ -30,12 +30,12 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/configuracion"
+        android:layout_gravity="start"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:background="?attr/colorOnPrimary">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -51,8 +51,9 @@
                 app:cardForegroundColor="@drawable/color_card_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:rippleColor="?attr/colorPrimary">
+                app:layout_constraintBottom_toTopOf="@id/etiqueta_orden"
+                app:rippleColor="?attr/colorPrimary"
+                tools:layout_editor_absoluteY="16dp">
 
                 <TextView
                     android:id="@+id/saludo"
@@ -107,26 +108,29 @@
                     android:textAppearance="?android:attr/textAppearanceListItem" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/etiqueta_filtros"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/filtros"
-                android:textAppearance="?android:attr/textAppearanceListItem"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/orden" />
+            <RelativeLayout
+                android:id="@+id/etiquetas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/contador"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
-                android:text="@string/resultados"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/orden"
-                app:layout_constraintTop_toBottomOf="@id/orden" />
+                <TextView
+                    android:id="@+id/etiqueta_filtros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/filtros"
+                    android:textAppearance="?android:attr/textAppearanceListItem"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/contador"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/resultados"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
             <ExpandableListView
                 android:id="@+id/filtros"
@@ -142,22 +146,22 @@
                 android:id="@+id/espacio"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/filtros"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_weight="1" />
+                app:layout_constraintTop_toBottomOf="@id/filtros" />
 
             <Button
                 android:id="@+id/restablecerFiltros"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/espacio"
+                android:layout_gravity="bottom|center_horizontal"
                 android:layout_marginBottom="8dp"
+                android:text="@string/restablecer_filtros"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="@string/restablecer_filtros"
-                android:layout_gravity="bottom|center_horizontal"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@id/espacio" />
+        </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
