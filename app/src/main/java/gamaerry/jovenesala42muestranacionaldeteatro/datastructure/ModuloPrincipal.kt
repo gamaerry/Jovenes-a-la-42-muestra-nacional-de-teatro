@@ -36,7 +36,9 @@ object ModuloPrincipal {
             getReference("profesionales")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        dataSnapshot.getValue<List<ProfesionalDelTeatro>>()?.let { listaCompleta.value = it }
+                        dataSnapshot.getValue<HashMap<String, ProfesionalDelTeatro>>()?.let {
+                            listaCompleta.value = it.values.toList()
+                        }
                     }
 
                     override fun onCancelled(error: DatabaseError) {
