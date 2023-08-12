@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.setUsuario
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -76,6 +77,8 @@ class LoginFragment : Fragment() {
                             supportFragmentManager.beginTransaction()
                                 .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                             setSaludo()
+                            guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toLong()) }
+                            guardados?.clear()
                         }
                         // finalmente y por unica ocasion se le da la bienvenida
                         // al usuario (notese que no es lo mismo que el saludo)
