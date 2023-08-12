@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             // se necesita restablecerExpandableListView pero no filtrar)
         }
         binding.editarDetalles.setOnClickListener {
-            if (usuario != null) {
+            if (nombre != null) {
                 binding.drawer.closeDrawer(GravityCompat.START)
                 Handler().postDelayed({
                     supportFragmentManager.beginTransaction()
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         // si el usuario todavia no se ha ingresado, se lanza el fragmento
         // del login y si ya esta ingresado y establecido en la variable 
         // usuario del activity entonces se inicia con la transicion de la listaInicio
-        if (usuario == null)
+        if (nombre == null)
             supportFragmentManager.beginTransaction()
                 .add(R.id.contenedorPrincipal, LoginFragment()).commit()
         //(notese que no se puede establecer el saludo aun porque usuario es null)
@@ -182,7 +182,7 @@ class MainActivity : AppCompatActivity() {
 
     fun setSaludo() {
         // cambia el saludo correspondiente del navigationView
-        usuario?.let { binding.saludo.text = getString(R.string.saludos, it) }
+        nombre?.let { binding.saludo.text = getString(R.string.saludos, it) }
     }
 
     private fun actualizarListas() {

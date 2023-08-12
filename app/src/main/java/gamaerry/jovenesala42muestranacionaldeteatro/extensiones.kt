@@ -16,12 +16,12 @@ val Activity.guardados: MutableSet<String>?
     get() = myPrefs.getStringSet("guardados", emptySet())
 
 // variable string que guarda unicamente el nombre del usuario
-val Activity.usuario: String?
-    get() = myPrefs.getString("usuario", null)
+val Activity.nombre: String?
+    get() = myPrefs.getString("nombre", null)
 
 // el metodo mutador de la varible usuario
-fun Activity.setUsuario(usuarioBuscado: String?) {
-    myPrefs.edit().putString("usuario", usuarioBuscado).apply()
+fun Activity.setNombre(usuario: String?) {
+    myPrefs.edit().putString("nombre", usuario).apply()
 }
 
 // agrega el mismo conjunto con un nuevo emento id

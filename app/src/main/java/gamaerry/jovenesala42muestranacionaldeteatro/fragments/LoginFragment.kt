@@ -23,8 +23,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.clearGuardados
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.setUsuario
+import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 
@@ -92,13 +91,13 @@ class LoginFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         binding.campoId.text.clear()
-                    } else if (it.isNotEmpty()) {
+                    } else if (it.nombre.isNotEmpty()) {
                         // una vez encontrado a algun usuario no nulo es necesario
                         // reforzar la siguiente operacion verificando si no es vacio,
                         // en cuyo caso, se realiza la transicion mediante el requireActivity,
                         // se le establece su correspondiente usuario y saludo
                         (requireActivity() as MainActivity).apply {
-                            setUsuario(it)
+                            setNombre(it.nombre)
                             supportFragmentManager.beginTransaction()
                                 .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                             setSaludo()
@@ -109,7 +108,7 @@ class LoginFragment : Fragment() {
                         // al usuario (notese que no es lo mismo que el saludo)
                         Toast.makeText(
                             requireActivity(),
-                            "¡Bienvenidx, ${it}!",
+                            "¡Bienvenidx, ${it.nombre}!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
