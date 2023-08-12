@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
@@ -132,16 +133,22 @@ class MainActivity : AppCompatActivity() {
             // se necesita restablecerExpandableListView pero no filtrar)
         }
         binding.editarDetalles.setOnClickListener {
-            binding.drawer.closeDrawer(GravityCompat.START)
-            Handler().postDelayed({
-                supportFragmentManager.beginTransaction()
-                    // reemplaza (no agrega) el DetallesProfesionalesFragment
-                    .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
-                    // se guarda con la etiqueta correspondiente
-                    .addToBackStack("editarDetalles")
-                    // ejecuta la transicion
-                    .commit()
-            }, 500)
+            if (usuario != null) {
+                binding.drawer.closeDrawer(GravityCompat.START)
+                Handler().postDelayed({
+                    supportFragmentManager.beginTransaction()
+                        // reemplaza (no agrega) el DetallesProfesionalesFragment
+                        .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
+                        // se guarda con la etiqueta correspondiente
+                        .addToBackStack("editarDetalles")
+                        // ejecuta la transicion
+                        .commit()
+                }, 500)
+            } else Toast.makeText(
+                this,
+                "Para salir de la sesión de invitado reinicie la app",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
