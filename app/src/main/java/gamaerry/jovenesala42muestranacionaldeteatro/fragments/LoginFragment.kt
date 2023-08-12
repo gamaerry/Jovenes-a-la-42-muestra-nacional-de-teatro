@@ -1,5 +1,9 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -40,41 +44,50 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // al estar cargadas las vistas se establece que el boton:
         binding.botonEntrar.setOnClickListener {
-            // guarde en una variable el id numerico introducido
-            val id = binding.campoId.text.toString()
-            Firebase.database.apply {
-                getReference("ids").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        dataSnapshot.getValue<String>()?.let {
-                            if (id.isNotEmpty())
-                                viewModelPrincipal.setUsuario(
-                                    if (id.length == 10 && it.contains(id))
-                                        id.substring(0..5).toInt()
-                                    else 999999
-                                )
-                            else Toast.makeText(
-                                requireActivity(),
-                                "Por favor, introduzca su id asignado",
-                                Toast.LENGTH_SHORT
-                            ).show()
+            if (hayConexion(requireActivity())) {
+                // guarde en una variable el id numerico introducido
+                val id = binding.campoId.text.toString()
+                Firebase.database.apply {
+                    getReference("ids").addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            dataSnapshot.getValue<String>()?.let {
+                                if (id.isNotEmpty())
+                                    viewModelPrincipal.setUsuario(
+                                        if (id.length == 10 && it.contains(id))
+                                            id.substring(0..5).toInt()
+                                        else 999999
+                                    )
+                                else Toast.makeText(
+                                    requireActivity(),
+                                    "Por favor, introduzca su id asignado",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
-                    }
 
-                    override fun onCancelled(error: DatabaseError) {
-                        Log.d("midebug", "Algo ha fallado :(")
-                    }
-                })
-            }
-            // pero si es vacio se le indica al usuario y si no lo es
-            // entonces se intenta obtener al usuario correspondiente
-            // (notese que esta operacion ocurre en el viewModelPrincipal)
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.d("midebug", "Algo ha fallado :(")
+                        }
+                    })
+                }
+            } else Toast.makeText(
+                requireActivity(),
+                "Compruebe su conexión a internet",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.botonEntrarComoInvitado.setOnClickListener {
-            (requireActivity() as MainActivity).apply {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-            }
+            if (hayConexion(requireActivity()))
+                (requireActivity() as MainActivity).apply {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+                }
+            else Toast.makeText(
+                requireActivity(),
+                "Compruebe su conexión a internet",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         // cada que cambie el String usuario del viewModel se establece:
@@ -118,6 +131,18 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun hayConexion(contexto: Context): Boolean {
+        val manager = contexto.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        // Android 10+
+            manager.getNetworkCapabilities(manager.activeNetwork)?.let { networkCapabilities ->
+                return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            }
+        else return manager.activeNetworkInfo?.isConnectedOrConnecting == true
+        return false
     }
 
     // al igual que sucede con el fragmento detallesProfesionales
