@@ -45,6 +45,13 @@ class LoginFragment : Fragment() {
             else viewModelPrincipal.setUsuario(id.toInt())
         }
 
+        binding.botonEntrarComoInvitado.setOnClickListener {
+            (requireActivity() as MainActivity).apply {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
+            }
+        }
+
         // cada que cambie el String usuario del viewModel se establece:
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
