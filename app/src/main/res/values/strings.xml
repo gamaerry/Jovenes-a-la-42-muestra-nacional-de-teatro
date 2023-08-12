@@ -40,4 +40,5 @@
     <string name="guardar">Guardar</string>
     <string name="no_eres_parte">¿No eres ni has sido parte del programa Jóvenes a la muestra?</string>
     <string name="entrar_como_invitado">Entrar como invitado</string>
+    <string name="saludos">¡Saludos, %1$s!</string>
 </resources>
