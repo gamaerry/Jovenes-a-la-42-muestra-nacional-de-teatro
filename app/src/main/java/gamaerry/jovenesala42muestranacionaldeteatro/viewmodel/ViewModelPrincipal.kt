@@ -46,7 +46,7 @@ constructor(
     val inicioEsLineal: StateFlow<Boolean> get() = _inicioEsLineal
 
     // aqui es donde se almacena el tipo de acomodo
-    private val _usuario = MutableStateFlow<ProfesionalDelTeatro?>(ProfesionalDelTeatro())
+    private val _usuario = MutableStateFlow<ProfesionalDelTeatro?>(null)
     val usuario: StateFlow<ProfesionalDelTeatro?> get() = _usuario
 
     // aqui es donde se almacena el tipo de acomodo

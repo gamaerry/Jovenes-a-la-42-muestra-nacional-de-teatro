@@ -81,36 +81,39 @@ class LoginFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.usuario.collect {
-                    // que si es null, entonces quiere decir que la operacion setUsuario
+                    // si el nombre es vacio, entonces quiere decir que la operacion setUsuario
                     // no encontro ninguna coincidencia en la base de datos y por lo tanto
                     // se le especifica al usuario ademas de resetear el campo del Id
-                    if (it == null) {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Id no válido, intente de nuevo",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        binding.campoId.text.clear()
-                    } else if (it.nombre.isNotEmpty()) {
-                        // una vez encontrado a algun usuario no nulo es necesario
-                        // reforzar la siguiente operacion verificando si no es vacio,
-                        // en cuyo caso, se realiza la transicion mediante el requireActivity,
-                        // se le establece su correspondiente usuario y saludo
-                        (requireActivity() as MainActivity).apply {
-                            setNombre(it.nombre)
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
-                            setSaludo()
-                            guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toInt()) }
-                            clearGuardados()
+                    it?.let {
+                        if (it.nombre.isEmpty()) {
+                            Toast.makeText(
+                                requireActivity(),
+                                "Id no válido, intente de nuevo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            binding.campoId.text.clear()
+                        } else {
+                            // una vez encontrado a algun usuario no nulo es necesario
+                            // reforzar la siguiente operacion verificando si no es vacio,
+                            // en cuyo caso, se realiza la transicion mediante el requireActivity,
+                            // se le establece su correspondiente usuario y saludo
+                            (requireActivity() as MainActivity).apply {
+                                setNombre(it.nombre)
+                                supportFragmentManager.beginTransaction()
+                                    .replace(R.id.contenedorPrincipal, ListaInicioFragment())
+                                    .commit()
+                                setSaludo()
+                                guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toInt()) }
+                                clearGuardados()
+                            }
+                            // finalmente y por unica ocasion se le da la bienvenida
+                            // al usuario (notese que no es lo mismo que el saludo)
+                            Toast.makeText(
+                                requireActivity(),
+                                "¡Bienvenidx, ${it.nombre}!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        // finalmente y por unica ocasion se le da la bienvenida
-                        // al usuario (notese que no es lo mismo que el saludo)
-                        Toast.makeText(
-                            requireActivity(),
-                            "¡Bienvenidx, ${it.nombre}!",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
             }

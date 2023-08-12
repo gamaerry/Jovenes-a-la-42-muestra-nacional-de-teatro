@@ -5,6 +5,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlin.random.Random
 
 // la función del repositorio es únicamente emitir los
 // resultados de las funciones suspendibles del dao
@@ -23,7 +24,11 @@ class RepositorioPrincipal(
 
     // es basicamente la ejecucion de una consulta de sql
     fun getNombrePorId(id: Int) = flow {
-        emit(listaCompleta.value.first { it.id == id })
+        emit(try {
+            listaCompleta.value.first { it.id == id }
+        } catch (_: NoSuchElementException) {
+            ProfesionalDelTeatro((1..id).random())
+        })
     }.catch { it.printStackTrace() }
 
     // filtra por partes para obtener una consulta adecuada
