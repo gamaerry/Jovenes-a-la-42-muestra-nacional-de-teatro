@@ -22,7 +22,7 @@ class RepositorioPrincipal(
     }.catch { it.printStackTrace() }
 
     // es basicamente la ejecucion de una consulta de sql
-    fun getNombrePorId(id: Int) = flow {
+    fun getNombrePorId(id: Long) = flow {
         emit(listaCompleta.value.first { it.id == id }.nombre)
     }.catch { it.printStackTrace() }
 

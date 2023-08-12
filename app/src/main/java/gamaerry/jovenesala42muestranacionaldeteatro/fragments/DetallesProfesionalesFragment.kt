@@ -39,10 +39,10 @@ class DetallesProfesionalesFragment : Fragment() {
         binding.imagen?.load(it?.urlImagen)
         especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
         binding.contacto1.setOnClickListener { _ ->
-            (requireActivity() as MainActivity).enviarCorreo(it.correo)
+            (requireActivity() as MainActivity).enviarCorreo(it.contacto1)
         }
         binding.contacto2.setOnClickListener { _ ->
-            (requireActivity() as MainActivity).abrirPerfilFacebook(it.facebook)
+            (requireActivity() as MainActivity).abrirPerfilFacebook(it.contacto2)
         }
     }
 

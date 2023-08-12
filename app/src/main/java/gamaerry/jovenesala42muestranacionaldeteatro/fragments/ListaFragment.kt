@@ -200,7 +200,7 @@ abstract class ListaFragment : Fragment() {
             if (it.isChecked)
                 if (viewModelPrincipal.enGuardados.value) {
                     requireActivity().removeGuardado(it.transitionName)
-                    viewModelPrincipal.removeGuardado(it.transitionName.toInt())
+                    viewModelPrincipal.removeGuardado(it.transitionName.toLong())
                 } else {
                     requireActivity().addGuardado(it.transitionName)
                     viewModelPrincipal.addGuardado(it.transitionName)

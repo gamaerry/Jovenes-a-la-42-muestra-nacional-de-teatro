@@ -42,7 +42,7 @@ class LoginFragment : Fragment() {
                     "Por favor, introduzca su id asignado",
                     Toast.LENGTH_SHORT
                 ).show()
-            else viewModelPrincipal.setUsuario(id.toInt())
+            else viewModelPrincipal.setUsuario(id.toLong())
         }
 
         binding.botonEntrarComoInvitado.setOnClickListener {
