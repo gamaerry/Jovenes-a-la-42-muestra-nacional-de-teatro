@@ -1,7 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.model
 
 data class ProfesionalDelTeatro(
-    val id: Long = 0L,
+    val id: Int = 0,
     val nombre: String = "",
     val especialidades: String = "",
     val descripcion: String = "",

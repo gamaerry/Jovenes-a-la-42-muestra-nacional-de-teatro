@@ -43,7 +43,7 @@ class LoginFragment : Fragment() {
                     "Por favor, introduzca su id asignado",
                     Toast.LENGTH_SHORT
                 ).show()
-            else viewModelPrincipal.setUsuario(id.toLong())
+            else viewModelPrincipal.setUsuario(id.toInt())
         }
 
         binding.botonEntrarComoInvitado.setOnClickListener {
@@ -77,7 +77,7 @@ class LoginFragment : Fragment() {
                             supportFragmentManager.beginTransaction()
                                 .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                             setSaludo()
-                            guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toLong()) }
+                            guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toInt()) }
                             guardados?.clear()
                         }
                         // finalmente y por unica ocasion se le da la bienvenida

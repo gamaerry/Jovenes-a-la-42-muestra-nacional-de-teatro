@@ -23,7 +23,7 @@ constructor(
     private val estadosCheckBox: @JvmSuppressWildcards List<MutableList<Boolean>>
 ) : ViewModel() {
     var ordenadosPorNombre = false
-    private val idsGuardados = mutableSetOf<Long>()
+    private val idsGuardados = mutableSetOf<Int>()
 
     // aqui es donde se almacenan a los profesionales del inicio
     private val _listaInicio = MutableStateFlow<List<ProfesionalDelTeatro>>(emptyList())
@@ -129,22 +129,22 @@ constructor(
 
     // a partir del id pasado se actualiza la listaGuardada
     fun addGuardado(id: String) {
-        idsGuardados.add(id.toLong())
+        idsGuardados.add(id.toInt())
         updateGuardados()
     }
 
     // a partir del id pasado se actualiza la listaGuardada
-    fun removeGuardado(id: Long) {
+    fun removeGuardado(id: Int) {
         idsGuardados.remove(id)
         updateGuardados()
     }
 
     fun updateListas(guardados: MutableSet<String>) {
-        idsGuardados.addAll(guardados.map { it.toLong() })
+        idsGuardados.addAll(guardados.map { it.toInt() })
         filtrarListas()
     }
 
-    fun setUsuario(id: Long) {
+    fun setUsuario(id: Int) {
         repositorio.getNombrePorId(id).onEach { _usuario.value = it }.launchIn(viewModelScope)
     }
 }
