@@ -37,7 +37,7 @@ object ModuloPrincipal {
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         dataSnapshot.getValue<HashMap<String, ProfesionalDelTeatro>>()?.let {
-                            listaCompleta.value = it.values.toList()
+                            listaCompleta.value = it.values.toSet()
                         }
                     }
 

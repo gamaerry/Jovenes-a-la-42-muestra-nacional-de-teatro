@@ -10,7 +10,7 @@ import kotlin.random.Random
 // la función del repositorio es únicamente emitir los
 // resultados de las funciones suspendibles del dao
 class RepositorioPrincipal(
-    val listaCompleta: MutableStateFlow<List<ProfesionalDelTeatro>> = MutableStateFlow(emptyList())
+    val listaCompleta: MutableStateFlow<Set<ProfesionalDelTeatro>> = MutableStateFlow(emptySet())
 ) {
     // es basicamente la ejecucion de una consulta de sql
     fun getListaDeProfesionales(palabrasClave: String) = flow {
