@@ -41,6 +41,11 @@ fun Activity.removeGuardado(id: String) {
     ).apply()
 }
 
+// agrega el mismo conjunto eliminando el id pasado
+fun Activity.clearGuardados() {
+    myPrefs.edit().putStringSet("guardados", emptySet()).apply()
+}
+
 // funcion de extension para obtener la lista de
 // especialidades de cada entidad ProfesionalDelTeatro,
 // que usaran los botones del DetallesProfesionalesFragment

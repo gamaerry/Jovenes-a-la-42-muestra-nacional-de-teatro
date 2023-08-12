@@ -1,6 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +11,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
+import gamaerry.jovenesala42muestranacionaldeteatro.clearGuardados
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setUsuario
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -34,16 +43,32 @@ class LoginFragment : Fragment() {
         binding.botonEntrar.setOnClickListener {
             // guarde en una variable el id numerico introducido
             val id = binding.campoId.text.toString()
+            Firebase.database.apply {
+                getReference("ids").addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        dataSnapshot.getValue<String>()?.let {
+                            if (id.isNotEmpty())
+                                viewModelPrincipal.setUsuario(
+                                    if (id.length == 10 && it.contains(id))
+                                        id.substring(0..5).toInt()
+                                    else 999999
+                                )
+                            else Toast.makeText(
+                                requireActivity(),
+                                "Por favor, introduzca su id asignado",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Log.d("midebug", "Algo ha fallado :(")
+                    }
+                })
+            }
             // pero si es vacio se le indica al usuario y si no lo es
             // entonces se intenta obtener al usuario correspondiente
             // (notese que esta operacion ocurre en el viewModelPrincipal)
-            if (id.isEmpty())
-                Toast.makeText(
-                    requireActivity(),
-                    "Por favor, introduzca su id asignado",
-                    Toast.LENGTH_SHORT
-                ).show()
-            else viewModelPrincipal.setUsuario(id.toInt())
         }
 
         binding.botonEntrarComoInvitado.setOnClickListener {
@@ -78,7 +103,7 @@ class LoginFragment : Fragment() {
                                 .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                             setSaludo()
                             guardados?.forEach { id -> viewModelPrincipal.removeGuardado(id.toInt()) }
-                            guardados?.clear()
+                            clearGuardados()
                         }
                         // finalmente y por unica ocasion se le da la bienvenida
                         // al usuario (notese que no es lo mismo que el saludo)
