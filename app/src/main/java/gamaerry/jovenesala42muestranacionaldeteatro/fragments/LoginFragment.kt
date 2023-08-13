@@ -27,6 +27,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.clearGuardados
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
+import gamaerry.jovenesala42muestranacionaldeteatro.setId
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -112,6 +113,7 @@ class LoginFragment : Fragment() {
                             // se le establece su correspondiente usuario y saludo
                             (requireActivity() as MainActivity).apply {
                                 setNombre(it.nombre)
+                                setId(it.id)
                                 supportFragmentManager.beginTransaction()
                                     .replace(R.id.contenedorPrincipal, ListaInicioFragment())
                                     .commit()

@@ -20,8 +20,17 @@ val Activity.nombre: String?
     get() = myPrefs.getString("nombre", null)
 
 // el metodo mutador de la varible usuario
-fun Activity.setNombre(usuario: String?) {
-    myPrefs.edit().putString("nombre", usuario).apply()
+fun Activity.setNombre(nombreUsuario: String?) {
+    myPrefs.edit().putString("nombre", nombreUsuario).apply()
+}
+
+// variable string que guarda unicamente el nombre del usuario
+val Activity.id: Int
+    get() = myPrefs.getInt("id", 0)
+
+// el metodo mutador de la varible usuario
+fun Activity.setId(idUsuario: Int) {
+    myPrefs.edit().putInt("id", idUsuario).apply()
 }
 
 // agrega el mismo conjunto con un nuevo emento id
