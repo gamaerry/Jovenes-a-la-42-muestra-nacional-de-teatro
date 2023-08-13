@@ -60,7 +60,7 @@ fun Activity.clearGuardados() {
 // especialidades de cada entidad ProfesionalDelTeatro,
 // que usaran los botones del DetallesProfesionalesFragment
 fun String.extraerLista(): List<String> {
-    return split(",", "y").map { string ->
+    return split(",", "y", " e ").map { string ->
         string.trim().replaceFirstChar { it.uppercaseChar() }
     }
 }
