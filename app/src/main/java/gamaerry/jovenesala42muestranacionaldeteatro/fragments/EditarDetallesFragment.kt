@@ -2,6 +2,7 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -24,12 +26,20 @@ import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import java.lang.Exception
 
 @AndroidEntryPoint
 class EditarDetallesFragment : Fragment() {
     private var _binding: FragmentEditarDetallesBinding? = null
     private val binding get() = _binding!!
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
+    private val redesSocialesValidadas = mutableListOf<Editable>()
+    private val validaciones = listOf<(String) -> Boolean>(
+        { validarFacebook(it) },
+        { validarEmail(it) },
+        { validarInstagram(it) },
+        { validarTikTok(it) },
+        { validarNumero(it) })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +57,16 @@ class EditarDetallesFragment : Fragment() {
     ): View {
         _binding = FragmentEditarDetallesBinding.inflate(inflater, container, false)
         val usuario = viewModelPrincipal.usuario.value!!
-        initCampos(usuario)
+        val redesSociales = listOf(
+            binding.facebook,
+            binding.email,
+            binding.instagram,
+            binding.tiktok,
+            binding.wp
+        )
+        initCampos(usuario, redesSociales)
         binding.guardar.setOnClickListener {
-            val mensaje = validarCampos()
+            val mensaje = validarCampos(redesSociales)
             if (mensaje.isNotEmpty())
                 Toast.makeText(requireActivity(), mensaje, Toast.LENGTH_SHORT).show()
             else {
@@ -61,7 +78,22 @@ class EditarDetallesFragment : Fragment() {
                     usuario.copy(
                         nombre = binding.nombre.text.toString(),
                         especialidades = listaEspecialidades.extraerString(),
-                        descripcion = binding.descripcion.text.toString()
+                        descripcion = binding.descripcion.text.toString(),
+                        contacto1 = try {
+                            redesSocialesValidadas[0].toString()
+                        } catch (_: Exception) {
+                            "null"
+                        },
+                        contacto2 = try {
+                            redesSocialesValidadas[1].toString()
+                        } catch (_: Exception) {
+                            "null"
+                        },
+                        contacto3 = try {
+                            redesSocialesValidadas[2].toString()
+                        } catch (_: Exception) {
+                            "null"
+                        }
                     )
                 )
             }
@@ -71,11 +103,17 @@ class EditarDetallesFragment : Fragment() {
         return binding.root
     }
 
-    private fun initCampos(usuario: ProfesionalDelTeatro) {
+    private fun initCampos(usuario: ProfesionalDelTeatro, redesSociales: List<TextInputEditText>) {
         binding.nombre.setText(usuario.nombre)
         binding.descripcion.setText(usuario.descripcion)
-        binding.email.setText(usuario.contacto1)
-        binding.facebook.setText(usuario.contacto2)
+        redesSociales.forEachIndexed { i, campo ->
+            if (validaciones[i](usuario.contacto1))
+                campo.setText(usuario.contacto1)
+            if (validaciones[i](usuario.contacto2))
+                campo.setText(usuario.contacto2)
+            if (validaciones[i](usuario.contacto3))
+                campo.setText(usuario.contacto3)
+        }
         val listaIndicesEspecialidades = usuario.especialidades
             .extraerLista().map { getEspecialidades().indexOf(it) }
         listaIndicesEspecialidades.forEach { (binding.chips[it] as Chip).isChecked = true }
@@ -98,48 +136,42 @@ class EditarDetallesFragment : Fragment() {
         }
     }
 
-    private fun validarRedesSociales(): String {
-        var i = 0
+    private fun validarRedesSociales(redesSociales: List<TextInputEditText>): String {
+        var noVacios = 0
+        val mensajesDeError = listOf(
+            "Url de Facebook no válido",
+            "Dirección de correo no válido",
+            "Url de Instagram no válido",
+            "Url de Tiktok no válido",
+            "Número telefónico no válido"
+        )
         var mensaje = ""
-        // FACEBOOK
-        if (binding.facebook.text.isNullOrEmpty() || binding.facebook.text.isNullOrBlank())
-            i++
-        else if (!validarFacebook(binding.facebook.text.toString()))
-            mensaje = "Url de Facebook no válido"
-        //E-MAIL
-        if (binding.email.text.isNullOrEmpty() || binding.email.text.isNullOrBlank())
-            i++
-        else if (!validarEmail(binding.email.text.toString()))
-            mensaje = "Dirección de correo no válido"
-        //INSTAGRAM
-        if (binding.instagram.text.isNullOrEmpty() || binding.instagram.text.isNullOrBlank())
-            i++
-        else if (!validarInstagram(binding.instagram.text.toString()))
-            mensaje = "Url de Instagram no válido"
-        //TIKTOK
-        if (binding.tiktok.text.isNullOrEmpty() || binding.tiktok.text.isNullOrBlank())
-            i++
-        else if (!validarTikTok(binding.tiktok.text.toString()))
-            mensaje = "Url de Tiktok no válido"
-        //WP
-        if (binding.wp.text.isNullOrEmpty() || binding.wp.text.isNullOrBlank())
-            i++
-        else if (!validarNumero(binding.wp.text.toString()))
-            mensaje = "Número telefónico no válido"
-        if (i > 3) mensaje = "Se permiten hasta 3 modos de contacto"
+        redesSociales.map { it.text }.forEachIndexed { i, editable ->
+            if (!editable.isNullOrEmpty() || !editable.isNullOrBlank()) {
+                noVacios++
+                if (!validaciones[i](editable.toString()))
+                    mensaje = mensajesDeError[i]
+                else
+                    redesSocialesValidadas.add(editable)
+            }
+        }
+        if (noVacios > 3)
+            mensaje = "Se permiten hasta 3 modos de contacto"
+        if (mensaje.isNotEmpty())
+            redesSocialesValidadas.clear()
         return mensaje
     }
 
-    private fun validarCampos(): String {
+    private fun validarCampos(redesSociales: List<TextInputEditText>): String {
         var mensaje = ""
         if (binding.nombre.text.isNullOrEmpty() || binding.nombre.text.isNullOrBlank())
             mensaje = "El nombre es obligatorio"
-        if (binding.descripcion.text.isNullOrEmpty() || binding.nombre.text.isNullOrBlank())
+        if (binding.descripcion.text.isNullOrEmpty() || binding.descripcion.text.isNullOrBlank())
             mensaje = "La semblanza es obligatoria"
         binding.chips.checkedChipIds.ifEmpty {
             mensaje = "Seleccione al menos una especialidad"
         }
-        mensaje = validarRedesSociales()
+        mensaje.ifEmpty { validarRedesSociales(redesSociales) }
         return mensaje
     }
 
