@@ -63,6 +63,12 @@ constructor(
         }
     }
 
+    fun updateUsuario(){
+        _usuario.value = repositorio.listaCompleta.value.first {
+            usuario.value?.id == it.id
+        }
+    }
+
     // cambia el valor del acomodo y lo regresa
     fun switchInicioEsLineal() {
         _inicioEsLineal.value = !_inicioEsLineal.value

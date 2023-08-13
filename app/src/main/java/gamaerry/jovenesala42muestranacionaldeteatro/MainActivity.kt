@@ -135,15 +135,14 @@ class MainActivity : AppCompatActivity() {
         binding.editarDetalles.setOnClickListener {
             if (nombre != null) {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                Handler().postDelayed({
-                    supportFragmentManager.beginTransaction()
-                        // reemplaza (no agrega) el DetallesProfesionalesFragment
-                        .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
-                        // se guarda con la etiqueta correspondiente
-                        .addToBackStack("editarDetalles")
-                        // ejecuta la transicion
-                        .commit()
-                }, 500)
+                viewModelPrincipal.updateUsuario()
+                supportFragmentManager.beginTransaction()
+                    // reemplaza (no agrega) el DetallesProfesionalesFragment
+                    .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
+                    // se guarda con la etiqueta correspondiente
+                    .addToBackStack("editarDetalles")
+                    // ejecuta la transicion
+                    .commit()
             } else Toast.makeText(
                 this,
                 "Para salir de la sesión de invitado reinicie la app",
