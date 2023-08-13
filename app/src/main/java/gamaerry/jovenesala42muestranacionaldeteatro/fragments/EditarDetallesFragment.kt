@@ -2,6 +2,7 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -97,14 +98,36 @@ class EditarDetallesFragment : Fragment() {
         }
     }
 
-    private fun masDeTresContactos(): Boolean {
+    private fun validarRedesSociales(): String {
         var i = 0
-        if (binding.facebook.text.isNullOrEmpty() || binding.facebook.text.isNullOrBlank()) i++
-        if (binding.email.text.isNullOrEmpty() || binding.email.text.isNullOrBlank()) i++
-        if (binding.instagram.text.isNullOrEmpty() || binding.instagram.text.isNullOrBlank()) i++
-        if (binding.tiktok.text.isNullOrEmpty() || binding.tiktok.text.isNullOrBlank()) i++
-        if (binding.wp.text.isNullOrEmpty() || binding.wp.text.isNullOrBlank()) i++
-        return i > 3
+        var mensaje = ""
+        // FACEBOOK
+        if (binding.facebook.text.isNullOrEmpty() || binding.facebook.text.isNullOrBlank())
+            i++
+        else if (!validarFacebook(binding.facebook.text.toString()))
+            mensaje = "Url de Facebook no válido"
+        //E-MAIL
+        if (binding.email.text.isNullOrEmpty() || binding.email.text.isNullOrBlank())
+            i++
+        else if (!validarEmail(binding.email.text.toString()))
+            mensaje = "Dirección de correo no válido"
+        //INSTAGRAM
+        if (binding.instagram.text.isNullOrEmpty() || binding.instagram.text.isNullOrBlank())
+            i++
+        else if (!validarInstagram(binding.instagram.text.toString()))
+            mensaje = "Url de Instagram no válido"
+        //TIKTOK
+        if (binding.tiktok.text.isNullOrEmpty() || binding.tiktok.text.isNullOrBlank())
+            i++
+        else if (!validarTikTok(binding.tiktok.text.toString()))
+            mensaje = "Url de Tiktok no válido"
+        //WP
+        if (binding.wp.text.isNullOrEmpty() || binding.wp.text.isNullOrBlank())
+            i++
+        else if (!validarNumero(binding.wp.text.toString()))
+            mensaje = "Número telefónico no válido"
+        if (i > 3) mensaje = "Se permiten hasta 3 modos de contacto"
+        return mensaje
     }
 
     private fun validarCampos(): String {
@@ -116,9 +139,28 @@ class EditarDetallesFragment : Fragment() {
         binding.chips.checkedChipIds.ifEmpty {
             mensaje = "Seleccione al menos una especialidad"
         }
-        if (masDeTresContactos())
-            mensaje = "Se permiten hasta 3 modos de contacto"
+        mensaje = validarRedesSociales()
         return mensaje
+    }
+
+    private fun validarFacebook(url: String): Boolean {
+        return url.contains("facebook.com/")
+    }
+
+    private fun validarEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun validarInstagram(url: String): Boolean {
+        return url.contains("instagram.com/")
+    }
+
+    private fun validarTikTok(url: String): Boolean {
+        return url.contains("tiktok.com/")
+    }
+
+    private fun validarNumero(numero: String): Boolean {
+        return Patterns.PHONE.matcher(numero).matches()
     }
 
     override fun onDestroy() {
