@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -24,7 +25,9 @@ import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFrag
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.LoginFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -132,17 +135,23 @@ class MainActivity : AppCompatActivity() {
             // provocaba una busqueda erronea, ya que al buscar tambien
             // se necesita restablecerExpandableListView pero no filtrar)
         }
+
         binding.editarDetalles.setOnClickListener {
             if (nombre != null) {
-                binding.drawer.closeDrawer(GravityCompat.START)
-                viewModelPrincipal.updateUsuario(id)
-                supportFragmentManager.beginTransaction()
-                    // reemplaza (no agrega) el DetallesProfesionalesFragment
+                val aEditarDetalles = supportFragmentManager.beginTransaction()
                     .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
-                    // se guarda con la etiqueta correspondiente
                     .addToBackStack("editarDetalles")
-                    // ejecuta la transicion
-                    .commit()
+                viewModelPrincipal.updateUsuario(id)
+                binding.drawer.addDrawerListener(object : DrawerLayout.DrawerListener {
+                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+                    override fun onDrawerStateChanged(newState: Int) {}
+                    override fun onDrawerOpened(drawerView: View) {}
+                    override fun onDrawerClosed(drawerView: View) {
+                        aEditarDetalles.commit()
+                        binding.drawer.removeDrawerListener(this)
+                    }
+                })
+                binding.drawer.closeDrawer(binding.configuracion)
             } else Toast.makeText(
                 this,
                 "Para salir de la sesión de invitado reinicie la app",
