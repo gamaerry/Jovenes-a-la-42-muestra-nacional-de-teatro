@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
-import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,8 +19,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.establecerContactos
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.validaciones
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,16 +35,27 @@ class DetallesProfesionalesFragment : Fragment() {
     @Inject
     lateinit var especialidadesAdapter: EspecialidadesAdapter
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
-    private val accionAlCambiarProfesionalEnfocado: (ProfesionalDelTeatro?) -> Unit = {
+    private val accionAlEnfocarProfesional: (ProfesionalDelTeatro?) -> Unit = {
         binding.nombre.text = it?.nombre
         binding.descripcion.text = it?.descripcion
         binding.imagen?.load(it?.urlImagen)
         especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
-        binding.contacto1.setOnClickListener { _ ->
-            (requireActivity() as MainActivity).enviarCorreo(it.contacto1)
-        }
-        binding.contacto2.setOnClickListener { _ ->
-            (requireActivity() as MainActivity).abrirPerfilFacebook(it.contacto2)
+        validaciones.forEachIndexed { i, validacion ->
+            if (validacion(it.contacto1))
+                binding.contacto1.apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener { _ -> establecerContactos[i](it.contacto1) }
+                }
+            if (validacion(it.contacto2))
+                binding.contacto2.apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener { _ -> establecerContactos[i](it.contacto2) }
+                }
+            if (validacion(it.contacto3))
+                binding.contacto3.apply {
+                    visibility = View.VISIBLE
+                    setOnClickListener { _ -> establecerContactos[i](it.contacto3) }
+                }
         }
     }
 
@@ -57,7 +69,7 @@ class DetallesProfesionalesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.profesionalEnfocado.collect {
-                    accionAlCambiarProfesionalEnfocado(it)
+                    accionAlEnfocarProfesional(it)
                 }
             }
         }

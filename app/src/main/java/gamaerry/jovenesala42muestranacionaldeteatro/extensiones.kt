@@ -99,6 +99,16 @@ fun View.ocultarTeclado() {
     this.clearFocus()
 }
 
+val Fragment.mainActivity get() = (requireActivity() as MainActivity)
+
+val Fragment.establecerContactos
+    get() = listOf<(String) -> Unit>(
+        { mainActivity.abrirPerfilFacebook(it) },
+        { mainActivity.enviarCorreo(it) },
+        { mainActivity.abrirPerfilInstagram(it) },
+        { mainActivity.abrirPerfilTikTok(it) },
+        { mainActivity.abrirPerfilWhatsApp(it) })
+
 val Fragment.validaciones
     get() = listOf<(String) -> Boolean>(
         { validarFacebook(it) },
