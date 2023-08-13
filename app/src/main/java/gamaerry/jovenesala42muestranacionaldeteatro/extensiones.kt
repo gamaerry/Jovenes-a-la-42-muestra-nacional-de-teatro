@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import java.util.Locale
 
 // se crea una "variable de extension" para tener
 // siempre una referencia al SharedPreferences principal
@@ -62,6 +63,22 @@ fun String.extraerLista(): List<String> {
     return split(",", "y").map { string ->
         string.trim().replaceFirstChar { it.uppercaseChar() }
     }
+}
+
+fun List<String>.extraerString(): String{
+    return when(size){
+        1 -> get(0)
+        2 -> "${get(0)} ${get(1).agregarUltimo()}"
+        else ->
+            "${get(0)}, ${drop(1)
+                .dropLast(1)
+                .joinToString(", ")
+                .lowercase(Locale.ROOT)} ${get(lastIndex).agregarUltimo()}"
+    }
+}
+
+private fun String.agregarUltimo():String{
+    return if (equals("Iluminación")) "e iluminación" else "y ${this.lowercase(Locale.ROOT)}"
 }
 
 // ocultarTeclado() se usa a la hora de presionar "buscar" en el fragmento principal
