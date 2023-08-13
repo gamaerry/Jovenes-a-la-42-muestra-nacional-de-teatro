@@ -1,5 +1,6 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
+import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -65,7 +66,10 @@ class DetallesProfesionalesFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.enGuardados.collect { _ ->
                     especialidadesAdapter.accionAlPresionarEspecialidad = {
-                        requireActivity().supportFragmentManager.popBackStack()
+                        (requireActivity() as MainActivity).apply {
+                            restablecerExpandableListView()
+                            supportFragmentManager.popBackStack()
+                        }
                         viewModelPrincipal.setFiltroEspecialidad(it)
                     }
                 }
