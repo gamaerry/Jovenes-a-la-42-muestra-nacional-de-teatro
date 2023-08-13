@@ -63,10 +63,8 @@ constructor(
         }
     }
 
-    fun updateUsuario(){
-        _usuario.value = repositorio.listaCompleta.value.first {
-            usuario.value?.id == it.id
-        }
+    fun updateUsuario(idUsuario: Int){
+        _usuario.value = repositorio.listaCompleta.value.first { it.id == idUsuario }
     }
 
     // cambia el valor del acomodo y lo regresa

@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
         binding.editarDetalles.setOnClickListener {
             if (nombre != null) {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                viewModelPrincipal.updateUsuario()
+                viewModelPrincipal.updateUsuario(id)
                 supportFragmentManager.beginTransaction()
                     // reemplaza (no agrega) el DetallesProfesionalesFragment
                     .replace(R.id.contenedorPrincipal, EditarDetallesFragment())
