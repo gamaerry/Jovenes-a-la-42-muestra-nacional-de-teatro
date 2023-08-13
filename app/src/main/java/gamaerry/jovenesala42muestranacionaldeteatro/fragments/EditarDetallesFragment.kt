@@ -21,6 +21,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerString
 import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
+import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 
 @AndroidEntryPoint
@@ -72,7 +73,11 @@ class EditarDetallesFragment : Fragment() {
                 "Datos almacenados con éxito",
                 Toast.LENGTH_SHORT
             ).show()
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).apply {
+                setNombre(binding.nombre.text.toString())
+                setSaludo()
+                requireActivity().supportFragmentManager.popBackStack()
+            }
         }
 
         (requireActivity() as MainActivity).desaparecerNavegacion()
