@@ -1,14 +1,13 @@
 package gamaerry.jovenesala42muestranacionaldeteatro
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
@@ -25,10 +24,9 @@ import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaGuardadosFrag
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.ListaInicioFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.fragments.LoginFragment
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -255,9 +253,50 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun abrirPerfilFacebook(facebook: String) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("fb://facewebmodal/f?href=$facebook")
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("fb://facewebmodal/f?href=$facebook")
+                )
+            )
+        } catch (_: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(facebook)))
         }
-        startActivity(intent)
+    }
+
+    fun abrirPerfilWhatsApp(numero: String) {
+        val intent =
+            Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$numero"))
+        try {
+            startActivity(intent.apply { setPackage("com.whatsapp") })
+        } catch (_: ActivityNotFoundException) {
+            startActivity(intent)
+        }
+    }
+
+    fun abrirPerfilInstagram(instagram: String) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://instagram.com/_u/${instagram.extraerUsuarioDeInstagram()}")
+        )
+        intent.setPackage("com.instagram.android")
+        try {
+            startActivity(intent)
+        } catch (_: ActivityNotFoundException) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(instagram)))
+        }
+    }
+
+    fun abrirPerfilTikTok(tikTok: String) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(tikTok)
+        )
+        try {
+            startActivity(intent.apply { setPackage("com.ss.android.ugc.trill") })
+        } catch (_: ActivityNotFoundException) {
+            startActivity(intent)
+        }
     }
 }

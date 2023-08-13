@@ -81,6 +81,12 @@ private fun String.agregarUltimo():String{
     return if (equals("Iluminación")) "e iluminación" else "y ${this.lowercase(Locale.ROOT)}"
 }
 
+fun String.extraerUsuarioDeInstagram(): String? {
+    return if (contains("instagram.com"))
+        "instagram\\.com/(.+)\\?".toRegex().find(this)?.groupValues?.getOrNull(1)
+    else this
+}
+
 // ocultarTeclado() se usa a la hora de presionar "buscar" en el fragmento principal
 fun View.ocultarTeclado() {
     val manejadorDelInputMethod =
