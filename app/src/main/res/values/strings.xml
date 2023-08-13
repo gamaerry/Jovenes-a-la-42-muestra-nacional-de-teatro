@@ -6,7 +6,7 @@
     <string name="facebook">Url del perfil de Facebook</string>
     <string name="instagram">Url del perfil de Instagram</string>
     <string name="tiktok">Url del perfil de TikTok</string>
-    <string name="numero_telefono">Número de WhatsApp</string>
+    <string name="numero_telefono">Número de WhatsApp (solo de México)</string>
     <string name="especialidad">"  Especialidad  "</string>
     <string name="descripcion">Descripción</string>
     <string name="descripcion_acomodo">cambia la forma de acomodar la lista</string>
