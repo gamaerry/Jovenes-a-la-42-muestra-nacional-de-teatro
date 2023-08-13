@@ -46,6 +46,31 @@ class EditarDetallesFragment : Fragment() {
     ): View {
         _binding = FragmentEditarDetallesBinding.inflate(inflater, container, false)
         val usuario = viewModelPrincipal.usuario.value!!
+        initCampos(usuario)
+        binding.guardar.setOnClickListener {
+            val mensaje = validarCampos()
+            if (mensaje.isNotEmpty())
+                Toast.makeText(requireActivity(), mensaje, Toast.LENGTH_SHORT).show()
+            else {
+                val listaEspecialidades = mutableListOf<String>()
+                binding.chips.forEachIndexed { i, chip ->
+                    if ((chip as Chip).isChecked) listaEspecialidades.add(getEspecialidades()[i])
+                }
+                guardar(
+                    usuario.copy(
+                        nombre = binding.nombre.text.toString(),
+                        especialidades = listaEspecialidades.extraerString(),
+                        descripcion = binding.descripcion.text.toString()
+                    )
+                )
+            }
+        }
+        (requireActivity() as MainActivity).desaparecerNavegacion()
+        (requireActivity() as MainActivity).desaparecerConfiguracion()
+        return binding.root
+    }
+
+    private fun initCampos(usuario: ProfesionalDelTeatro) {
         binding.nombre.setText(usuario.nombre)
         binding.descripcion.setText(usuario.descripcion)
         binding.email.setText(usuario.contacto1)
@@ -53,36 +78,47 @@ class EditarDetallesFragment : Fragment() {
         val listaIndicesEspecialidades = usuario.especialidades
             .extraerLista().map { getEspecialidades().indexOf(it) }
         listaIndicesEspecialidades.forEach { (binding.chips[it] as Chip).isChecked = true }
-        binding.guardar.setOnClickListener {
-            val listaEspecialidades = mutableListOf<String>()
-            binding.chips.forEachIndexed { i, chip ->
-                if ((chip as Chip).isChecked) listaEspecialidades.add(getEspecialidades()[i])
-            }
-            Firebase.database.reference
-                .child("profesionales")
-                .child(usuario.id.toString())
-                .setValue(
-                    usuario.copy(
-                        nombre = binding.nombre.text.toString(),
-                        especialidades = listaEspecialidades.extraerString(),
-                        descripcion = binding.descripcion.text.toString()
-                    )
-                )
+    }
+
+    private fun guardar(usuarioModificado: ProfesionalDelTeatro) {
+        Firebase.database.reference
+            .child("profesionales")
+            .child(usuarioModificado.id.toString())
+            .setValue(usuarioModificado)
+        (requireActivity() as MainActivity).apply {
+            setNombre(binding.nombre.text.toString())
+            setSaludo()
+            supportFragmentManager.popBackStack()
             Toast.makeText(
-                requireActivity(),
+                this,
                 "Datos almacenados con éxito",
                 Toast.LENGTH_SHORT
             ).show()
-            (requireActivity() as MainActivity).apply {
-                setNombre(binding.nombre.text.toString())
-                setSaludo()
-                requireActivity().supportFragmentManager.popBackStack()
-            }
         }
+    }
 
-        (requireActivity() as MainActivity).desaparecerNavegacion()
-        (requireActivity() as MainActivity).desaparecerConfiguracion()
-        return binding.root
+    private fun masDeTresContactos(): Boolean {
+        var i = 0
+        if (binding.facebook.text.isNullOrEmpty() || binding.facebook.text.isNullOrBlank()) i++
+        if (binding.email.text.isNullOrEmpty() || binding.email.text.isNullOrBlank()) i++
+        if (binding.instagram.text.isNullOrEmpty() || binding.instagram.text.isNullOrBlank()) i++
+        if (binding.tiktok.text.isNullOrEmpty() || binding.tiktok.text.isNullOrBlank()) i++
+        if (binding.wp.text.isNullOrEmpty() || binding.wp.text.isNullOrBlank()) i++
+        return i > 3
+    }
+
+    private fun validarCampos(): String {
+        var mensaje = ""
+        if (binding.nombre.text.isNullOrEmpty() || binding.nombre.text.isNullOrBlank())
+            mensaje = "El nombre es obligatorio"
+        if (binding.descripcion.text.isNullOrEmpty() || binding.nombre.text.isNullOrBlank())
+            mensaje = "La semblanza es obligatoria"
+        binding.chips.checkedChipIds.ifEmpty {
+            mensaje = "Seleccione al menos una especialidad"
+        }
+        if (masDeTresContactos())
+            mensaje = "Se permiten hasta 3 modos de contacto"
+        return mensaje
     }
 
     override fun onDestroy() {
