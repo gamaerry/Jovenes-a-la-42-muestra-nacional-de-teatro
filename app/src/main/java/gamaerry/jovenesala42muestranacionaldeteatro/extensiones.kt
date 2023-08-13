@@ -3,8 +3,10 @@ package gamaerry.jovenesala42muestranacionaldeteatro
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.fragment.app.Fragment
 import java.util.Locale
 
 // se crea una "variable de extension" para tener
@@ -65,19 +67,21 @@ fun String.extraerLista(): List<String> {
     }
 }
 
-fun List<String>.extraerString(): String{
-    return when(size){
+fun List<String>.extraerString(): String {
+    return when (size) {
         1 -> get(0)
         2 -> "${get(0)} ${get(1).agregarUltimo()}"
         else ->
-            "${get(0)}, ${drop(1)
-                .dropLast(1)
-                .joinToString(", ")
-                .lowercase(Locale.ROOT)} ${get(lastIndex).agregarUltimo()}"
+            "${get(0)}, ${
+                drop(1)
+                    .dropLast(1)
+                    .joinToString(", ")
+                    .lowercase(Locale.ROOT)
+            } ${get(lastIndex).agregarUltimo()}"
     }
 }
 
-private fun String.agregarUltimo():String{
+private fun String.agregarUltimo(): String {
     return if (equals("Iluminación")) "e iluminación" else "y ${this.lowercase(Locale.ROOT)}"
 }
 
@@ -93,4 +97,32 @@ fun View.ocultarTeclado() {
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     manejadorDelInputMethod.hideSoftInputFromWindow(windowToken, 0)
     this.clearFocus()
+}
+
+val Fragment.validaciones
+    get() = listOf<(String) -> Boolean>(
+        { validarFacebook(it) },
+        { validarEmail(it) },
+        { validarInstagram(it) },
+        { validarTikTok(it) },
+        { validarNumero(it) })
+
+private fun Fragment.validarFacebook(url: String): Boolean {
+    return url.contains("facebook.com/")
+}
+
+private fun Fragment.validarEmail(email: String): Boolean {
+    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+}
+
+private fun Fragment.validarInstagram(url: String): Boolean {
+    return url.contains("instagram.com/")
+}
+
+private fun Fragment.validarTikTok(url: String): Boolean {
+    return url.contains("tiktok.com/")
+}
+
+private fun Fragment.validarNumero(numero: String): Boolean {
+    return Patterns.PHONE.matcher(numero).matches()
 }

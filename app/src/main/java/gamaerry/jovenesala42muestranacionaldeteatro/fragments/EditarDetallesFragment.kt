@@ -3,7 +3,6 @@ package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
-import android.util.Patterns
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.extraerString
 import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
+import gamaerry.jovenesala42muestranacionaldeteatro.validaciones
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import java.lang.Exception
 
@@ -34,12 +34,6 @@ class EditarDetallesFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
     private val redesSocialesValidadas = mutableListOf<Editable>()
-    private val validaciones = listOf<(String) -> Boolean>(
-        { validarFacebook(it) },
-        { validarEmail(it) },
-        { validarInstagram(it) },
-        { validarTikTok(it) },
-        { validarNumero(it) })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,26 +167,6 @@ class EditarDetallesFragment : Fragment() {
         }
         mensaje.ifEmpty { validarRedesSociales(redesSociales) }
         return mensaje
-    }
-
-    private fun validarFacebook(url: String): Boolean {
-        return url.contains("facebook.com/")
-    }
-
-    private fun validarEmail(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun validarInstagram(url: String): Boolean {
-        return url.contains("instagram.com/")
-    }
-
-    private fun validarTikTok(url: String): Boolean {
-        return url.contains("tiktok.com/")
-    }
-
-    private fun validarNumero(numero: String): Boolean {
-        return Patterns.PHONE.matcher(numero).matches()
     }
 
     override fun onDestroy() {
