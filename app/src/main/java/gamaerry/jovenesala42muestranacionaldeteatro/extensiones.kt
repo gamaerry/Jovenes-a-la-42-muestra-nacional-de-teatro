@@ -83,7 +83,7 @@ private fun String.agregarUltimo():String{
 
 fun String.extraerUsuarioDeInstagram(): String? {
     return if (contains("instagram.com"))
-        "instagram\\.com/(.+)\\?".toRegex().find(this)?.groupValues?.getOrNull(1)
+        "instagram\\.com/([^?/]+)".toRegex().find(this)?.groupValues?.getOrNull(1)
     else this
 }
 
