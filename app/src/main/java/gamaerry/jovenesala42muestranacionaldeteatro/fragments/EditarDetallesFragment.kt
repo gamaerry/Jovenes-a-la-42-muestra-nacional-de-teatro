@@ -187,7 +187,7 @@ class EditarDetallesFragment : Fragment() {
         binding.chips.checkedChipIds.ifEmpty {
             mensaje = "Seleccione al menos una especialidad"
         }
-        mensaje.ifEmpty { validarRedesSociales(redesSociales) }
+        mensaje.ifEmpty { mensaje = validarRedesSociales(redesSociales) }
         return mensaje
     }
 
