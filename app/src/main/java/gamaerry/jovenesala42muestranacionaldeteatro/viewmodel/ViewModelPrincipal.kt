@@ -125,6 +125,14 @@ constructor(
         }
     }
 
+    fun limpiarFiltros() {
+        estadosCheckBox.forEachIndexed { i, filtros ->
+            filtros.forEachIndexed { j, _ ->
+                estadosCheckBox[i][j] = false
+            }
+        }
+    }
+
     fun setFiltroEspecialidad(especialidad: String) {
         estadosCheckBox[1].forEachIndexed { i, _ -> estadosCheckBox[1][i] = false }
         estadosCheckBox[1][itemsFiltros[1].indexOf(especialidad)] = true

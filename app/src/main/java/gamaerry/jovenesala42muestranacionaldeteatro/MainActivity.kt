@@ -134,6 +134,14 @@ class MainActivity : AppCompatActivity() {
             // se necesita restablecerExpandableListView pero no filtrar)
         }
 
+        binding.limpiarFiltros.setOnClickListener {
+            limpiarExpandableListView()
+            viewModelPrincipal.filtrarListas()
+            // (filtrarListas dentro del restablecerExpandableListView
+            // provocaba una busqueda erronea, ya que al buscar tambien
+            // se necesita restablecerExpandableListView pero no filtrar)
+        }
+
         binding.editarDetalles.setOnClickListener {
             if (nombre != null) {
                 val aEditarDetalles = supportFragmentManager.beginTransaction()
@@ -205,6 +213,16 @@ class MainActivity : AppCompatActivity() {
         for (i in getFiltros().indices)
             binding.filtros.collapseGroup(i)
         viewModelPrincipal.restablecerFiltros()
+    }
+
+    private fun limpiarExpandableListView() {
+        // cierra (colapsa) a cada filtro y los limpia
+        // (el cerrado es necesario porque al cambiar los
+        // estados de check programaticamente el cambio visual
+        // no se aplica hasta un "cambio de configuracion")
+        for (i in getFiltros().indices)
+            binding.filtros.collapseGroup(i)
+        viewModelPrincipal.limpiarFiltros()
     }
 
     fun setItemNavegacionInicio() {
