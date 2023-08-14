@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
                     Uri.parse("fb://facewebmodal/f?href=$facebook")
                 )
             )
-        } catch (_: ActivityNotFoundException) {
+        } catch (_: Exception) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(facebook)))
         }
     }
@@ -288,7 +288,7 @@ class MainActivity : AppCompatActivity() {
             Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$numero"))
         try {
             startActivity(intent.apply { setPackage("com.whatsapp") })
-        } catch (_: ActivityNotFoundException) {
+        } catch (_: Exception) {
             startActivity(intent)
         }
     }
@@ -301,7 +301,7 @@ class MainActivity : AppCompatActivity() {
         intent.setPackage("com.instagram.android")
         try {
             startActivity(intent)
-        } catch (_: ActivityNotFoundException) {
+        } catch (_: Exception) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(instagram)))
         }
     }
@@ -312,8 +312,8 @@ class MainActivity : AppCompatActivity() {
             Uri.parse(tikTok)
         )
         try {
-            startActivity(intent.apply { setPackage("com.ss.android.ugc.trill") })
-        } catch (_: ActivityNotFoundException) {
+            startActivity(intent.apply { setPackage("com.zhiliaoapp.musically") })
+        } catch (_: Exception) {
             startActivity(intent)
         }
     }
