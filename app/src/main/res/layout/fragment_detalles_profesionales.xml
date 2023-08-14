@@ -70,7 +70,7 @@
                 android:textSize="18sp" />
         </ScrollView>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/contacto_1"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="55dp"
@@ -79,13 +79,12 @@
             android:scaleX="1.25"
             android:scaleY="1.25"
             android:visibility="gone"
-            app:icon="@drawable/ic_mail"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/contacto_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/contacto_2"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="55dp"
@@ -94,13 +93,12 @@
             android:scaleX="1.25"
             android:scaleY="1.25"
             android:visibility="gone"
-            app:icon="@drawable/ic_face"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/contacto_3"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/contacto_1" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/contacto_3"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="55dp"
