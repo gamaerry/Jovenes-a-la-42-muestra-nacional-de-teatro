@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorOnPrimary"
@@ -17,7 +17,11 @@
             android:id="@+id/contenedorPrincipal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            app:layout_constraintBottom_toTopOf="@id/navegacion"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navegacion"
@@ -25,8 +29,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/menu_navegacion" />
-    </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/carga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/contenedorPrincipal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/contenedorPrincipal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/configuracion"
@@ -49,9 +67,9 @@
                 android:backgroundTint="?attr/colorOnPrimary"
                 app:cardElevation="10dp"
                 app:cardForegroundColor="@drawable/color_card_view"
+                app:layout_constraintBottom_toTopOf="@id/etiqueta_orden"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/etiqueta_orden"
                 app:rippleColor="?attr/colorPrimary"
                 tools:layout_editor_absoluteY="16dp">
 
@@ -124,9 +142,9 @@
 
                 <TextView
                     android:id="@+id/contador"
-                    android:layout_alignParentEnd="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_margin="16dp"
                     android:text="@string/resultados"
                     android:textStyle="bold" />

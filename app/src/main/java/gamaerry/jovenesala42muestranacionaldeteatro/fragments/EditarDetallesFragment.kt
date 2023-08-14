@@ -50,6 +50,7 @@ class EditarDetallesFragment : Fragment() {
         sharedElementEnterTransition = animacion
         sharedElementReturnTransition = animacion
         requireActivity().apply {
+            (this as MainActivity).ocultarCarga()
             onBackPressedDispatcher.addCallback(this@EditarDetallesFragment,
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {

@@ -1,6 +1,5 @@
 package gamaerry.jovenesala42muestranacionaldeteatro
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -157,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                         binding.drawer.removeDrawerListener(this)
                     }
                 })
+                binding.carga.visibility = View.VISIBLE
                 binding.drawer.closeDrawer(binding.configuracion)
             } else Toast.makeText(
                 this,
@@ -192,6 +192,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         actualizarListas()
+    }
+
+    fun ocultarCarga() {
+        binding.carga.visibility = View.GONE
     }
 
     fun setSaludo() {
