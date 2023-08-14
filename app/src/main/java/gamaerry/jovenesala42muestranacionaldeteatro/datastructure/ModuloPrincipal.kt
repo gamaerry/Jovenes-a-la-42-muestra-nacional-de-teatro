@@ -1,6 +1,9 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.datastructure
 
+import android.content.Context
 import android.util.Log
+import android.util.Patterns
+import androidx.core.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -10,7 +13,10 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
 import gamaerry.jovenesala42muestranacionaldeteatro.getEstados
 import gamaerry.jovenesala42muestranacionaldeteatro.getMuestras
@@ -48,14 +54,31 @@ object ModuloPrincipal {
         }
     }
 
-    // la instancia del dao se crea a partir de la base de datos ya proveida
     @Provides
     @Singleton
     fun proveerItemsFiltros() = listOf(getEstados(), getEspecialidades(), getMuestras())
 
-    // la instancia del dao se crea a partir de la base de datos ya proveida
     @Provides
     @Singleton
     fun proveerEstadosCheckBox(itemsFiltros: @JvmSuppressWildcards List<List<String>>) =
         itemsFiltros.map { it.map { true }.toMutableList() }
+
+    @Provides
+    @Singleton
+    fun proveerValidaciones() = listOf<(String) -> Boolean>(
+        { it.contains("facebook.com/") },
+        { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
+        { it.contains("instagram.com/") },
+        { it.contains("tiktok.com/") },
+        { Patterns.PHONE.matcher(it).matches() })
+
+    @Provides
+    @Singleton
+    fun proveerIconos(@ApplicationContext contexto: Context) = listOf(
+        ContextCompat.getDrawable(contexto, R.drawable.ic_face),
+        ContextCompat.getDrawable(contexto, R.drawable.ic_mail),
+        ContextCompat.getDrawable(contexto, R.drawable.ic_ins),
+        ContextCompat.getDrawable(contexto, R.drawable.ic_tik),
+        ContextCompat.getDrawable(contexto, R.drawable.ic_wp)
+    )
 }

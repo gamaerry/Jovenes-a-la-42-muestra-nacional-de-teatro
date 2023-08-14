@@ -108,31 +108,3 @@ val Fragment.establecerContactos
         { mainActivity.abrirPerfilInstagram(it) },
         { mainActivity.abrirPerfilTikTok(it) },
         { mainActivity.abrirPerfilWhatsApp(it) })
-
-val Fragment.validaciones
-    get() = listOf<(String) -> Boolean>(
-        { validarFacebook(it) },
-        { validarEmail(it) },
-        { validarInstagram(it) },
-        { validarTikTok(it) },
-        { validarNumero(it) })
-
-private fun Fragment.validarFacebook(url: String): Boolean {
-    return url.contains("facebook.com/")
-}
-
-private fun Fragment.validarEmail(email: String): Boolean {
-    return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-}
-
-private fun Fragment.validarInstagram(url: String): Boolean {
-    return url.contains("instagram.com/")
-}
-
-private fun Fragment.validarTikTok(url: String): Boolean {
-    return url.contains("tiktok.com/")
-}
-
-private fun Fragment.validarNumero(numero: String): Boolean {
-    return Patterns.PHONE.matcher(numero).matches()
-}

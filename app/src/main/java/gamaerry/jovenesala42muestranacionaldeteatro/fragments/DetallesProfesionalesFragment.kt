@@ -1,6 +1,7 @@
 package gamaerry.jovenesala42muestranacionaldeteatro.fragments
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,7 +23,6 @@ import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetalles
 import gamaerry.jovenesala42muestranacionaldeteatro.establecerContactos
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.validaciones
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,6 +32,12 @@ class DetallesProfesionalesFragment : Fragment() {
     private var _binding: FragmentDetallesProfesionalesBinding? = null
     private val binding get() = _binding!!
 
+    @JvmSuppressWildcards
+    @Inject
+    lateinit var validaciones: List<(String) -> Boolean>
+    @JvmSuppressWildcards
+    @Inject
+    lateinit var iconos: List<Drawable>
     @Inject
     lateinit var especialidadesAdapter: EspecialidadesAdapter
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
@@ -44,16 +50,19 @@ class DetallesProfesionalesFragment : Fragment() {
             if (validacion(it.contacto1))
                 binding.contacto1.apply {
                     visibility = View.VISIBLE
+                    icon = iconos[i]
                     setOnClickListener { _ -> establecerContactos[i](it.contacto1) }
                 }
             if (validacion(it.contacto2))
                 binding.contacto2.apply {
                     visibility = View.VISIBLE
+                    icon = iconos[i]
                     setOnClickListener { _ -> establecerContactos[i](it.contacto2) }
                 }
             if (validacion(it.contacto3))
                 binding.contacto3.apply {
                     visibility = View.VISIBLE
+                    icon = iconos[i]
                     setOnClickListener { _ -> establecerContactos[i](it.contacto3) }
                 }
         }

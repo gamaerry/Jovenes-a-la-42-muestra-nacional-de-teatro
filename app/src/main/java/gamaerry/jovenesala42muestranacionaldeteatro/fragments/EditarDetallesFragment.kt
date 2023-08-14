@@ -24,9 +24,9 @@ import gamaerry.jovenesala42muestranacionaldeteatro.extraerString
 import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
-import gamaerry.jovenesala42muestranacionaldeteatro.validaciones
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditarDetallesFragment : Fragment() {
@@ -34,6 +34,9 @@ class EditarDetallesFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
     private val redesSocialesValidadas = mutableListOf<Editable>()
+    @Inject
+    @JvmSuppressWildcards
+    lateinit var validaciones: List<(String) -> Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
