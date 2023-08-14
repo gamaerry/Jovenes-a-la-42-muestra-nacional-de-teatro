@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.firebase.database.ktx.database
@@ -34,6 +36,7 @@ class EditarDetallesFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
     private val redesSocialesValidadas = mutableListOf<Editable>()
+
     @Inject
     @JvmSuppressWildcards
     lateinit var validaciones: List<(String) -> Boolean>
@@ -46,6 +49,22 @@ class EditarDetallesFragment : Fragment() {
         }
         sharedElementEnterTransition = animacion
         sharedElementReturnTransition = animacion
+        requireActivity().apply {
+            onBackPressedDispatcher.addCallback(this@EditarDetallesFragment,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        MaterialAlertDialogBuilder(this@apply)
+                            .setTitle("Advertencia")
+                            .setMessage("¿Está seguro(a) de que quiere salir sin guardar los cambios?")
+                            .setNegativeButton("Quedarse") { dialog, _ ->
+                                dialog.dismiss()
+                            }.setPositiveButton("Sí, salir") { dialog, _ ->
+                                dialog.dismiss()
+                                supportFragmentManager.popBackStack()
+                            }.show()
+                    }
+                })
+        }
     }
 
     override fun onCreateView(
