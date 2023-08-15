@@ -7,7 +7,7 @@ data class ProfesionalDelTeatro(
     val descripcion: String = "",
     val estado: String = "",
     val urlImagen: String = "",
-    val contacto1: String = "null",
-    val contacto2: String = "null",
-    val contacto3: String = "null"
+    val contacto1: String = "",
+    val contacto2: String = "",
+    val contacto3: String = ""
 )
