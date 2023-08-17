@@ -36,6 +36,14 @@ fun Activity.setId(idUsuario: Int) {
     myPrefs.edit().putInt("id", idUsuario).apply()
 }
 
+// variable string que guarda unicamente el nombre del usuario
+val Activity.candado: String?
+    get() = myPrefs.getString("candado", null)
+
+// el metodo mutador de la varible usuario
+fun Activity.setCandado(candado: String?) {
+    myPrefs.edit().putString("candado", candado).apply()
+}
 // agrega el mismo conjunto con un nuevo emento id
 // (notese que el conjunto guardados guarda solo los id)
 fun Activity.addGuardado(id: String) {

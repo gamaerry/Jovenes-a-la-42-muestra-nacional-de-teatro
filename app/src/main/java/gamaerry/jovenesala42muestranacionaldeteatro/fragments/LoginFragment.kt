@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -27,6 +28,9 @@ import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.clearGuardados
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
+import gamaerry.jovenesala42muestranacionaldeteatro.mainActivity
+import gamaerry.jovenesala42muestranacionaldeteatro.model.Acceso
+import gamaerry.jovenesala42muestranacionaldeteatro.setCandado
 import gamaerry.jovenesala42muestranacionaldeteatro.setId
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
@@ -45,21 +49,17 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // al estar cargadas las vistas se establece que el boton:
         binding.botonEntrar.setOnClickListener {
-            if (hayConexion(requireActivity())) {
+            if (hayConexion(mainActivity)) {
                 // guarde en una variable el id numerico introducido
                 val id = binding.campoId.text.toString()
                 Firebase.database.apply {
-                    getReference("ids").addValueEventListener(object : ValueEventListener {
+                    getReference("acceso").addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            dataSnapshot.getValue<String>()?.let {
+                            dataSnapshot.getValue<HashMap<String, Acceso>>()?.let {
                                 if (id.isNotEmpty())
-                                    viewModelPrincipal.setUsuario(
-                                        if (id.length == 10 && it.contains(id))
-                                            id.substring(0..5).toInt()
-                                        else 999999
-                                    )
+                                    viewModelPrincipal.setUsuario( accesoValido(it, id) )
                                 else Toast.makeText(
-                                    requireActivity(),
+                                    mainActivity,
                                     "Por favor, introduzca su id asignado",
                                     Toast.LENGTH_SHORT
                                 ).show()
@@ -72,20 +72,20 @@ class LoginFragment : Fragment() {
                     })
                 }
             } else Toast.makeText(
-                requireActivity(),
+                mainActivity,
                 "Compruebe su conexión a internet",
                 Toast.LENGTH_SHORT
             ).show()
         }
 
         binding.botonEntrarComoInvitado.setOnClickListener {
-            if (hayConexion(requireActivity()))
-                (requireActivity() as MainActivity).apply {
+            if (hayConexion(mainActivity))
+                mainActivity.apply {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.contenedorPrincipal, ListaInicioFragment()).commit()
                 }
             else Toast.makeText(
-                requireActivity(),
+                mainActivity,
                 "Compruebe su conexión a internet",
                 Toast.LENGTH_SHORT
             ).show()
@@ -101,7 +101,7 @@ class LoginFragment : Fragment() {
                     it?.let {
                         if (it.nombre.isEmpty()) {
                             Toast.makeText(
-                                requireActivity(),
+                                mainActivity,
                                 "Id no válido, intente de nuevo",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -111,7 +111,7 @@ class LoginFragment : Fragment() {
                             // reforzar la siguiente operacion verificando si no es vacio,
                             // en cuyo caso, se realiza la transicion mediante el requireActivity,
                             // se le establece su correspondiente usuario y saludo
-                            (requireActivity() as MainActivity).apply {
+                            mainActivity.apply {
                                 setNombre(it.nombre)
                                 setId(it.id)
                                 supportFragmentManager.beginTransaction()
@@ -124,7 +124,7 @@ class LoginFragment : Fragment() {
                             // finalmente y por unica ocasion se le da la bienvenida
                             // al usuario (notese que no es lo mismo que el saludo)
                             Toast.makeText(
-                                requireActivity(),
+                                mainActivity,
                                 "¡Bienvenidx, ${it.nombre}!",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -133,6 +133,20 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun accesoValido(
+        accesos: HashMap<String, Acceso>,
+        idLargo: String
+    ): Int {
+        return if (idLargo.length == 10) {
+            val id = idLargo.substring(0..5)
+            if (accesos[id]?.llave == idLargo.substring(6..9)) {
+                mainActivity.setCandado(accesos[id]?.candado)
+                id.toInt()
+            }
+            else 999999
+        } else 999999
     }
 
     private fun hayConexion(contexto: Context): Boolean {
@@ -156,8 +170,8 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-        (requireActivity() as MainActivity).desaparecerNavegacion()
-        (requireActivity() as MainActivity).desaparecerConfiguracion()
+        mainActivity.desaparecerNavegacion()
+        mainActivity.desaparecerConfiguracion()
         return binding.root
     }
 
@@ -167,8 +181,8 @@ class LoginFragment : Fragment() {
     // (notese que ademas se resetea el binding a nulo)
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as MainActivity).aparecerNavegacion()
-        (requireActivity() as MainActivity).aparecerConfiguracion()
+        mainActivity.aparecerNavegacion()
+        mainActivity.aparecerConfiguracion()
         _binding = null
     }
 }
