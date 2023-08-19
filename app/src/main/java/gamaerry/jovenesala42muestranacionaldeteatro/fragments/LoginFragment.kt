@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,23 +15,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.R
 import gamaerry.jovenesala42muestranacionaldeteatro.clearGuardados
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBinding
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.mainActivity
-import gamaerry.jovenesala42muestranacionaldeteatro.model.Acceso
-import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
-import gamaerry.jovenesala42muestranacionaldeteatro.setCandado
 import gamaerry.jovenesala42muestranacionaldeteatro.setId
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
@@ -56,18 +44,21 @@ class LoginFragment : Fragment() {
                 // guarde en una variable el id numerico introducido
                 val id = binding.campoId.text.toString()
                 val correo = binding.campoCorreo.text.toString()
-                Log.d("midebug", "correo=$correo...\nid=$id...")
                 if (id.isNotEmpty() && correo.isNotEmpty())
                     auth.signInWithEmailAndPassword(correo, id)
                         .addOnCompleteListener(mainActivity) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
-                                Log.d("midebug", "signInWithEmail: continuo :D")
                                 auth.currentUser?.uid?.let { viewModelPrincipal.setUsuario(it.toInt()) }
                             } else {
                                 // If sign in fails, display a message to the user.
                                 viewModelPrincipal.setUsuario(999999)
-                                Log.w("midebug", "signInWithEmail: fallo :(", task.exception)
+                                Toast.makeText(
+                                    mainActivity,
+                                    "Credenciales no válidas, intente de nuevo",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                binding.campoId.text.clear()
                             }
                         }
                 else Toast.makeText(
@@ -103,14 +94,7 @@ class LoginFragment : Fragment() {
                     // no encontro ninguna coincidencia en la base de datos y por lo tanto
                     // se le especifica al usuario ademas de resetear el campo del Id
                     it?.let {
-                        if (it.nombre.isEmpty()) {
-                            Toast.makeText(
-                                mainActivity,
-                                "Credenciales no válidas, intente de nuevo",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            binding.campoId.text.clear()
-                        } else {
+                        if (it.nombre.isNotEmpty()){
                             // una vez encontrado a algun usuario no nulo es necesario
                             // reforzar la siguiente operacion verificando si no es vacio,
                             // en cuyo caso, se realiza la transicion mediante el requireActivity,
@@ -139,17 +123,6 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun accesoValido(
-        correo: String,
-        idAcceso: String
-    ): Int {
-        return if (idAcceso.length == 12) {
-            var id = 999999
-
-            id.toInt()
-        } else 999999
-    }
-
     private fun hayConexion(contexto: Context): Boolean {
         val manager = contexto.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
@@ -158,7 +131,7 @@ class LoginFragment : Fragment() {
                 return networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
                         || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
             }
-        else return manager.activeNetworkInfo?.isConnectedOrConnecting == true
+        else return manager.activeNetwork != null
         return false
     }
 
