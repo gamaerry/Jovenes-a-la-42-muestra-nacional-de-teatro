@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,6 +31,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentLoginBin
 import gamaerry.jovenesala42muestranacionaldeteatro.guardados
 import gamaerry.jovenesala42muestranacionaldeteatro.mainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.model.Acceso
+import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setCandado
 import gamaerry.jovenesala42muestranacionaldeteatro.setId
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
@@ -48,29 +50,31 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // al estar cargadas las vistas se establece que el boton:
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
         binding.botonEntrar.setOnClickListener {
             if (hayConexion(mainActivity)) {
                 // guarde en una variable el id numerico introducido
                 val id = binding.campoId.text.toString()
-                Firebase.database.apply {
-                    getReference("acceso").addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(dataSnapshot: DataSnapshot) {
-                            dataSnapshot.getValue<HashMap<String, Acceso>>()?.let {
-                                if (id.isNotEmpty())
-                                    viewModelPrincipal.setUsuario( accesoValido(it, id) )
-                                else Toast.makeText(
-                                    mainActivity,
-                                    "Por favor, introduzca su id asignado",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                val correo = binding.campoCorreo.text.toString()
+                Log.d("midebug", "correo=$correo...\nid=$id...")
+                if (id.isNotEmpty() && correo.isNotEmpty())
+                    auth.signInWithEmailAndPassword(correo, id)
+                        .addOnCompleteListener(mainActivity) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d("midebug", "signInWithEmail: continuo :D")
+                                auth.currentUser?.uid?.let { viewModelPrincipal.setUsuario(it.toInt()) }
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                viewModelPrincipal.setUsuario(999999)
+                                Log.w("midebug", "signInWithEmail: fallo :(", task.exception)
                             }
                         }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            Log.d("midebug", "Algo ha fallado :(")
-                        }
-                    })
-                }
+                else Toast.makeText(
+                    mainActivity,
+                    "Por favor, introduzca su correo y su id asignado",
+                    Toast.LENGTH_SHORT
+                ).show()
             } else Toast.makeText(
                 mainActivity,
                 "Compruebe su conexión a internet",
@@ -102,7 +106,7 @@ class LoginFragment : Fragment() {
                         if (it.nombre.isEmpty()) {
                             Toast.makeText(
                                 mainActivity,
-                                "Id no válido, intente de nuevo",
+                                "Credenciales no válidas, intente de nuevo",
                                 Toast.LENGTH_SHORT
                             ).show()
                             binding.campoId.text.clear()
@@ -136,16 +140,13 @@ class LoginFragment : Fragment() {
     }
 
     private fun accesoValido(
-        accesos: HashMap<String, Acceso>,
-        idLargo: String
+        correo: String,
+        idAcceso: String
     ): Int {
-        return if (idLargo.length == 10) {
-            val id = idLargo.substring(0..5)
-            if (accesos[id]?.llave == idLargo.substring(6..9)) {
-                mainActivity.setCandado(accesos[id]?.candado)
-                id.toInt()
-            }
-            else 999999
+        return if (idAcceso.length == 12) {
+            var id = 999999
+
+            id.toInt()
         } else 999999
     }
 
