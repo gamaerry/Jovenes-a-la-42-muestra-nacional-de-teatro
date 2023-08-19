@@ -59,10 +59,29 @@
         app:layout_constraintTop_toTopOf="@+id/viewA" />
 
     <EditText
+        android:id="@+id/campoCorreo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/campos_login"
+        android:drawableStart="@drawable/ic_mail"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="@string/correo"
+        android:padding="11dp"
+        android:textColor="@color/verde_700"
+        android:textColorHint="@color/verde_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewB" />
+
+    <EditText
         android:id="@+id/campoId"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="8dp"
         android:background="@drawable/campos_login"
         android:drawableStart="@drawable/key"
         android:drawablePadding="8dp"
@@ -74,20 +93,20 @@
         android:textColorHint="@color/verde_700"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewB" />
+        app:layout_constraintTop_toBottomOf="@+id/campoCorreo" />
 
     <Button
         android:id="@+id/botonEntrar"
         android:layout_width="0dp"
-        app:cornerRadius="100dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="16dp"
+        android:layout_marginVertical="8dp"
         android:padding="10dp"
         android:text="@string/entrar"
         android:textSize="18sp"
         android:textStyle="bold"
         app:backgroundTint="@color/verde_700"
+        app:cornerRadius="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/campoId" />
@@ -97,20 +116,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:layout_marginTop="3dp"
         android:gravity="center"
         android:text="@string/no_eres_parte"
         android:textColor="?attr/colorSecondaryVariant"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/botonEntrarComoInvitado"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/botonEntrar" />
 
     <Button
         android:id="@+id/botonEntrarComoInvitado"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginVertical="16dp"
+        android:layout_marginVertical="8dp"
         app:cornerRadius="100dp"
         android:padding="10dp"
         android:text="@string/entrar_como_invitado"
