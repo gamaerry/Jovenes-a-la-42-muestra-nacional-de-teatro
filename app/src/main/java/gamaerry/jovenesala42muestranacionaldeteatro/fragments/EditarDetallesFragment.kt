@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.view.forEachIndexed
 import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -49,23 +50,6 @@ class EditarDetallesFragment : Fragment() {
         }
         sharedElementEnterTransition = animacion
         sharedElementReturnTransition = animacion
-        requireActivity().apply {
-            (this as MainActivity).ocultarCarga()
-            onBackPressedDispatcher.addCallback(this@EditarDetallesFragment,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        MaterialAlertDialogBuilder(this@apply)
-                            .setTitle("Advertencia")
-                            .setMessage("¿Está seguro(a) de que quiere salir sin guardar los cambios?")
-                            .setNegativeButton("Quedarse") { dialog, _ ->
-                                dialog.dismiss()
-                            }.setPositiveButton("Sí, salir") { dialog, _ ->
-                                dialog.dismiss()
-                                supportFragmentManager.popBackStack()
-                            }.show()
-                    }
-                })
-        }
     }
 
     override fun onCreateView(
@@ -114,6 +98,23 @@ class EditarDetallesFragment : Fragment() {
                     )
                 )
             }
+        }
+        requireActivity().apply {
+            (this as MainActivity).ocultarCarga()
+            onBackPressedDispatcher.addCallback( viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        MaterialAlertDialogBuilder(this@apply)
+                            .setTitle("Advertencia")
+                            .setMessage("¿Está seguro(a) de que quiere salir sin guardar los cambios?")
+                            .setNegativeButton("Quedarse") { dialog, _ ->
+                                dialog.dismiss()
+                            }.setPositiveButton("Sí, salir") { dialog, _ ->
+                                dialog.dismiss()
+                                supportFragmentManager.popBackStack()
+                            }.show()
+                    }
+                })
         }
         (requireActivity() as MainActivity).desaparecerNavegacion()
         (requireActivity() as MainActivity).desaparecerConfiguracion()
