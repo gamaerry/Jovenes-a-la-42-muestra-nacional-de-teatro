@@ -12,6 +12,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,6 +60,10 @@ object ModuloPrincipal {
     @Provides
     @Singleton
     fun proveerAutenticador() = FirebaseAuth.getInstance()
+
+    @Provides
+    @Singleton
+    fun proveerAlmacenamiento() = FirebaseStorage.getInstance().reference
 
     @Provides
     @Singleton

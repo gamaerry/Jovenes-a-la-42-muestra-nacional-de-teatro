@@ -6,17 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.google.android.material.card.MaterialCardView
+import com.google.firebase.storage.StorageReference
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.ItemCompaneroBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.GlideApp
 import javax.inject.Inject
 
 // en el contexto de los adapter en android "item" hace referencia a los contenedores que se reutilizan
 // (de ahi el termino recyclerView) para mostrar informacion, en este caso emitida por nuestro viewModel
 class ProfesionalesAdapter
 @Inject
-constructor() :
+constructor(private val almacenamiento: StorageReference) :
     ListAdapter<ProfesionalDelTeatro, ProfesionalesAdapter.ProfesionalDelTeatroViewHolder>(
         ProfesionalDiffUtil
     ) {
@@ -69,7 +70,9 @@ constructor() :
             // del profesional a cada elemento visual del item
             nombre.text = profesional.nombre
             especialidad.text = profesional.especialidades
-            imagen.load(profesional.urlImagen)
+            GlideApp.with(imagen.context)
+                .load(almacenamiento.child(profesional.urlImagen))
+                .into(imagen)
         }
     }
 

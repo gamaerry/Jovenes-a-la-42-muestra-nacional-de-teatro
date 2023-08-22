@@ -11,17 +11,19 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import coil.load
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.transition.MaterialContainerTransform
+import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.adapters.EspecialidadesAdapter
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentDetallesProfesionalesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.GlideApp
 import gamaerry.jovenesala42muestranacionaldeteatro.establecerContactos
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
+import gamaerry.jovenesala42muestranacionaldeteatro.mainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
@@ -35,17 +37,26 @@ class DetallesProfesionalesFragment : Fragment() {
     @JvmSuppressWildcards
     @Inject
     lateinit var validaciones: List<(String) -> Boolean>
+
     @JvmSuppressWildcards
     @Inject
     lateinit var iconos: List<Drawable>
+
     @Inject
     lateinit var especialidadesAdapter: EspecialidadesAdapter
+
+    @Inject
+    lateinit var almacenamiento: StorageReference
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
-    private val accionAlEnfocarProfesional: (ProfesionalDelTeatro?) -> Unit = {
-        binding.nombre.text = it?.nombre
-        binding.descripcion.text = it?.descripcion
-        binding.imagen?.load(it?.urlImagen)
-        especialidadesAdapter.listaDeEspecialidades = it?.especialidades!!.extraerLista()
+    private val accionAlEnfocarProfesional: (ProfesionalDelTeatro) -> Unit = {
+        binding.nombre.text = it.nombre
+        binding.descripcion.text = it.descripcion
+        binding.imagen?.let { imageView ->
+            GlideApp.with(mainActivity)
+                .load(almacenamiento.child(it.urlImagen))
+                .into(imageView)
+        }
+        especialidadesAdapter.listaDeEspecialidades = it.especialidades.extraerLista()
         validaciones.forEachIndexed { i, validacion ->
             if (validacion(it.contacto1))
                 binding.contacto1.apply {
@@ -78,7 +89,7 @@ class DetallesProfesionalesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModelPrincipal.profesionalEnfocado.collect {
-                    accionAlEnfocarProfesional(it)
+                    it?.let { accionAlEnfocarProfesional(it) }
                 }
             }
         }
