@@ -19,12 +19,15 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.transition.MaterialContainerTransform
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
 import gamaerry.jovenesala42muestranacionaldeteatro.MainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.databinding.FragmentEditarDetallesBinding
+import gamaerry.jovenesala42muestranacionaldeteatro.datastructure.GlideApp
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerLista
 import gamaerry.jovenesala42muestranacionaldeteatro.extraerString
 import gamaerry.jovenesala42muestranacionaldeteatro.getEspecialidades
+import gamaerry.jovenesala42muestranacionaldeteatro.mainActivity
 import gamaerry.jovenesala42muestranacionaldeteatro.model.ProfesionalDelTeatro
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
@@ -41,6 +44,9 @@ class EditarDetallesFragment : Fragment() {
     @Inject
     @JvmSuppressWildcards
     lateinit var validaciones: List<(String) -> Boolean>
+
+    @Inject
+    lateinit var almacenamiento: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +105,13 @@ class EditarDetallesFragment : Fragment() {
                 )
             }
         }
+        binding.contenedor.setOnClickListener {
+            Toast.makeText(
+                mainActivity,
+                "Cambiar imagen",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
         requireActivity().apply {
             (this as MainActivity).ocultarCarga()
             onBackPressedDispatcher.addCallback( viewLifecycleOwner,
@@ -135,6 +148,9 @@ class EditarDetallesFragment : Fragment() {
         val listaIndicesEspecialidades = usuario.especialidades
             .extraerLista().map { getEspecialidades().indexOf(it) }
         listaIndicesEspecialidades.forEach { (binding.chips[it] as Chip).isChecked = true }
+        GlideApp.with(mainActivity)
+            .load(almacenamiento.child(usuario.urlImagen))
+            .into(binding.imagen)
     }
 
     private fun guardar(usuarioModificado: ProfesionalDelTeatro) {
