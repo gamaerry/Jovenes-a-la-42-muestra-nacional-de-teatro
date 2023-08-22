@@ -25,6 +25,7 @@ import gamaerry.jovenesala42muestranacionaldeteatro.setId
 import gamaerry.jovenesala42muestranacionaldeteatro.setNombre
 import gamaerry.jovenesala42muestranacionaldeteatro.viewmodel.ViewModelPrincipal
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -35,24 +36,25 @@ class LoginFragment : Fragment() {
     // uso un solo viewModel para todas las operaciones de la base de datos
     private val viewModelPrincipal: ViewModelPrincipal by activityViewModels()
 
+    @Inject
+    lateinit var autenticador: FirebaseAuth
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // al estar cargadas las vistas se establece que el boton:
-        val auth: FirebaseAuth = FirebaseAuth.getInstance()
         binding.botonEntrar.setOnClickListener {
             if (hayConexion(mainActivity)) {
                 // guarde en una variable el id numerico introducido
                 val id = binding.campoId.text.toString()
                 val correo = binding.campoCorreo.text.toString()
                 if (id.isNotEmpty() && correo.isNotEmpty())
-                    auth.signInWithEmailAndPassword(correo, id)
+                    autenticador.signInWithEmailAndPassword(correo, id)
                         .addOnCompleteListener(mainActivity) { task ->
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
-                                auth.currentUser?.uid?.let { viewModelPrincipal.setUsuario(it.toInt()) }
+                                autenticador.currentUser?.uid?.let { viewModelPrincipal.setUsuario(it.toInt()) }
                             } else {
                                 // If sign in fails, display a message to the user.
-                                viewModelPrincipal.setUsuario(999999)
                                 Toast.makeText(
                                     mainActivity,
                                     "Credenciales no válidas, intente de nuevo",

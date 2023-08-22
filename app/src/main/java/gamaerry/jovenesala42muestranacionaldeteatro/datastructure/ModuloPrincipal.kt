@@ -4,12 +4,14 @@ import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.core.content.ContextCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,6 +55,10 @@ object ModuloPrincipal {
                 })
         }
     }
+
+    @Provides
+    @Singleton
+    fun proveerAutenticador() = FirebaseAuth.getInstance()
 
     @Provides
     @Singleton
