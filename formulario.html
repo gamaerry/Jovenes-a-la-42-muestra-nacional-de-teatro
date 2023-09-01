@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solicitud de Eliminación de Datos</title>
+</head>
+<body>
+    <h1>Solicitud de Eliminación de Datos</h1>
+    <p>Por favor, complete el siguiente formulario para solicitar la eliminación de sus datos.</p>
+    
+    <form action="mailto:gamaerry@gmail.com" method="post" enctype="text/plain">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="correo">Correo Electrónico:</label><br>
+        <input type="email" id="correo" name="correo" required><br><br>
+
+        <label for="solicitud">Solicitud de Eliminación:</label><br>
+        <textarea id="solicitud" name="solicitud" rows="4" cols="50" required></textarea><br><br>
+
+        <input type="submit" value="Enviar Solicitud">
+    </form>
+</body>
+</html>
