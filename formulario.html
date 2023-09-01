@@ -2,10 +2,74 @@
 <html>
 <head>
     <title>Solicitud de Eliminación de Datos</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+    }
+
+    form {
+        background-color: #fff;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 100%;
+        padding-top: 5px; 
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    label[for="joven"] {
+        display: block;
+    }
+
+    input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .form-text {
+        text-align: center;
+    }
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+
 </head>
 <body>
     <h1>Solicitud de Eliminación de Datos</h1>
-    <p>Por favor, complete el siguiente formulario para solicitar la eliminación de sus datos.</p>
+    <div class="form-text">
+        <p>Por favor, complete el siguiente formulario para solicitar la eliminación de sus datos.</p>
+    </div>
     
     <form action="mailto:gamaerry@gmail.com" method="post" enctype="text/plain">
         <label for="nombre">Nombre:</label><br>
@@ -13,6 +77,9 @@
 
         <label for="correo">Correo Electrónico:</label><br>
         <input type="email" id="correo" name="correo" required><br><br>
+        
+        <label for="joven">¿Eres un(a) Joven a la muestra?</label>
+        <input type="checkbox" id="joven" name="joven"><br><br>
 
         <label for="solicitud">Solicitud de Eliminación:</label><br>
         <textarea id="solicitud" name="solicitud" rows="4" cols="50" required></textarea><br><br>
